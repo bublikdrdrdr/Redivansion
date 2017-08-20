@@ -35,9 +35,11 @@ public class JmeFragment extends AndroidHarnessFragment {
 
         // Set application exit settings
         finishOnAppStop = true;
-        handleExitHook = true;
-        exitDialogTitle = "Confirm exit";
-        exitDialogMessage = "You really wanna close this game? Бездушная скотина";
+        //disable exit message
+        // TODO: use gui back press handling and confirmation
+        handleExitHook = false;
+        //exitDialogTitle = "Confirm exit";
+        //exitDialogMessage = "You really wanna close this game? Бездушная скотина";
 
         // Set splash screen resource id, if used
         // (default = 0, no splash screen)

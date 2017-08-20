@@ -12,8 +12,22 @@ import java.util.logging.Logger;
 public class Main extends SimpleApplication {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
-    public void simpleInitApp() {
+    @Override
+    public void simpleUpdate(float tpf) {
+        // TODO: 20-Aug-17 process game logic 
+    }
 
+    public void simpleInitApp() {
+        setupApplication();
+        addTestBox();
+    }
+
+    private void setupApplication(){
+        this.setDisplayStatView(false);
+        this.setDisplayFps(false);
+    }
+
+    private void addTestBox(){
         Box box = new Box(1, 1, 1);
         Geometry geom = new Geometry("box", box);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
