@@ -1,4 +1,4 @@
-package org.jmonkeyengine.simple_jme_android.gamelogic;
+package tk.ubublik.redivansion.gamelogic;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
@@ -24,7 +24,6 @@ public class Main extends SimpleApplication {
         // looking for game assets.
         Texture texture = assetManager.loadTexture("Textures/Monkey.png");
         mat.setTexture("ColorMap", texture);
-
         geom.setMaterial(mat);
         rootNode.attachChild(geom);
     }

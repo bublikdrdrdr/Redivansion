@@ -1,7 +1,8 @@
-package org.jmonkeyengine.simple_jme_android;
+package tk.ubublik.redivansion;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,7 +14,5 @@ public class MainActivity extends AppCompatActivity {
         // to the fragment that contains the GLSurfaceView
         // that will be used to display the jME content.
         setContentView(R.layout.activity_main);
-
-
     }
 }

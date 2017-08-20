@@ -1,4 +1,4 @@
-package org.jmonkeyengine.simple_jme_android;
+package tk.ubublik.redivansion;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
