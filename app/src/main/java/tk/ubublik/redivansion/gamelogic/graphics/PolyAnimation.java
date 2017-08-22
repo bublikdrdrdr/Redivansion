@@ -1,6 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.graphics;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +17,7 @@ import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter;
  * For example: some building must be created, upgraded and destroyed.
  * Every process has own animation and this class - it is.
  */
-public class PolyAnimation {
+public class PolyAnimation{
 
     //list of single polygons animation
     private List<Polygon> polygons;
@@ -32,7 +33,7 @@ public class PolyAnimation {
         try{
             int stringSize = ByteConverter.getInt(bytes, index);
             index+=4;
-            String name = ByteConverter.getString(bytes, index, stringSize);
+            name = ByteConverter.getString(bytes, index, stringSize);
             index+=stringSize;
             this.polygons = parseBytes(bytes, index);
         } catch (IndexOutOfBoundsException | IllegalArgumentException e) {

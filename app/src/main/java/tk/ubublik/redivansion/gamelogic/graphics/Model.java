@@ -1,5 +1,6 @@
 package tk.ubublik.redivansion.gamelogic.graphics;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -62,6 +63,8 @@ public class Model {
         size+=4;
         for(PolyAnimation polyAnimation: animations){
             byte[] animationBytes = polyAnimation.getBytes();
+            byteArraysList.add(ByteConverter.getArray(animationBytes.length));
+            size+=4;
             byteArraysList.add(animationBytes);
             size+=animationBytes.length;
         }

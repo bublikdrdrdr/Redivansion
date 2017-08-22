@@ -33,6 +33,9 @@ dependencies {
     compile "org.jmonkeyengine:jme3-jogg:$jmeVersion"
     compile "org.jmonkeyengine:jme3-plugins:$jmeVersion"
 
+    //interesting features
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
     // below is only when using Lemur as UI
     //compile 'com.simsilica:lemur:[1.6,)'
 

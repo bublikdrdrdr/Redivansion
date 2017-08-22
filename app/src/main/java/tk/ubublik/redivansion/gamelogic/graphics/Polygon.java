@@ -3,6 +3,7 @@ package tk.ubublik.redivansion.gamelogic.graphics;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter;
  * Created by Bublik on 20-Aug-17.
  */
 
-public class Polygon {
+public class Polygon{
 
     private ColorRGBA startColor;
     private ColorRGBA endColor;
@@ -63,6 +64,8 @@ public class Polygon {
             setValues(startColor, endColor, startPoints, endPoints, duration, delay);
         } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
             throw new IllegalArgumentException("Can't parse model from bytes", e);
+        } catch (Exception e){
+            System.out.println("d");
         }
     }
 
@@ -196,7 +199,7 @@ public class Polygon {
             return true;
         }
         try {
-            if (obj instanceof String) {
+            if (obj instanceof Polygon) {
                 Polygon anotherPolygon = (Polygon) obj;
                 if (anotherPolygon.getDuration() != getDuration()) return false;
                 if (anotherPolygon.getDelay() != getDelay()) return false;
