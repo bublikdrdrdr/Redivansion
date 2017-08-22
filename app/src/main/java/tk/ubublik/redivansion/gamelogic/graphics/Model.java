@@ -1,6 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.graphics;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +18,10 @@ public class Model {
     //нам це треба?
     private int id;
     private String name;
+
+    public Model(){
+        this(new LinkedList<PolyAnimation>());
+    }
 
     public Model(List<PolyAnimation> animations){
         this.animations = animations;
@@ -70,4 +75,35 @@ public class Model {
         return bytes;
     }
 
+    public List<PolyAnimation> getAnimations() {
+        return animations;
+    }
+
+    public void addAnimation(PolyAnimation polyAnimation){
+        animations.add(polyAnimation);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        try {
+            if (obj instanceof Model) {
+                Model anotherModel = (Model) obj;
+                if (anotherModel.getAnimations().size()==getAnimations().size()){
+                    Iterator<PolyAnimation> anotherAnimationsIterator = anotherModel.getAnimations().iterator();
+                    PolyAnimation anotherAnimation;
+                    for (PolyAnimation polyAnimation: getAnimations()){
+                        anotherAnimation = anotherAnimationsIterator.next();
+                        if (!anotherAnimation.equals(polyAnimation)) return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        } catch (NullPointerException e){
+            return false;
+        }
+    }
 }

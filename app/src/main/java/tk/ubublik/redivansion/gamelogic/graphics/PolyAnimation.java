@@ -91,4 +91,33 @@ public class PolyAnimation {
     public String getName() {
         return name;
     }
+
+    public void addPolygon(Polygon polygon){
+        this.polygons.add(polygon);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        try {
+            if (obj instanceof PolyAnimation) {
+                PolyAnimation anotherPolyAnimation = (PolyAnimation) obj;
+                if (!anotherPolyAnimation.name.equals(getName())) return false;
+                if (anotherPolyAnimation.getPolygons().size()==getPolygons().size()){
+                    Iterator<Polygon> anotherPolygonsIterator = anotherPolyAnimation.getPolygons().iterator();
+                    Polygon anotherPolygon;
+                    for (Polygon polygon: getPolygons()){
+                        anotherPolygon = anotherPolygonsIterator.next();
+                        if (!anotherPolygon.equals(polygon)) return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        } catch (NullPointerException e){
+            return false;
+        }
+    }
 }

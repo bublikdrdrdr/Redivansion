@@ -189,4 +189,34 @@ public class Polygon {
     public void setDelay(float delay) {
         this.delay = delay;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        try {
+            if (obj instanceof String) {
+                Polygon anotherPolygon = (Polygon) obj;
+                if (anotherPolygon.getDuration() != getDuration()) return false;
+                if (anotherPolygon.getDelay() != getDelay()) return false;
+
+                if (!anotherPolygon.getStartColor().equals(getStartColor())) return false;
+                if (!anotherPolygon.getEndColor().equals(getEndColor())) return false;
+
+                if (anotherPolygon.getStartPoints().length != getStartPoints().length) return false;
+                if (anotherPolygon.getEndPoints().length != getEndPoints().length) return false;
+
+                for (int i = 0; i < VECTOR_ARRAY_COUNT; i++) {
+                    if (!anotherPolygon.getStartPoints()[i].equals(getStartPoints()[i]))
+                        return false;
+                    if (!anotherPolygon.getEndPoints()[i].equals(getEndPoints()[i])) return false;
+                }
+                return true;
+            }
+            return false;
+        } catch (NullPointerException e){
+            return false;
+        }
+    }
 }
