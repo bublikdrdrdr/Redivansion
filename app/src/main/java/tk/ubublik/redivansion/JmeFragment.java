@@ -3,6 +3,10 @@ package tk.ubublik.redivansion;
 import com.jme3.app.AndroidHarnessFragment;
 
 /**
+ * Created by Bublik on 20-Aug-17.
+ */
+
+/**
  * A placeholder fragment containing a simple view.
  */
 public class JmeFragment extends AndroidHarnessFragment {

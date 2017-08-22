@@ -6,15 +6,13 @@ import com.jme3.math.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
-import tk.ubublik.redivansion.gamelogic.utils.ByteSettings;
+import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter;
 
 /**
  * Created by Bublik on 20-Aug-17.
  */
 
 public class Polygon {
-
-    private static final int POLYGON_VECTOR_ARRAY_SIZE = 3;
 
     private ColorRGBA startColor;
     private ColorRGBA endColor;
@@ -26,8 +24,8 @@ public class Polygon {
     private float delay;//delay before animation start
 
     private void setValues(ColorRGBA startColor, ColorRGBA endColor, Vector3f[] startPoints, Vector3f[] endPoints, float duration, float delay){
-        if (startPoints.length !=POLYGON_VECTOR_ARRAY_SIZE || endPoints.length != POLYGON_VECTOR_ARRAY_SIZE)
-            throw new IllegalArgumentException("Point array length must be equal "+Integer.toString(POLYGON_VECTOR_ARRAY_SIZE));
+        if (startPoints.length !=VECTOR_ARRAY_COUNT || endPoints.length != VECTOR_ARRAY_COUNT)
+            throw new IllegalArgumentException("Point array length must be equal "+Integer.toString(VECTOR_ARRAY_COUNT));
         this.startColor = startColor;
         this.endColor = endColor;
         this.startPoints = startPoints;
@@ -45,11 +43,12 @@ public class Polygon {
     private static final int VECTOR_ARRAY_COUNT = 3;
     private static final int VECTOR_ARRAY_SIZE = VECTOR_SIZE*VECTOR_ARRAY_COUNT;
     private static final int COLOR_SIZE = FLOAT_SIZE*4;
+    public static final int POLYGON_SIZE = FLOAT_SIZE*2 + COLOR_SIZE*2 + VECTOR_ARRAY_SIZE*2;
     public Polygon(byte[] bytes, int index) {
         try{
-            float duration = ByteSettings.ByteConverter.getFloat(bytes, index);
+            float duration = ByteConverter.getFloat(bytes, index);
             index+=FLOAT_SIZE;
-            float delay = ByteSettings.ByteConverter.getFloat(bytes, index);
+            float delay = ByteConverter.getFloat(bytes, index);
             index+=FLOAT_SIZE;
 
             Vector3f[] startPoints = parseVectorArray(bytes, index);
@@ -68,11 +67,11 @@ public class Polygon {
     }
 
     private Vector3f parseVector3f(byte[] bytes, int index){
-        float x = ByteSettings.ByteConverter.getFloat(bytes, index);
+        float x = ByteConverter.getFloat(bytes, index);
         index+=FLOAT_SIZE;
-        float y = ByteSettings.ByteConverter.getFloat(bytes, index);
+        float y = ByteConverter.getFloat(bytes, index);
         index+=FLOAT_SIZE;
-        float z = ByteSettings.ByteConverter.getFloat(bytes, index);
+        float z = ByteConverter.getFloat(bytes, index);
         return new Vector3f(x,y,z);
     }
 
@@ -86,43 +85,61 @@ public class Polygon {
     }
 
     private ColorRGBA parseColor(byte[] bytes, int index){
-        float r = ByteSettings.ByteConverter.getFloat(bytes, index);
+        float r = ByteConverter.getFloat(bytes, index);
         index+=FLOAT_SIZE;
-        float g = ByteSettings.ByteConverter.getFloat(bytes, index);
+        float g = ByteConverter.getFloat(bytes, index);
         index+=FLOAT_SIZE;
-        float b = ByteSettings.ByteConverter.getFloat(bytes, index);
+        float b = ByteConverter.getFloat(bytes, index);
         index+=FLOAT_SIZE;
-        float a = ByteSettings.ByteConverter.getFloat(bytes, index);
+        float a = ByteConverter.getFloat(bytes, index);
         return new ColorRGBA(r,g,b,a);
     }
 
-
-    private List<Polygon> parseBytes(byte[] bytes, int index){
-        try {
-            List<Polygon> list = new ArrayList<>();
-            int count = ByteSettings.ByteConverter.getInt(bytes, index);
-            if (count < 0) throw new IllegalArgumentException("Count number is negative");
-            index+=4;
-            for (int i = 0; i < count; i++){
-                int size = ByteSettings.ByteConverter.getInt(bytes, index);
-                index+=4;
-                Polygon polygon = new Polygon(bytes, index);
-                index+=size;
-                list.add(polygon);
-            }
-            return list;
-        } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
-            throw new IllegalArgumentException("Can't parse model from bytes", e);
-        }
-    }
-
     public byte[] getBytes(){
-        // TODO: 21-Aug-17
-        return null;
+        byte[] bytes = new byte[POLYGON_SIZE];
+        int index = 0;
+        ByteConverter.insertArray(bytes, ByteConverter.getArray(duration), index);
+        index+=FLOAT_SIZE;
+        ByteConverter.insertArray(bytes, ByteConverter.getArray(delay), index);
+        index+=FLOAT_SIZE;
+
+        ByteConverter.insertArray(bytes, getVectorArrayBytes(startPoints), index);
+        index+=VECTOR_ARRAY_SIZE;
+        ByteConverter.insertArray(bytes, getVectorArrayBytes(endPoints), index);
+        index+=VECTOR_ARRAY_SIZE;
+
+        ByteConverter.insertArray(bytes, getColorBytes(startColor), index);
+        index+=COLOR_SIZE;
+        ByteConverter.insertArray(bytes, getColorBytes(endColor), index);
+        return bytes;
     }
 
-    public static int getPolygonVectorArraySize() {
-        return POLYGON_VECTOR_ARRAY_SIZE;
+    private byte[] getColorBytes(ColorRGBA color){
+        byte[] bytes = new byte[COLOR_SIZE];
+        int index = 0;
+        ByteConverter.insertArray(bytes, ByteConverter.getArray(color.getRed()), index);
+        index+=FLOAT_SIZE;
+        ByteConverter.insertArray(bytes, ByteConverter.getArray(color.getGreen()), index);
+        index+=FLOAT_SIZE;
+        ByteConverter.insertArray(bytes, ByteConverter.getArray(color.getBlue()), index);
+        index+=FLOAT_SIZE;
+        ByteConverter.insertArray(bytes, ByteConverter.getArray(color.getAlpha()), index);
+        return bytes;
+    }
+
+    //do not get single vector bytes, cause of time wasting
+    private byte[] getVectorArrayBytes(Vector3f[] vectorArray){
+        byte[] bytes = new byte[VECTOR_ARRAY_SIZE];
+        int index = 0;
+        for (int i = 0; i < VECTOR_ARRAY_COUNT; i++){
+            ByteConverter.insertArray(bytes, ByteConverter.getArray(vectorArray[i].getX()), index);
+            index+=FLOAT_SIZE;
+            ByteConverter.insertArray(bytes, ByteConverter.getArray(vectorArray[i].getY()), index);
+            index+=FLOAT_SIZE;
+            ByteConverter.insertArray(bytes, ByteConverter.getArray(vectorArray[i].getZ()), index);
+            index+=FLOAT_SIZE;
+        }
+        return bytes;
     }
 
     public ColorRGBA getStartColor() {

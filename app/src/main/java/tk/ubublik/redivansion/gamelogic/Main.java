@@ -13,6 +13,10 @@ import java.nio.ShortBuffer;
 import java.util.Random;
 import java.util.logging.Logger;
 
+/**
+ * Created by Bublik on 20-Aug-17.
+ */
+
 public class Main extends SimpleApplication {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 

@@ -2,9 +2,14 @@ package tk.ubublik.redivansion.gamelogic.graphics;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import tk.ubublik.redivansion.gamelogic.utils.ByteSettings;
+import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter;
+
+/**
+ * Created by Bublik on 22-Aug-17.
+ */
 
 /**
  * One-step model animation.
@@ -25,9 +30,9 @@ public class PolyAnimation {
 
     public PolyAnimation(byte[] bytes, int index){
         try{
-            int stringSize = ByteSettings.ByteConverter.getInt(bytes, index);
+            int stringSize = ByteConverter.getInt(bytes, index);
             index+=4;
-            String name = ByteSettings.ByteConverter.getString(bytes, index, stringSize);
+            String name = ByteConverter.getString(bytes, index, stringSize);
             index+=stringSize;
             this.polygons = parseBytes(bytes, index);
         } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
@@ -39,14 +44,12 @@ public class PolyAnimation {
     private List<Polygon> parseBytes(byte[] bytes, int index){
         try {
             List<Polygon> list = new ArrayList<>();
-            int count = ByteSettings.ByteConverter.getInt(bytes, index);
+            int count = ByteConverter.getInt(bytes, index);
             if (count < 0) throw new IllegalArgumentException("Count number is negative");
             index+=4;
             for (int i = 0; i < count; i++){
-                int size = ByteSettings.ByteConverter.getInt(bytes, index);
-                index+=4;
                 Polygon polygon = new Polygon(bytes, index);
-                index+=size;
+                index+=Polygon.POLYGON_SIZE;
                 list.add(polygon);
             }
             return list;
@@ -60,8 +63,25 @@ public class PolyAnimation {
     }
     
     public byte[] getBytes(){
-        return null;
-        // TODO: 21-Aug-17  
+        byte[] nameStringBytes = ByteConverter.getArray(name);
+        int polygonsCount = polygons.size();
+        int nameStringSize = nameStringBytes.length;
+        int polygonsSize = polygonsCount * Polygon.POLYGON_SIZE;
+        
+        int size = 4 + nameStringSize + 4 + polygonsCount * 4 + polygonsSize;
+        byte[] bytes = new byte[size];
+        int index = 0;
+        ByteConverter.insertArray(bytes, ByteConverter.getArray(nameStringSize), index);
+        index+=4;
+        ByteConverter.insertArray(bytes, nameStringBytes, index);
+        index+=nameStringSize;
+        ByteConverter.insertArray(bytes, ByteConverter.getArray(polygonsCount), index);
+        index+=4;
+        for (Polygon polygon:polygons) {
+            ByteConverter.insertArray(bytes, polygon.getBytes(), index);
+            index+=Polygon.POLYGON_SIZE;
+        }
+        return bytes;
     }
 
     public List<Polygon> getPolygons() {
