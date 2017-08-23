@@ -32,6 +32,7 @@ dependencies {
     compile "org.jmonkeyengine:jme3-effects:$jmeVersion"
     compile "org.jmonkeyengine:jme3-jogg:$jmeVersion"
     compile "org.jmonkeyengine:jme3-plugins:$jmeVersion"
+    compile "org.jmonkeyengine:jme3-terrain:$jmeVersion"
 
     //interesting features
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'

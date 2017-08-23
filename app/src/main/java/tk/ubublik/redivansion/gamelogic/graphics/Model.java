@@ -1,6 +1,5 @@
 package tk.ubublik.redivansion.gamelogic.graphics;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;

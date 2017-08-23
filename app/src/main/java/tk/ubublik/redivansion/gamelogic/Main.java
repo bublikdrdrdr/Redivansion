@@ -3,6 +3,8 @@ package tk.ubublik.redivansion.gamelogic;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Triangle;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
@@ -12,6 +14,8 @@ import com.jme3.texture.Texture;
 import java.nio.ShortBuffer;
 import java.util.Random;
 import java.util.logging.Logger;
+
+import tk.ubublik.redivansion.gamelogic.test.DynamicObject;
 
 /**
  * Created by Bublik on 20-Aug-17.
@@ -27,9 +31,14 @@ public class Main extends SimpleApplication {
     }
 
     public void simpleInitApp() {
+        Box box = new Box(1f,1f,1f);
+
         setupApplication();
-        //addTestBox();
+        addTestBox();
         testInit();
+        getCamera().setLocation(new Vector3f(-4,3,6));
+        getCamera().lookAt(new Vector3f(0,0,0), getCamera().getUp());
+        rootNode.updateGeometricState();
     }
 
     private void setupApplication(){
@@ -49,38 +58,34 @@ public class Main extends SimpleApplication {
         Texture texture = assetManager.loadTexture("Textures/Monkey.png");
         mat.setTexture("ColorMap", texture);
         geom.setMaterial(mat);
+        geom.move(new Vector3f(2,0,0));
         rootNode.attachChild(geom);
     }
 
 
 
-
     //TEST FIELD
-    VertexBuffer indexBuffer;
-    ShortBuffer indices;
+    private DynamicObject dynamicObject;
 
     private void testInit(){
-        short[] indexbuffer = new short[]{ 1, 2 };
-        float[] vertexbuffer = new float[]{ 0, 0, 0, 0, 3, 0, 3, 0, 0, -3, 0, 0};
-        Mesh lineMesh = new Mesh();
-        lineMesh.setMode(Mesh.Mode.Lines);
-        lineMesh.setDynamic();
-        lineMesh.setBuffer(VertexBuffer.Type.Position, 3, vertexbuffer);
-        lineMesh.setBuffer(VertexBuffer.Type.Index, 1, indexbuffer);
-        Geometry lineGeometry = new Geometry("line", lineMesh);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md"); // create a simple material
-        mat.setColor("Color", ColorRGBA.Red); // set color of material to blue
-        lineGeometry.setMaterial(mat);
-        rootNode.attachChild(lineGeometry);
-        rootNode.updateGeometricState();
-        indexBuffer = (VertexBuffer)lineGeometry.getMesh().getBuffer(VertexBuffer.Type.Index);
-        indices = (ShortBuffer)indexBuffer.getData();
+        dynamicObject = new DynamicObject(rootNode, assetManager);
+        dynamicObject.drawSomething();
+        time = System.currentTimeMillis();
     }
 
     private void testUpdate(){
-        Random r = new Random();
-        indices.put(0, (short)r.nextInt(4));
-        indices.put(1, (short)r.nextInt(4));
-        indexBuffer.setUpdateNeeded();
+        dynamicObject.update();
+        changeAfter5Seconds();
+    }
+
+    private boolean updated = false;
+    private long time;
+    private void changeAfter5Seconds(){
+        if (!updated){
+            if (System.currentTimeMillis()-time >= 5000){
+                dynamicObject.changeSomething();
+                updated = true;
+            }
+        }
     }
 }

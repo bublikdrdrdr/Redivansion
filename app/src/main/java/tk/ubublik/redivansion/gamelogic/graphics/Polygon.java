@@ -3,10 +3,6 @@ package tk.ubublik.redivansion.gamelogic.graphics;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter;
 
 /**

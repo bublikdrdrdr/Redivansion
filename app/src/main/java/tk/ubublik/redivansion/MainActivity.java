@@ -2,7 +2,6 @@ package tk.ubublik.redivansion;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 /**
  * Created by Bublik on 20-Aug-17.
