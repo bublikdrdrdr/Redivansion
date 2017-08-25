@@ -15,7 +15,7 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 /**
  * Created by Bublik on 25-Aug-17.
  */
-
+@Deprecated//does not work
 public class ModelGeometry {
 
     private Model model;
@@ -39,7 +39,7 @@ public class ModelGeometry {
         currentAnimation = model.getAnimationByName(name);
         if (currentAnimation==null) throw new IllegalArgumentException("Animation with name \""+name+"\" not found");
         int count = currentAnimation.polygonCount();
-        setBuffers(count*3);
+        setBuffers(count*3*3);
         animationStartMillis = System.currentTimeMillis();
     }
 
@@ -117,10 +117,10 @@ public class ModelGeometry {
         floatPositionBuffer = (FloatBuffer)positionBuffer.getData();
 
         indexBuffer = mesh.getBuffer(VertexBuffer.Type.Index);
-        shortIndexBuffer = (ShortBuffer) positionBuffer.getData();
+        shortIndexBuffer = (ShortBuffer) indexBuffer.getData();
 
         normalsBuffer = mesh.getBuffer(VertexBuffer.Type.Normal);
-        floatNormalBuffer = (FloatBuffer)positionBuffer.getData();
+        floatNormalBuffer = (FloatBuffer)normalsBuffer.getData();
     }
 
     private void updateGeometry(){

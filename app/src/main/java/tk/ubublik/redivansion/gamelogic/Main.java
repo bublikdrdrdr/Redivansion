@@ -15,7 +15,11 @@ import java.nio.ShortBuffer;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import tk.ubublik.redivansion.gamelogic.graphics.DynamicGeometry;
+import tk.ubublik.redivansion.gamelogic.graphics.DynamicGeometryImpl;
+import tk.ubublik.redivansion.gamelogic.graphics.ModelGeometry;
 import tk.ubublik.redivansion.gamelogic.test.DynamicObject;
+import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
@@ -25,6 +29,11 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 public class Main extends SimpleApplication {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
+    public static void main(String[] args) {
+        Main main = new Main();
+        main.start();
+    }
+
     @Override
     public void simpleUpdate(float tpf) {
         // TODO: 20-Aug-17 process game logic
@@ -33,7 +42,7 @@ public class Main extends SimpleApplication {
 
     public void simpleInitApp() {
         setupApplication();
-        addTestBox();
+        //addTestBox();
         testInit();
         getCamera().setLocation(new Vector3f(-4,3,6));
         getCamera().lookAt(new Vector3f(0,0,0), getCamera().getUp());
@@ -65,7 +74,43 @@ public class Main extends SimpleApplication {
 
 
     //TEST FIELD
-    private DynamicObject dynamicObject;
+    ModelGeometry modelGeometry;
+    DynamicGeometryImpl dynamicGeometry;
+
+    private void testInit(){
+        /*modelGeometry = new ModelGeometry("something", new ExampleModel());
+        rootNode.attachChild(modelGeometry.getGeometry());
+        time = System.currentTimeMillis();*/
+        dynamicGeometry = new DynamicGeometryImpl(new ExampleModel());
+        rootNode.attachChild(dynamicGeometry);
+        dynamicGeometry.beginAnimation("build");
+    }
+
+    private void testUpdate(){
+        dynamicGeometry.onUpdate();
+        //change();
+    }
+
+
+    private long time;
+
+    boolean built = false;
+    boolean changed = false;
+    private void change(){
+        if (!built){
+            if (System.currentTimeMillis()-time >= 4000){
+                dynamicGeometry.beginAnimation("build");
+                built = true;
+            }
+        }
+        if (!changed){
+            if (System.currentTimeMillis()-time >= 10000){
+                dynamicGeometry.beginAnimation("change");
+                changed = true;
+            }
+        }
+    }
+    /*private DynamicObject dynamicObject;
 
     private void testInit(){
         dynamicObject = new DynamicObject(rootNode, assetManager);
@@ -87,5 +132,5 @@ public class Main extends SimpleApplication {
                 updated = true;
             }
         }
-    }
+    }*/
 }

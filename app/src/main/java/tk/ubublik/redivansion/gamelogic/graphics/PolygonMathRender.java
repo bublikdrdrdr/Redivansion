@@ -9,7 +9,7 @@ import java.nio.ShortBuffer;
 /**
  * Created by Bublik on 25-Aug-17.
  */
-
+@Deprecated
 public class PolygonMathRender {
 
     private class PolygonCache{
@@ -41,12 +41,28 @@ public class PolygonMathRender {
         return triangle;
     }
 
+    private static int POSITIONS_PER_POLYGON = 9;
+    private static int INDEXES_PER_POLYGON = 9;
+    private static int NORMALS_PER_POLYGON = 9;
     public void renderPositions(int polyIndex, FloatBuffer buffer, Polygon polygon, float changeAmount){
-        // TODO: 25-Aug-17 set polygon points to buffer (starting from index position)
         Vector3f[] triangle = getCurrentTriangle(polygon, changeAmount);
+        int index = polyIndex*POSITIONS_PER_POLYGON;
+        for (int i = 0; i < triangle.length; i++){
+            buffer.put(index, triangle[i].getX());
+            index++;
+            buffer.put(index, triangle[i].getY());
+            index++;
+            buffer.put(index, triangle[i].getZ());
+            index++;
+        }
     }
 
     public void renderIndexes(int polyIndex, ShortBuffer buffer, Polygon polygon, float changeAmount){
+        Vector3f[] triangle = getCurrentTriangle(polygon, changeAmount);
+        int index = polyIndex*POSITIONS_PER_POLYGON;
+        for (int i = 0; i < 9; i++){
+            buffer.put(index, (short)index);
+        }
     }
 
     public void renderNormals(int polyIndex, FloatBuffer buffer, Polygon polygon, float changeAmount){

@@ -144,8 +144,13 @@ public class Polygon{
         return ((getDelay()<=time) && (getDelay()+getDuration()>=time));
     }
 
+    private boolean done = false;
     public boolean isDone(long time){
-        return (time>delay+duration);
+        if (!done) {
+            if (time > delay + duration) done = true;
+            return false;
+        } return true;
+
     }
 
     public ColorRGBA getStartColor() {
