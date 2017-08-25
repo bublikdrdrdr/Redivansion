@@ -15,10 +15,6 @@ public class Model {
 
     private List<PolyAnimation> animations;
 
-    //нам це треба?
-    private int id;
-    private String name;
-
     public Model(){
         this(new LinkedList<PolyAnimation>());
     }
@@ -107,5 +103,12 @@ public class Model {
         } catch (NullPointerException e){
             return false;
         }
+    }
+
+    public PolyAnimation getAnimationByName(String name){
+        for (PolyAnimation polyAnimation: animations){
+            if (polyAnimation.getName().equals(name)) return polyAnimation;
+        }
+        return null;
     }
 }

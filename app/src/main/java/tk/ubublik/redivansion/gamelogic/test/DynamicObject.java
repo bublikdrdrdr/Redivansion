@@ -8,6 +8,8 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.VertexBuffer;
 
+import java.nio.Buffer;
+import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.Random;
 
@@ -43,6 +45,7 @@ public class DynamicObject {
         Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         material.setColor("Color", ColorRGBA.Red);
         geometry.setMaterial(material);
+        geometry.updateModelBound();
     }
 
     public void drawSomething(){
@@ -51,11 +54,34 @@ public class DynamicObject {
     }
 
     public void changeSomething(){
-
+        vertexBuffer = geometry.getMesh().getBuffer(VertexBuffer.Type.Position);
+        buffer = (FloatBuffer) vertexBuffer.getData();
+        animationNow = true;
+        startTime = System.currentTimeMillis();
     }
 
-    public void update(){
+    VertexBuffer vertexBuffer;
+    FloatBuffer buffer;
 
+    long duration = 1000;
+    long startTime;
+    boolean animationNow = false;
+    public void update(){
+        if (animationNow){
+            long time = System.currentTimeMillis()-startTime;
+            if (time>=duration){
+                setVertex(1f);
+                animationNow = false;
+            } else {
+                setVertex(time / (float) duration);
+            }
+            geometry.updateModelBound();
+            vertexBuffer.setUpdateNeeded();
+        }
+    }
+
+    private void setVertex(float percent){
+        buffer.put(0, (-3)*percent);
     }
 
     VertexBuffer indexBuffer;

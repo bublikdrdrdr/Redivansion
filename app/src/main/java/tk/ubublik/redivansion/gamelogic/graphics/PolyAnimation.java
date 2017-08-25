@@ -94,6 +94,7 @@ public class PolyAnimation{
 
     public void addPolygon(Polygon polygon){
         this.polygons.add(polygon);
+        resetCount();
     }
 
     @Override
@@ -119,5 +120,17 @@ public class PolyAnimation{
         } catch (NullPointerException e){
             return false;
         }
+    }
+
+    private void resetCount(){
+        count = -1;
+    }
+
+    private int count = -1;
+    public int polygonCount(){
+        if (count==-1) {
+            count = this.polygons.size();
+        }
+        return count;
     }
 }

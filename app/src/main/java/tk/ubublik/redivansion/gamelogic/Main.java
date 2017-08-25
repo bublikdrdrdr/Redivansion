@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import tk.ubublik.redivansion.gamelogic.test.DynamicObject;
+import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
  * Created by Bublik on 20-Aug-17.
@@ -31,19 +32,18 @@ public class Main extends SimpleApplication {
     }
 
     public void simpleInitApp() {
-        Box box = new Box(1f,1f,1f);
-
         setupApplication();
         addTestBox();
         testInit();
         getCamera().setLocation(new Vector3f(-4,3,6));
         getCamera().lookAt(new Vector3f(0,0,0), getCamera().getUp());
-        rootNode.updateGeometricState();
+        //rootNode.updateGeometricState();
     }
 
     private void setupApplication(){
         this.setDisplayStatView(false);
         this.setDisplayFps(false);
+        StaticAssetManager.setAssetManager(assetManager);
     }
 
     private void addTestBox(){
@@ -82,7 +82,7 @@ public class Main extends SimpleApplication {
     private long time;
     private void changeAfter5Seconds(){
         if (!updated){
-            if (System.currentTimeMillis()-time >= 5000){
+            if (System.currentTimeMillis()-time >= 3000){
                 dynamicObject.changeSomething();
                 updated = true;
             }

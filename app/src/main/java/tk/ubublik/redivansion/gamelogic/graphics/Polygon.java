@@ -17,10 +17,10 @@ public class Polygon{
     private Vector3f[] startPoints;
     private Vector3f[] endPoints;
 
-    private float duration;//animation duration
-    private float delay;//delay before animation start
+    private long duration;//animation duration
+    private long delay;//delay before animation start
 
-    private void setValues(ColorRGBA startColor, ColorRGBA endColor, Vector3f[] startPoints, Vector3f[] endPoints, float duration, float delay){
+    private void setValues(ColorRGBA startColor, ColorRGBA endColor, Vector3f[] startPoints, Vector3f[] endPoints, long duration, long delay){
         if (startPoints.length !=VECTOR_ARRAY_COUNT || endPoints.length != VECTOR_ARRAY_COUNT)
             throw new IllegalArgumentException("Point array length must be equal "+Integer.toString(VECTOR_ARRAY_COUNT));
         this.startColor = startColor;
@@ -31,22 +31,23 @@ public class Polygon{
         this.delay = delay;
     }
 
-    public Polygon(ColorRGBA startColor, ColorRGBA endColor, Vector3f[] startPoints, Vector3f[] endPoints, float duration, float delay) {
+    public Polygon(ColorRGBA startColor, ColorRGBA endColor, Vector3f[] startPoints, Vector3f[] endPoints, long duration, long delay) {
         setValues(startColor, endColor, startPoints, endPoints, duration, delay);
     }
 
     private static final int FLOAT_SIZE = 4;
+    private static final int LONG_SIZE = 8;
     private static final int VECTOR_SIZE = FLOAT_SIZE*3;
     private static final int VECTOR_ARRAY_COUNT = 3;
     private static final int VECTOR_ARRAY_SIZE = VECTOR_SIZE*VECTOR_ARRAY_COUNT;
     private static final int COLOR_SIZE = FLOAT_SIZE*4;
-    public static final int POLYGON_SIZE = FLOAT_SIZE*2 + COLOR_SIZE*2 + VECTOR_ARRAY_SIZE*2;
+    static final int POLYGON_SIZE = FLOAT_SIZE*2 + COLOR_SIZE*2 + VECTOR_ARRAY_SIZE*2;
     public Polygon(byte[] bytes, int index) {
         try{
-            float duration = ByteConverter.getFloat(bytes, index);
-            index+=FLOAT_SIZE;
-            float delay = ByteConverter.getFloat(bytes, index);
-            index+=FLOAT_SIZE;
+            long duration = ByteConverter.getLong(bytes, index);
+            index+=LONG_SIZE;
+            long delay = ByteConverter.getLong(bytes, index);
+            index+=LONG_SIZE;
 
             Vector3f[] startPoints = parseVectorArray(bytes, index);
             index+=VECTOR_ARRAY_SIZE;
@@ -60,8 +61,6 @@ public class Polygon{
             setValues(startColor, endColor, startPoints, endPoints, duration, delay);
         } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
             throw new IllegalArgumentException("Can't parse model from bytes", e);
-        } catch (Exception e){
-            System.out.println("d");
         }
     }
 
@@ -98,9 +97,9 @@ public class Polygon{
         byte[] bytes = new byte[POLYGON_SIZE];
         int index = 0;
         ByteConverter.insertArray(bytes, ByteConverter.getArray(duration), index);
-        index+=FLOAT_SIZE;
+        index+=LONG_SIZE;
         ByteConverter.insertArray(bytes, ByteConverter.getArray(delay), index);
-        index+=FLOAT_SIZE;
+        index+=LONG_SIZE;
 
         ByteConverter.insertArray(bytes, getVectorArrayBytes(startPoints), index);
         index+=VECTOR_ARRAY_SIZE;
@@ -141,6 +140,14 @@ public class Polygon{
         return bytes;
     }
 
+    public boolean isUpdating(long time){
+        return ((getDelay()<=time) && (getDelay()+getDuration()>=time));
+    }
+
+    public boolean isDone(long time){
+        return (time>delay+duration);
+    }
+
     public ColorRGBA getStartColor() {
         return startColor;
     }
@@ -173,19 +180,19 @@ public class Polygon{
         this.endPoints = endPoints;
     }
 
-    public float getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(float duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
-    public float getDelay() {
+    public long getDelay() {
         return delay;
     }
 
-    public void setDelay(float delay) {
+    public void setDelay(long delay) {
         this.delay = delay;
     }
 
