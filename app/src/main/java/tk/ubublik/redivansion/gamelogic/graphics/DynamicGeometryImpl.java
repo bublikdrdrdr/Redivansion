@@ -2,11 +2,7 @@ package tk.ubublik.redivansion.gamelogic.graphics;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.shape.Box;
-import com.jme3.texture.Texture;
 
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
@@ -37,8 +33,11 @@ public class DynamicGeometryImpl extends Geometry implements DynamicGeometry{
         meshRender = new MeshRender(polyAnimation);
         this.setMesh(meshRender.getMesh());
         meshRender.beginAnimation();
-        Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Yellow);
+        Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
+        mat.setColor("Specular", ColorRGBA.White);
+        mat.setBoolean("UseVertexColor", true);
+        //mat.setBoolean("VertexLighting", true);
+        //mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);//debug mode: show polygons from both sides
         this.setMaterial(mat);
     }
 

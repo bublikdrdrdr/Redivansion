@@ -1,24 +1,21 @@
 package tk.ubublik.redivansion.gamelogic;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.Light;
+import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Triangle;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 
-import java.nio.ShortBuffer;
-import java.util.Random;
 import java.util.logging.Logger;
 
-import tk.ubublik.redivansion.gamelogic.graphics.DynamicGeometry;
 import tk.ubublik.redivansion.gamelogic.graphics.DynamicGeometryImpl;
-import tk.ubublik.redivansion.gamelogic.graphics.ModelGeometry;
-import tk.ubublik.redivansion.gamelogic.test.DynamicObject;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
@@ -42,7 +39,7 @@ public class Main extends SimpleApplication {
 
     public void simpleInitApp() {
         setupApplication();
-        //addTestBox();
+        addTestBox();
         testInit();
         getCamera().setLocation(new Vector3f(-4,3,6));
         getCamera().lookAt(new Vector3f(0,0,0), getCamera().getUp());
@@ -68,19 +65,35 @@ public class Main extends SimpleApplication {
         mat.setTexture("ColorMap", texture);
         geom.setMaterial(mat);
         geom.move(new Vector3f(2,0,0));
+
+        com.jme3.scene.shape.Quad quad = new Quad(30,30);
+        Material mat2 = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
+        mat2.setBoolean("UseMaterialColors",true);  // Set some parameters, e.g. blue.
+        mat2.setColor("Ambient", ColorRGBA.Blue);   // ... color of this object
+        mat2.setColor("Diffuse", ColorRGBA.Yellow);
+        mat2.setColor("Specular", ColorRGBA.White);
+        Texture texture2 = assetManager.loadTexture("Textures/specular.png");
+        mat2.setTexture("SpecularMap",texture2);
+        mat2.setFloat("Shininess", 2f);
+        Geometry floor = new Geometry("floor", quad);
+        floor.move(-15f,-5,15);
+        floor.rotate(-FastMath.HALF_PI,0,0);
+        floor.setMaterial(mat2);
+        rootNode.attachChild(floor);
         rootNode.attachChild(geom);
     }
 
 
 
     //TEST FIELD
-    ModelGeometry modelGeometry;
     DynamicGeometryImpl dynamicGeometry;
+    SpotLight light;
 
     private void testInit(){
-        /*modelGeometry = new ModelGeometry("something", new ExampleModel());
-        rootNode.attachChild(modelGeometry.getGeometry());
-        time = System.currentTimeMillis();*/
+        Light allLight = new AmbientLight(ColorRGBA.DarkGray);
+        rootNode.addLight(allLight);
+        light = new SpotLight(getCamera().getLocation(), getCamera().getDirection());
+        rootNode.addLight(light);
         dynamicGeometry = new DynamicGeometryImpl(new ExampleModel());
         rootNode.attachChild(dynamicGeometry);
         dynamicGeometry.beginAnimation("build");
@@ -88,6 +101,9 @@ public class Main extends SimpleApplication {
 
     private void testUpdate(){
         dynamicGeometry.onUpdate();
+        //dynamicGeometry.rotate(0f, 0.02f, 0f);
+        light.setDirection(getCamera().getDirection());
+        light.setPosition(getCamera().getLocation());
         //change();
     }
 

@@ -141,7 +141,7 @@ public class Polygon{
     }
 
     public boolean isUpdating(long time){
-        return ((getDelay()<=time) && (getDelay()+getDuration()>=time));
+        return ((getDelay()<=time) && ((getDelay()+getDuration()>=time) || (!done)));
     }
 
     private boolean done = false;
