@@ -2,20 +2,22 @@ package tk.ubublik.redivansion.gamelogic;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
-import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 
+import java.nio.FloatBuffer;
 import java.util.logging.Logger;
 
-import tk.ubublik.redivansion.gamelogic.graphics.DynamicGeometryImpl;
+import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
@@ -41,7 +43,8 @@ public class Main extends SimpleApplication {
         setupApplication();
         addTestBox();
         testInit();
-        getCamera().setLocation(new Vector3f(-4,3,6));
+        getCamera().setLocation(new Vector3f(-3,2,6));
+        getCamera().setFrustumPerspective(90f, 1.7777f, 0.1f, 500f);
         getCamera().lookAt(new Vector3f(0,0,0), getCamera().getUp());
         //rootNode.updateGeometricState();
     }
@@ -79,6 +82,10 @@ public class Main extends SimpleApplication {
         floor.move(-15f,-5,15);
         floor.rotate(-FastMath.HALF_PI,0,0);
         floor.setMaterial(mat2);
+
+        VertexBuffer vertexBuffer = floor.getMesh().getBuffer(VertexBuffer.Type.Normal);
+        FloatBuffer floatBuffer = (FloatBuffer)vertexBuffer.getData();
+
         rootNode.attachChild(floor);
         rootNode.attachChild(geom);
     }
@@ -86,15 +93,15 @@ public class Main extends SimpleApplication {
 
 
     //TEST FIELD
-    DynamicGeometryImpl dynamicGeometry;
-    SpotLight light;
+    GeometryAnimationManager dynamicGeometry;
+    DirectionalLight light;
 
     private void testInit(){
         Light allLight = new AmbientLight(ColorRGBA.DarkGray);
         rootNode.addLight(allLight);
-        light = new SpotLight(getCamera().getLocation(), getCamera().getDirection());
+        light = new DirectionalLight(getCamera().getDirection());
         rootNode.addLight(light);
-        dynamicGeometry = new DynamicGeometryImpl(new ExampleModel());
+        dynamicGeometry = new GeometryAnimationManager(new ExampleModel());
         rootNode.attachChild(dynamicGeometry);
         dynamicGeometry.beginAnimation("build");
     }
@@ -103,7 +110,7 @@ public class Main extends SimpleApplication {
         dynamicGeometry.onUpdate();
         //dynamicGeometry.rotate(0f, 0.02f, 0f);
         light.setDirection(getCamera().getDirection());
-        light.setPosition(getCamera().getLocation());
+        //light.setPosition(getCamera().getLocation());
         //change();
     }
 

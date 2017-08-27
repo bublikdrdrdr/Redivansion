@@ -9,17 +9,17 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 /**
  * Created by Bublik on 25-Aug-17.
  */
-// TODO: 25-Aug-17 pick a better class name
-public class DynamicGeometryImpl extends Geometry implements DynamicGeometry{
+
+public class GeometryAnimationManager extends GeometryManager{
 
     private Model model;
     private MeshRender meshRender;
 
-    public DynamicGeometryImpl(byte[] bytes) {
+    public GeometryAnimationManager(byte[] bytes) {
         this(new Model(bytes));
     }
 
-    public DynamicGeometryImpl(Model model){
+    public GeometryAnimationManager(Model model){
         if (model==null) throw new NullPointerException("Model can't be null");
         this.model = model;
         prepareAnimation(model.getAnimations().get(0));
@@ -51,7 +51,6 @@ public class DynamicGeometryImpl extends Geometry implements DynamicGeometry{
         }
     }
 
-    @Override
     public void beginAnimation(String name) {
         PolyAnimation polyAnimation = model.getAnimationByName(name);
         if (polyAnimation==null) throw new NullPointerException("Can't find animation with name +\""+name+"\"");

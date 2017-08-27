@@ -101,6 +101,8 @@ public class MeshRender {
             positionVertexBuffer.setUpdateNeeded();
             normalVertexBuffer.setUpdateNeeded();
             colorVertexBuffer.setUpdateNeeded();
+
+
             if (allDone) {
                 done = true;
                 animationStart = ANIMATION_DISABLED;
