@@ -36,6 +36,7 @@ dependencies {
 
     //interesting features
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    compile group: 'org.apache.commons', name: 'commons-io', version: '1.3.2'
 
     // below is only when using Lemur as UI
     //compile 'com.simsilica:lemur:[1.6,)'

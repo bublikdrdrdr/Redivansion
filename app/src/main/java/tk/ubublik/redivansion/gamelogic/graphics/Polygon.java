@@ -41,7 +41,7 @@ public class Polygon{
     private static final int VECTOR_ARRAY_COUNT = 3;
     private static final int VECTOR_ARRAY_SIZE = VECTOR_SIZE*VECTOR_ARRAY_COUNT;
     private static final int COLOR_SIZE = FLOAT_SIZE*4;
-    static final int POLYGON_SIZE = FLOAT_SIZE*2 + COLOR_SIZE*2 + VECTOR_ARRAY_SIZE*2;
+    static final int POLYGON_SIZE = LONG_SIZE*2 + COLOR_SIZE*2 + VECTOR_ARRAY_SIZE*2;
     public Polygon(byte[] bytes, int index) {
         try{
             long duration = ByteConverter.getLong(bytes, index);

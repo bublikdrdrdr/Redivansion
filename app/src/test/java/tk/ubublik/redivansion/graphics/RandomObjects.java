@@ -54,7 +54,7 @@ public class RandomObjects {
         ColorRGBA c2 = getRandomColor();
         Vector3f[] v1 = new Vector3f[]{getRandomVector(), getRandomVector(), getRandomVector()};
         Vector3f[] v2 = new Vector3f[]{getRandomVector(), getRandomVector(), getRandomVector()};
-        return new Polygon(c1, c2, v1, v2, random.nextFloat(), random.nextFloat());
+        return new Polygon(c1, c2, v1, v2, random.nextLong(), random.nextLong());
     }
 
     public ColorRGBA getRandomColor(){

@@ -1,5 +1,10 @@
 package tk.ubublik.redivansion.gamelogic;
 
+import android.os.Environment;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -14,11 +19,19 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
 import java.nio.FloatBuffer;
 import java.util.logging.Logger;
+import java.util.logging.SocketHandler;
 
+import tk.ubublik.redivansion.MainActivity;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
+import tk.ubublik.redivansion.gamelogic.graphics.Model;
+import tk.ubublik.redivansion.gamelogic.graphics.ModelManager;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
+import tk.ubublik.redivansion.gamelogic.utils.CustomModelLoader;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
@@ -28,19 +41,28 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 public class Main extends SimpleApplication {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
-    public static void main(String[] args) {
-        Main main = new Main();
-        main.start();
-    }
-
     @Override
     public void simpleUpdate(float tpf) {
         // TODO: 20-Aug-17 process game logic
         testUpdate();
     }
 
+    ModelManager modelManager = new ModelManager();
+
     public void simpleInitApp() {
         setupApplication();
+        Model model = new ExampleModel();
+        modelManager.loadModel("polyModel1.crm");
+        /*try {
+
+            Looper.prepare(); //да да, ця дрянь треба, щоб записати сраний файл
+            File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "file.file");
+            file.createNewFile();
+            FileUtils.writeByteArrayToFile(file, model.getBytes());
+            Toast.makeText(MainActivity.context, "ok", Toast.LENGTH_LONG).show();
+        } catch (Exception e){
+            logger.warning(e.getMessage());
+        }*/
         addTestBox();
         testInit();
         getCamera().setLocation(new Vector3f(-3,2,6));
@@ -53,6 +75,7 @@ public class Main extends SimpleApplication {
         this.setDisplayStatView(false);
         this.setDisplayFps(false);
         StaticAssetManager.setAssetManager(assetManager);
+        assetManager.registerLoader(CustomModelLoader.class, "crm");
     }
 
     private void addTestBox(){
@@ -101,7 +124,7 @@ public class Main extends SimpleApplication {
         rootNode.addLight(allLight);
         light = new DirectionalLight(getCamera().getDirection());
         rootNode.addLight(light);
-        dynamicGeometry = new GeometryAnimationManager(new ExampleModel());
+        dynamicGeometry = new GeometryAnimationManager(modelManager.getModel("polyModel1.crm"));
         rootNode.attachChild(dynamicGeometry);
         dynamicGeometry.beginAnimation("build");
     }
