@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'groovyx.grooid.groovy-android'
 
 android {
     compileSdkVersion 25
@@ -11,6 +12,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -22,10 +24,9 @@ android {
 ext.jmeVersion = "[3.1,)"
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.3.1'
-
     compile "org.jmonkeyengine:jme3-android:$jmeVersion"
     compile "org.jmonkeyengine:jme3-android-native:$jmeVersion"
     compile "org.jmonkeyengine:jme3-core:$jmeVersion"
@@ -33,17 +34,17 @@ dependencies {
     compile "org.jmonkeyengine:jme3-jogg:$jmeVersion"
     compile "org.jmonkeyengine:jme3-plugins:$jmeVersion"
     compile "org.jmonkeyengine:jme3-terrain:$jmeVersion"
-
     //interesting features
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
-    compile group: 'org.apache.commons', name: 'commons-io', version: '1.3.2'
-
+    compile 'org.apache.commons:commons-lang3:3.0'
+    compile 'org.apache.commons:commons-io:1.3.2'
     // below is only when using Lemur as UI
-    //compile 'com.simsilica:lemur:[1.6,)'
-
+    compile 'com.simsilica:lemur:1.10.1'
+    //compile "com.simsilica:lemur-proto:1.9.1"
+    //needed for Lemur
+    compile 'com.google.guava:guava:23.0-android'
+    compile 'org.codehaus.groovy:groovy:2.4.0:grooid'
     // below is only when using Physics libs
     //compile "org.jmonkeyengine:jme3-bullet:$jmeVersion"
     //compile "org.jmonkeyengine:jme3-bullet-native-android:$jmeVersion"
     //compile "org.jmonkeyengine:jme3-terrain:$jmeVersion"
-
 }

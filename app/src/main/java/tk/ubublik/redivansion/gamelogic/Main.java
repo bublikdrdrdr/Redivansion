@@ -15,9 +15,11 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.VertexBuffer;
+import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
+import com.simsilica.lemur.GuiGlobals;
 
 import org.apache.commons.io.FileUtils;
 
@@ -30,6 +32,7 @@ import tk.ubublik.redivansion.MainActivity;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.graphics.ModelManager;
+import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.utils.CustomModelLoader;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
@@ -41,6 +44,8 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 public class Main extends SimpleApplication {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
+    GUI gui;
+
     @Override
     public void simpleUpdate(float tpf) {
         // TODO: 20-Aug-17 process game logic
@@ -51,6 +56,7 @@ public class Main extends SimpleApplication {
 
     public void simpleInitApp() {
         setupApplication();
+        setupGui();
         Model model = new ExampleModel();
         modelManager.loadModel("polyModel1.crm");
         /*try {
@@ -66,14 +72,19 @@ public class Main extends SimpleApplication {
         addTestBox();
         testInit();
         getCamera().setLocation(new Vector3f(-3,2,6));
-        getCamera().setFrustumPerspective(90f, 1.7777f, 0.1f, 500f);
+        getCamera().setFrustumPerspective(60f, 1.7777f, 0.1f, 500f);
         getCamera().lookAt(new Vector3f(0,0,0), getCamera().getUp());
         //rootNode.updateGeometricState();
     }
 
+    private void setupGui(){
+        GuiGlobals.initialize(this);
+        gui = new GUI(guiNode);
+    }
+
     private void setupApplication(){
         this.setDisplayStatView(false);
-        this.setDisplayFps(false);
+        this.setDisplayFps(true);
         StaticAssetManager.setAssetManager(assetManager);
         assetManager.registerLoader(CustomModelLoader.class, "crm");
     }
@@ -120,6 +131,7 @@ public class Main extends SimpleApplication {
     DirectionalLight light;
 
     private void testInit(){
+        attachGrid(new Vector3f(0,-1,0), 50, ColorRGBA.Cyan);
         Light allLight = new AmbientLight(ColorRGBA.DarkGray);
         rootNode.addLight(allLight);
         light = new DirectionalLight(getCamera().getDirection());
@@ -135,6 +147,17 @@ public class Main extends SimpleApplication {
         light.setDirection(getCamera().getDirection());
         //light.setPosition(getCamera().getLocation());
         //change();
+    }
+
+    private Geometry attachGrid(Vector3f pos, int size, ColorRGBA color){
+        Geometry g = new Geometry("wireframe grid", new Grid(size, size, 0.5f) );
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.getAdditionalRenderState().setWireframe(true);
+        mat.setColor("Color", color);
+        g.setMaterial(mat);
+        g.center().move(pos);
+        rootNode.attachChild(g);
+        return g;
     }
 
 

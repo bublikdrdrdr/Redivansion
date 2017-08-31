@@ -13,13 +13,13 @@ public class JmeFragment extends AndroidHarnessFragment {
 
     public JmeFragment() {
         // Set main project class (fully qualified path)
-        appClass = "tk.ubublik.redivansion.gamelogic.Main";
+        appClass = "tk.ubublik.redivansion.gamelogic.gems.Main";
 
         // Set the desired EGL configuration
         eglBitsPerPixel = 24;
         eglAlphaBits = 0;
         eglDepthBits = 16;
-        eglSamples = 16;//anti-aliasing
+        eglSamples = 1;//anti-aliasing
         eglStencilBits = 0;
 
         // Set the maximum framerate
