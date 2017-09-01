@@ -33,6 +33,8 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.graphics.ModelManager;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
+import tk.ubublik.redivansion.gamelogic.lifecycle.Lifecycle;
+import tk.ubublik.redivansion.gamelogic.lifecycle.MainLifecycle;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.utils.CustomModelLoader;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
@@ -44,7 +46,30 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 public class Main extends SimpleApplication {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
-    GUI gui;
+    private Lifecycle lifecycle = new MainLifecycle(this);
+
+    @Override
+    public void simpleInitApp() {
+        setupApplication();
+    }
+
+    @Override
+    public void simpleUpdate(float tpf) {
+        while (!lifecycle.isDone()){
+            lifecycle.update();
+        }
+    }
+
+    private void setupApplication(){
+        this.setDisplayStatView(false);
+        this.setDisplayFps(true);
+        StaticAssetManager.setAssetManager(assetManager);
+        assetManager.registerLoader(CustomModelLoader.class, "crm");
+    }
+
+
+
+    /*GUI gui;
 
     @Override
     public void simpleUpdate(float tpf) {
@@ -59,16 +84,6 @@ public class Main extends SimpleApplication {
         setupGui();
         Model model = new ExampleModel();
         modelManager.loadModel("polyModel1.crm");
-        /*try {
-
-            Looper.prepare(); //да да, ця дрянь треба, щоб записати сраний файл
-            File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "file.file");
-            file.createNewFile();
-            FileUtils.writeByteArrayToFile(file, model.getBytes());
-            Toast.makeText(MainActivity.context, "ok", Toast.LENGTH_LONG).show();
-        } catch (Exception e){
-            logger.warning(e.getMessage());
-        }*/
         addTestBox();
         testInit();
         getCamera().setLocation(new Vector3f(-3,2,6));
@@ -143,10 +158,7 @@ public class Main extends SimpleApplication {
 
     private void testUpdate(){
         dynamicGeometry.onUpdate();
-        //dynamicGeometry.rotate(0f, 0.02f, 0f);
         light.setDirection(getCamera().getDirection());
-        //light.setPosition(getCamera().getLocation());
-        //change();
     }
 
     private Geometry attachGrid(Vector3f pos, int size, ColorRGBA color){
@@ -176,29 +188,6 @@ public class Main extends SimpleApplication {
             if (System.currentTimeMillis()-time >= 10000){
                 dynamicGeometry.beginAnimation("change");
                 changed = true;
-            }
-        }
-    }
-    /*private DynamicObject dynamicObject;
-
-    private void testInit(){
-        dynamicObject = new DynamicObject(rootNode, assetManager);
-        dynamicObject.drawSomething();
-        time = System.currentTimeMillis();
-    }
-
-    private void testUpdate(){
-        dynamicObject.update();
-        changeAfter5Seconds();
-    }
-
-    private boolean updated = false;
-    private long time;
-    private void changeAfter5Seconds(){
-        if (!updated){
-            if (System.currentTimeMillis()-time >= 3000){
-                dynamicObject.changeSomething();
-                updated = true;
             }
         }
     }*/
