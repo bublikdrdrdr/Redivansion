@@ -13,7 +13,11 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 
 public abstract class WorldObject extends Node{
 
+    //only 3D model
     private GeometryManager geometryManager;
+
+    //notification icon (if something wrong with the object)
+    private Node icon;
 
     //game logic properties
     private Point position;
@@ -22,10 +26,13 @@ public abstract class WorldObject extends Node{
     private WorldObjectLevel level;
     private boolean permanent;
 
-    public WorldObject(){};
+    public WorldObject(){
+        this(null);
+    };
 
     public WorldObject(GeometryManager geometryManager){
         this.geometryManager = geometryManager;
+        setGeometryManager(geometryManager);
     }
 
     public GeometryManager getGeometryManager() {
@@ -34,6 +41,9 @@ public abstract class WorldObject extends Node{
 
     public void setGeometryManager(GeometryManager geometryManager) {
         this.geometryManager = geometryManager;
+        if (geometryManager!=null){
+            this.attachChild(geometryManager);
+        }
     }
 
     public abstract byte[] toBytes();

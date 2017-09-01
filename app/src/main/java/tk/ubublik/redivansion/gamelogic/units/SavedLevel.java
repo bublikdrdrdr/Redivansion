@@ -14,4 +14,13 @@ public class SavedLevel {
     long time;
     int money;
     int level;
+
+    public SavedLevel(byte[] bytes){
+
+    }
+
+    public byte[] getBytes() {
+        //// TODO: 01-Sep-17
+        return null;
+    }
 }

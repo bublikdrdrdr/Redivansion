@@ -9,6 +9,8 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
  */
 
 public class Level {
+
+    int id;
     LevelStatus levelStatus;
     List<WorldObject> worldObjects;
     long time;
