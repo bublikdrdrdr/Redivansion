@@ -5,7 +5,7 @@ package tk.ubublik.redivansion.gamelogic.lifecycle;
  */
 
 public interface Lifecycle {
-
+    LifecycleType getType();
     boolean isDone();
     void update();
 }
