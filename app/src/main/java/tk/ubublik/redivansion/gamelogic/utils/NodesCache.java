@@ -1,6 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.utils;
 
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Objects;
 public class NodesCache {
     private static final NodesCache ourInstance = new NodesCache();
 
-    private Map<String, Node> map;
+    private Map<String, Spatial> map;
 
     public static NodesCache getInstance() {
         return ourInstance;
@@ -27,12 +28,12 @@ public class NodesCache {
         map = new HashMap<>();
     }
 
-    public void put(String key, Node node){
+    public void put(String key, Spatial node){
         map.put(key, node);
     }
 
-    public void  get(String key){
-        map.get(key);
+    public Spatial  get(String key){
+        return map.get(key);
     }
 
     public void remove(String key) {

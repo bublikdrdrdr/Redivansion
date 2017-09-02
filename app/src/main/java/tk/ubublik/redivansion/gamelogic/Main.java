@@ -46,21 +46,24 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 public class Main extends SimpleApplication {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
-    private Lifecycle lifecycle = new MainLifecycle(this);
+    private Lifecycle lifecycle;
 
     @Override
     public void simpleInitApp() {
         setupApplication();
+        lifecycle = new MainLifecycle(this);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        while (!lifecycle.isDone()){
-            lifecycle.update();
+        lifecycle.update();
+        if (lifecycle.isDone()) {
+            this.stop();
         }
     }
 
     private void setupApplication(){
+        GuiGlobals.initialize(this);
         this.setDisplayStatView(false);
         this.setDisplayFps(true);
         StaticAssetManager.setAssetManager(assetManager);
