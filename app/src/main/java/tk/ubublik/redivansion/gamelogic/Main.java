@@ -63,6 +63,7 @@ public class Main extends SimpleApplication {
     }
 
     private void setupApplication(){
+        inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
         GuiGlobals.initialize(this);
         this.setDisplayStatView(false);
         this.setDisplayFps(true);

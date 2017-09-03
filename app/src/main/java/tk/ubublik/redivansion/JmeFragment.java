@@ -1,6 +1,12 @@
 package tk.ubublik.redivansion;
 
+import android.app.AlertDialog;
+
 import com.jme3.app.AndroidHarnessFragment;
+import com.jme3.app.SimpleApplication;
+import com.jme3.input.TouchInput;
+import com.jme3.input.controls.TouchTrigger;
+import com.jme3.input.event.TouchEvent;
 
 /**
  * Created by Bublik on 20-Aug-17.
@@ -52,4 +58,12 @@ public class JmeFragment extends AndroidHarnessFragment {
         splashPicID = 0;
     }
 
+
+    // TODO: 03-Sep-17 find a better place to put next code
+    public static final String BACK_PRESS_EVENT = "BackPressEvent";
+    @Override
+    public void initialize() {
+        super.initialize();
+        super.getJmeApplication().getInputManager().addMapping(BACK_PRESS_EVENT, new TouchTrigger(TouchInput.KEYCODE_BACK));
+    }
 }

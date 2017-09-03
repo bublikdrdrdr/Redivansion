@@ -8,8 +8,12 @@ import com.jme3.app.SimpleApplication;
  * Difference between LevelLoadingLifecycle - additional tutorial nodes
  */
 public class TutorialLoadingLifecycle extends LoadingLifecycle {
+
+    private boolean done = false;
+
     public TutorialLoadingLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
+        done = true;
     }
 
     @Override
@@ -19,7 +23,7 @@ public class TutorialLoadingLifecycle extends LoadingLifecycle {
 
     @Override
     public boolean isDone() {
-        return false;
+        return done;
     }
 
     @Override

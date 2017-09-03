@@ -32,6 +32,9 @@ public class MainLoadingLifecycle extends LoadingLifecycle {
             public void run() {
                 // TODO: 02-Sep-17 load gui nodes to NodesCache
                 try {
+                    // FIXME: 03-Sep-17 does not show the image on screen
+                    //use IconComponent
+                    //see https://github.com/jMonkeyEngine-Contributions/Lemur/wiki/GUI-Components#iconcomponent
                     Material unshadedMaterial = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
                     Picture picture = new Picture("Textures/menu_background.png");
                     picture.setMaterial(unshadedMaterial);

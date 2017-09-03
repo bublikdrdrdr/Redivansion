@@ -41,7 +41,15 @@ public class MainLifecycle extends Lifecycle {
                 case LEVEL_LOADING:
                     currentLifecycle = new LevelLifecycle(((LevelLoadingLifecycle) currentLifecycle).getLevelNumber(), simpleApplication);
                     break;
-                case LEVEL: currentLifecycle = new MainLoadingLifecycle(simpleApplication); break;
+                case LEVEL:
+                    currentLifecycle = new MainLoadingLifecycle(simpleApplication);
+                    break;
+                case TUTORIAL_LOADING:
+                    currentLifecycle = new TutorialLifecycle(simpleApplication);
+                    break;
+                case TUTORIAL:
+                    currentLifecycle = new MainLoadingLifecycle(simpleApplication);
+                    break;
             }
         }
     }

@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         // The "activity_main" layout includes the reference
         // to the fragment that contains the GLSurfaceView
         // that will be used to display the jME content.
-        setContentView(R.layout.activity_main);
         context = this.getApplicationContext();
+        setContentView(R.layout.activity_main);
     }
 }

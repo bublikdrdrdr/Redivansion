@@ -14,6 +14,7 @@ import com.jme3.scene.shape.Box;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
+import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.Panel;
 import com.simsilica.lemur.component.BoxLayout;
@@ -32,6 +33,7 @@ public class MenuLifecycle extends Lifecycle {
     enum MenuResult{ START_LEVEL, START_TUTORIAL, EXIT};
     public int startLevelNumber;
     public MenuResult menuResult;
+    private boolean done = false;
 
     public MenuLifecycle(SimpleApplication simpleApplication){
         super(simpleApplication);
@@ -45,7 +47,7 @@ public class MenuLifecycle extends Lifecycle {
 
     @Override
     public boolean isDone() {
-        return false;
+        return done;
     }
 
     @Override
@@ -55,27 +57,38 @@ public class MenuLifecycle extends Lifecycle {
 
     Spatial background;
     private void createMenuElements(){
-        background = NodesCache.getInstance().get("menu_background");
-        simpleApplication.getGuiNode().attachChild(background);
+        /*background = NodesCache.getInstance().get("menu_background");
+        simpleApplication.getGuiNode().attachChild(background);*/
 
         final Container myWindow = new Container();
         simpleApplication.getGuiNode().attachChild(myWindow);
         myWindow.setLocalScale(4f);
-        myWindow.setLocalTranslation(300, 300, 0);
-        myWindow.addChild(new Label("This is menu."));
-        Button clickMe = myWindow.addChild(new Button("button"));
-        clickMe.addClickCommands(new Command<Button>() {
+        myWindow.setLocalTranslation(simpleApplication.getCamera().getWidth()/2-200, simpleApplication.getCamera().getHeight()-200, 0);
+        Label label = myWindow.addChild(new Label("Main menu"));
+        label.setColor(ColorRGBA.Cyan);
+        Button startGame = myWindow.addChild(new Button("Start game"));
+        Button tutorial = myWindow.addChild(new Button("Tutorial"));
+        Button settings = myWindow.addChild(new Button("Settings"));
+        Button exit = myWindow.addChild(new Button("Exit"));
+        startGame.addClickCommands(new Command<Button>() {
             @Override
-            public void execute( Button source ) {
+            public void execute(Button source) {
+
             }
         });
-    }
-
-    private Panel loadingPanel;
-    private void setLoadingNode(){
-        Label label = new Label("MENU");
-        label.setFontSize(50f);
-        loadingPanel = label;
-        simpleApplication.getGuiNode().attachChild(loadingPanel);
+        tutorial.addClickCommands(new Command<Button>() {
+            @Override
+            public void execute(Button source) {
+                menuResult = MenuResult.START_TUTORIAL;
+                done = true;
+            }
+        });
+        exit.addClickCommands(new Command<Button>() {
+            @Override
+            public void execute(Button source) {
+                menuResult = MenuResult.EXIT;
+                done = true;
+            }
+        });
     }
 }
