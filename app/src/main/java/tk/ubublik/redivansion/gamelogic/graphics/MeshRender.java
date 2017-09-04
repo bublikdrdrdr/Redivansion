@@ -20,6 +20,7 @@ public class MeshRender {
     private Mesh mesh;
     private long animationStart = ANIMATION_DISABLED;
     private static long ANIMATION_DISABLED = -1;
+    private GeometryLoopAnimationManager.OnAnimationEndListener listener = null;
 
     public MeshRender(PolyAnimation polyAnimation) {
         this.polyAnimation = polyAnimation;
@@ -40,6 +41,10 @@ public class MeshRender {
 
         fillIndexBuffer();
         return mesh;
+    }
+
+    public void setOnAnimationEndListener(GeometryLoopAnimationManager.OnAnimationEndListener onAnimationEndListener){
+        this.listener = onAnimationEndListener;
     }
 
     private void setMeshBuffer() {
@@ -148,5 +153,13 @@ public class MeshRender {
 
     public void beginAnimation() {
         animationStart = System.currentTimeMillis();
+    }
+
+    public GeometryLoopAnimationManager.OnAnimationEndListener getListener() {
+        return listener;
+    }
+
+    public void setListener(GeometryLoopAnimationManager.OnAnimationEndListener listener) {
+        this.listener = listener;
     }
 }
