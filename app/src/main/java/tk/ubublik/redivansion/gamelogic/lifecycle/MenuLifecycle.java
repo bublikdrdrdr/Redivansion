@@ -11,6 +11,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.ui.Picture;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
@@ -59,7 +60,11 @@ public class MenuLifecycle extends Lifecycle {
     private void createMenuElements(){
         /*background = NodesCache.getInstance().get("menu_background");
         simpleApplication.getGuiNode().attachChild(background);*/
-
+        Picture backgroundPicture = (Picture)NodesCache.getInstance().get("menu_background");
+        backgroundPicture.setWidth(simpleApplication.getCamera().getWidth());
+        backgroundPicture.setHeight(simpleApplication.getCamera().getHeight());
+        backgroundPicture.setPosition(0,0);
+        simpleApplication.getGuiNode().attachChild(backgroundPicture);
         final Container myWindow = new Container();
         simpleApplication.getGuiNode().attachChild(myWindow);
         myWindow.setLocalScale(4f);
