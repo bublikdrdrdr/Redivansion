@@ -13,11 +13,18 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.debug.Grid;
+import com.simsilica.lemur.Button;
+import com.simsilica.lemur.Command;
+import com.simsilica.lemur.Container;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tk.ubublik.redivansion.JmeFragment;
 import tk.ubublik.redivansion.MainActivity;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
+import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
@@ -35,6 +42,7 @@ public class TutorialLifecycle extends Lifecycle {
     public TutorialLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
         simpleApplication.getInputManager().addListener(touchListener,  new String[]{BACK_PRESS_EVENT});
+        addDebugPanel();
         testContent();
     }
 
@@ -83,6 +91,20 @@ public class TutorialLifecycle extends Lifecycle {
                         done = true;
                         break;
                 }
+            }
+        }
+    };
+
+    private void addDebugPanel(){
+        DebugPanel debugPanel = new DebugPanel(simpleApplication);
+        debugPanel.addButton("Console log", commands);
+    }
+
+    Command<Button> commands = new Command<Button>() {
+        @Override
+        public void execute(Button source) {
+            switch (source.getText()){
+                case "Console log": System.out.println("Console log"); break;
             }
         }
     };
