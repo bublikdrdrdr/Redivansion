@@ -141,9 +141,12 @@ public class Polygon{
     }
 
     public boolean isUpdating(long time){
-        return ((getDelay()<=time) && ((getDelay()+getDuration()>=time) || (!done)));
+        boolean res = ((getDelay()<=time) && ((!lastUpdate) || (getDelay()+getDuration()>=time)));
+        if (done) lastUpdate = true;
+        return res;
     }
 
+    private boolean lastUpdate = false;
     private boolean done = false;
     public boolean isDone(long time){
         if (!done) {
