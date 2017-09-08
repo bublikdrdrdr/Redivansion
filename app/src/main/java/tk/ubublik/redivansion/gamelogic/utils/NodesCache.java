@@ -18,7 +18,7 @@ import java.util.Objects;
 public class NodesCache {
     private static final NodesCache ourInstance = new NodesCache();
 
-    private Map<String, Spatial> map;
+    private Map<String, Object> map;
 
     public static NodesCache getInstance() {
         return ourInstance;
@@ -28,11 +28,11 @@ public class NodesCache {
         map = new HashMap<>();
     }
 
-    public void put(String key, Spatial node){
+    public void put(String key, Object node){
         map.put(key, node);
     }
 
-    public Spatial  get(String key){
+    public Object get(String key){
         return map.get(key);
     }
 

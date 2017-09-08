@@ -12,6 +12,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
@@ -26,6 +27,7 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
+import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 import static com.jme3.input.event.TouchEvent.Type.KEY_UP;
@@ -44,10 +46,19 @@ public class TutorialLifecycle extends Lifecycle {
         simpleApplication.getInputManager().addListener(touchListener,  new String[]{BACK_PRESS_EVENT});
         addDebugPanel();
         testContent();
+        addTestModel();
+    }
+
+    GeometryAnimationManager geometryAnimationManager;
+    private void addTestModel(){
+        //surprise: does not work on emulator... but on real device is good
+        geometryAnimationManager = (GeometryAnimationManager) NodesCache.getInstance().get("simple");
+        simpleApplication.getRootNode().attachChild(geometryAnimationManager);
+        geometryAnimationManager.beginAnimation("build_lvl_1");
     }
 
     private void testContent(){
-        simpleApplication.getCamera().setLocation(new Vector3f(-3,2,6));
+        simpleApplication.getCamera().setLocation(new Vector3f(3,3,3));
         simpleApplication.getCamera().setFrustumPerspective(60f, 1.7777f, 0.1f, 500f);
         simpleApplication.getCamera().lookAt(new Vector3f(0,0,0), simpleApplication.getCamera().getUp());
         Light allLight = new AmbientLight(ColorRGBA.DarkGray);
@@ -80,6 +91,7 @@ public class TutorialLifecycle extends Lifecycle {
 
     @Override
     public void update() {
+        geometryAnimationManager.onUpdate();
     }
 
     TouchListener touchListener = new TouchListener() {

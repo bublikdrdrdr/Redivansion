@@ -133,4 +133,8 @@ public class PolyAnimation{
         }
         return count;
     }
+
+    public void reset(){
+        for (Polygon polygon: polygons) polygon.reset();
+    }
 }

@@ -205,6 +205,12 @@ public class Polygon{
         this.delay = delay;
     }
 
+    public void reset(){
+        lastUpdate = false;
+        init = false;
+        done = false;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

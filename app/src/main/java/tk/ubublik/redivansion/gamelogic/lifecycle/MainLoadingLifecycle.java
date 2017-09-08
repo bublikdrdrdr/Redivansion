@@ -26,7 +26,6 @@ public class MainLoadingLifecycle extends LoadingLifecycle {
 
     public MainLoadingLifecycle(final SimpleApplication simpleApplication){
         super(simpleApplication);
-        setLoadingNode();
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -54,16 +53,4 @@ public class MainLoadingLifecycle extends LoadingLifecycle {
         return done;
     }
 
-    @Override
-    public void update() {
-        loadingPanel.setLocalTranslation(FastMath.nextRandomInt(0, simpleApplication.getCamera().getWidth()), FastMath.nextRandomInt(0, simpleApplication.getCamera().getHeight()), 0);
-    }
-
-    private Panel loadingPanel;
-    private void setLoadingNode(){
-        Label label = new Label("LOADING");
-        label.setFontSize(50f);
-        loadingPanel = label;
-        simpleApplication.getGuiNode().attachChild(loadingPanel);
-    }
 }

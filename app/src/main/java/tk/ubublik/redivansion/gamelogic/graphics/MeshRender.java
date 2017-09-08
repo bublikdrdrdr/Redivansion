@@ -111,6 +111,7 @@ public class MeshRender {
             if (allDone) {
                 done = true;
                 animationStart = ANIMATION_DISABLED;
+                polyAnimation.reset();
             }
         }
     }
