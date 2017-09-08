@@ -86,22 +86,22 @@ public class MeshRender {
                         System.out.println(middleColor);
 
                         for (int i = 0; i < 3; i++) {
-                            positionDataBuffer.put(index * 3 + i * 3, middleTriangle[i].getX());
-                            positionDataBuffer.put(index * 3 + i * 3 + 1, middleTriangle[i].getY());
-                            positionDataBuffer.put(index * 3 + i * 3 + 2, middleTriangle[i].getZ());
+                            positionDataBuffer.put(index * 9 + i * 3, middleTriangle[i].getX());
+                            positionDataBuffer.put(index * 9 + i * 3 + 1, middleTriangle[i].getY());
+                            positionDataBuffer.put(index * 9 + i * 3 + 2, middleTriangle[i].getZ());
 
-                            normalDataBuffer.put(index * 3 + i * 3, normalVector.getX());
-                            normalDataBuffer.put(index * 3 + i * 3 + 1, normalVector.getY());
-                            normalDataBuffer.put(index * 3 + i * 3 + 2, normalVector.getZ());
+                            normalDataBuffer.put(index * 9 + i * 3, normalVector.getX());
+                            normalDataBuffer.put(index * 9 + i * 3 + 1, normalVector.getY());
+                            normalDataBuffer.put(index * 9 + i * 3 + 2, normalVector.getZ());
 
-                            colorDataBuffer.put(index*3+i*4, middleColor.getRed());
-                            colorDataBuffer.put(index*3+i*4+1, middleColor.getGreen());
-                            colorDataBuffer.put(index*3+i*4+2, middleColor.getBlue());
-                            colorDataBuffer.put(index*3+i*4+3, middleColor.getAlpha());
+                            colorDataBuffer.put(index*12+i*4, middleColor.getRed());
+                            colorDataBuffer.put(index*12+i*4+1, middleColor.getGreen());
+                            colorDataBuffer.put(index*12+i*4+2, middleColor.getBlue());
+                            colorDataBuffer.put(index*12+i*4+3, middleColor.getAlpha());
                         }
                     }
                 }
-                index += 3;
+                index += 1;
             }
             positionVertexBuffer.setUpdateNeeded();
             normalVertexBuffer.setUpdateNeeded();
