@@ -58,13 +58,8 @@ public class MenuLifecycle extends Lifecycle {
 
     Spatial background;
     private void createMenuElements(){
-        /*background = NodesCache.getInstance().get("menu_background");
-        simpleApplication.getGuiNode().attachChild(background);*/
-        Picture backgroundPicture = (Picture)NodesCache.getInstance().get("menu_background");
-        backgroundPicture.setWidth(simpleApplication.getCamera().getWidth());
-        backgroundPicture.setHeight(simpleApplication.getCamera().getHeight());
-        backgroundPicture.setPosition(0,0);
-        simpleApplication.getGuiNode().attachChild(backgroundPicture);
+        addBackgroundImage();
+
         final Container myWindow = new Container();
         simpleApplication.getGuiNode().attachChild(myWindow);
         myWindow.setLocalScale(4f);
@@ -95,5 +90,13 @@ public class MenuLifecycle extends Lifecycle {
                 done = true;
             }
         });
+    }
+
+    private void addBackgroundImage(){
+        Picture backgroundPicture = (Picture)NodesCache.getInstance().get("menu_background");
+        backgroundPicture.setWidth(simpleApplication.getCamera().getWidth());
+        backgroundPicture.setHeight(simpleApplication.getCamera().getHeight());
+        backgroundPicture.setPosition(0,0);
+        simpleApplication.getGuiNode().attachChild(backgroundPicture);
     }
 }
