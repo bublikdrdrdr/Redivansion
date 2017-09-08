@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Mesh;
 
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
@@ -23,7 +24,15 @@ public class GeometryLoopAnimationManager extends GeometryManager {
     public GeometryLoopAnimationManager(Model model){
         if (model==null) throw new NullPointerException("Model can't be null");
         this.model = model;
-        prepareAnimation(model.getAnimations().get(0));
+        setBase();
+    }
+
+    private void setBase(){
+        this.setMesh(new Mesh());
+        Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
+        mat.setColor("Specular", ColorRGBA.White);
+        mat.setBoolean("UseVertexColor", true);
+        this.setMaterial(mat);
     }
 
     /**
@@ -34,11 +43,6 @@ public class GeometryLoopAnimationManager extends GeometryManager {
         meshRender = new MeshRender(polyAnimation);
         this.setMesh(meshRender.getMesh());
         meshRender.beginAnimation();
-        Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
-        mat.setColor("Specular", ColorRGBA.White);
-        mat.setBoolean("UseVertexColor", true);
-        //mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);//debug mode: show polygons from both sides
-        this.setMaterial(mat);
     }
 
     private void prepareAnimation(PolyAnimation polyAnimation, OnAnimationEndListener onAnimationEndListener){
