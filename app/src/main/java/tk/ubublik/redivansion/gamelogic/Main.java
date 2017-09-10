@@ -5,7 +5,10 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
+import com.jme3.input.ChaseCamera;
+import com.jme3.input.FlyByCamera;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
@@ -29,6 +32,7 @@ import java.util.logging.Logger;
 import java.util.logging.SocketHandler;
 
 import tk.ubublik.redivansion.MainActivity;
+import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.graphics.ModelManager;
@@ -51,6 +55,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         setupApplication();
+        initCameraControl();
         lifecycle = new MainLifecycle(this);
     }
 
@@ -63,6 +68,7 @@ public class Main extends SimpleApplication {
     }
 
     private void setupApplication(){
+        flyCam.setEnabled(false);
         inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
         GuiGlobals.initialize(this);
         this.setDisplayStatView(false);
@@ -70,6 +76,12 @@ public class Main extends SimpleApplication {
         StaticAssetManager.setAssetManager(assetManager);
         assetManager.registerLoader(CustomModelLoader.class, "crm");
     }
+
+    private void initCameraControl(){
+        flyCam.setEnabled(false);
+    }
+
+
 
 
 

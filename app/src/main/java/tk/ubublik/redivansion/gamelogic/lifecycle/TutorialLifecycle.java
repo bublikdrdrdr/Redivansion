@@ -3,6 +3,7 @@ package tk.ubublik.redivansion.gamelogic.lifecycle;
 import android.app.AlertDialog;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.input.ChaseCamera;
 import com.jme3.input.controls.TouchListener;
 import com.jme3.input.event.TouchEvent;
 import com.jme3.light.AmbientLight;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import tk.ubublik.redivansion.JmeFragment;
 import tk.ubublik.redivansion.MainActivity;
+import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
@@ -47,6 +49,7 @@ public class TutorialLifecycle extends Lifecycle {
         addDebugPanel();
         testContent();
         addTestModel();
+        CameraControl cameraControl = new CameraControl(simpleApplication.getCamera(), geometryAnimationManager, simpleApplication.getInputManager());
     }
 
     GeometryAnimationManager geometryAnimationManager;
