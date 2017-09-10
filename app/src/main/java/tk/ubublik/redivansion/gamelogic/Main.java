@@ -72,7 +72,7 @@ public class Main extends SimpleApplication {
         inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
         GuiGlobals.initialize(this);
         this.setDisplayStatView(false);
-        this.setDisplayFps(true);
+        this.setDisplayFps(false);
         StaticAssetManager.setAssetManager(assetManager);
         assetManager.registerLoader(CustomModelLoader.class, "crm");
     }

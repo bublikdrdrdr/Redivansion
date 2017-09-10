@@ -13,6 +13,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.simsilica.lemur.Button;
@@ -49,15 +50,17 @@ public class TutorialLifecycle extends Lifecycle {
         addDebugPanel();
         testContent();
         addTestModel();
-        CameraControl cameraControl = new CameraControl(simpleApplication.getCamera(), geometryAnimationManager, simpleApplication.getInputManager());
+        CameraControl cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
     }
 
     GeometryAnimationManager geometryAnimationManager;
     private void addTestModel(){
         //surprise: does not work on emulator... but on real device is good
         geometryAnimationManager = (GeometryAnimationManager) NodesCache.getInstance().get("simple");
-        simpleApplication.getRootNode().attachChild(geometryAnimationManager);
-        geometryAnimationManager.beginAnimation("build_lvl_1");
+        if (geometryAnimationManager!=null) {
+            simpleApplication.getRootNode().attachChild(geometryAnimationManager);
+            geometryAnimationManager.beginAnimation("build_lvl_1");
+        }
     }
 
     private void testContent(){
@@ -68,7 +71,7 @@ public class TutorialLifecycle extends Lifecycle {
         simpleApplication.getRootNode().addLight(allLight);
         Light light = new DirectionalLight(simpleApplication.getCamera().getDirection());
         simpleApplication.getRootNode().addLight(light);
-        attachGrid(Vector3f.ZERO, 100, ColorRGBA.Cyan);
+        attachGrid(Vector3f.ZERO, 50, ColorRGBA.Cyan);
     }
 
     private Geometry attachGrid(Vector3f pos, int size, ColorRGBA color){
@@ -94,7 +97,9 @@ public class TutorialLifecycle extends Lifecycle {
 
     @Override
     public void update() {
-        geometryAnimationManager.onUpdate();
+        if (geometryAnimationManager!=null) {
+            geometryAnimationManager.onUpdate();
+        }
     }
 
     TouchListener touchListener = new TouchListener() {
