@@ -61,14 +61,16 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
+        logFps();
+        long nanos = System.nanoTime();
         lifecycle.update();
         if (lifecycle.isDone()) {
             this.stop();
         }
+        logLogic(nanos);
     }
 
     private void setupApplication(){
-        flyCam.setEnabled(false);
         inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
         GuiGlobals.initialize(this);
         this.setDisplayStatView(false);
@@ -79,6 +81,27 @@ public class Main extends SimpleApplication {
 
     private void initCameraControl(){
         flyCam.setEnabled(false);
+        flyCam.unregisterInput();
+        flyCam = null;
+    }
+
+    long nano = System.nanoTime();
+    long fpsCounter = 0;
+    private void logFps(){
+        if (System.nanoTime()-nano >= 500000000L){
+            System.out.println("RENDER FPS: "+fpsCounter*2);
+            fpsCounter = 0;
+            nano = System.nanoTime();
+        }
+        fpsCounter++;
+    }
+
+    long lastLogicShow = System.currentTimeMillis();
+    private void logLogic(long nanos){
+        if (System.currentTimeMillis()-lastLogicShow>=500) {
+            System.out.println("LOGIC FPS: " + (1000000000L / (System.nanoTime() - nanos)));
+            lastLogicShow = System.currentTimeMillis();
+        }
     }
 
 

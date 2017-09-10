@@ -50,6 +50,7 @@ public class CameraControl implements ActionListener, AnalogListener {
     protected Vector3f initialUpVec;
     protected float rotationSpeed = 1f;
     protected float moveSpeed = 3f;
+    protected float moveYSpeed = 2f;
     protected float zoomSpeed = 1f;
     protected MotionAllowedListener motionAllowed = null;
     protected boolean enabled = true;
@@ -299,6 +300,7 @@ public class CameraControl implements ActionListener, AnalogListener {
             cam.getDirection(vel);
             vel.setY(0);
             vel.normalize();
+            vel.multLocal(moveYSpeed);
         }
         vel.multLocal(value * moveSpeed);
 

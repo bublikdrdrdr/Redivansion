@@ -28,6 +28,7 @@ import tk.ubublik.redivansion.MainActivity;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
+import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
@@ -64,14 +65,14 @@ public class TutorialLifecycle extends Lifecycle {
     }
 
     private void testContent(){
-        simpleApplication.getCamera().setLocation(new Vector3f(3,3,3));
-        simpleApplication.getCamera().setFrustumPerspective(60f, 1.7777f, 0.1f, 500f);
+        simpleApplication.getCamera().setLocation(new Vector3f(3,6,3));
+        simpleApplication.getCamera().setFrustumPerspective(30f, 1.7777f, 0.1f, 500f);
         simpleApplication.getCamera().lookAt(new Vector3f(0,0,0), simpleApplication.getCamera().getUp());
         Light allLight = new AmbientLight(ColorRGBA.DarkGray);
         simpleApplication.getRootNode().addLight(allLight);
         Light light = new DirectionalLight(simpleApplication.getCamera().getDirection());
         simpleApplication.getRootNode().addLight(light);
-        attachGrid(Vector3f.ZERO, 50, ColorRGBA.Cyan);
+        //attachGrid(Vector3f.ZERO, 50, ColorRGBA.Cyan);
     }
 
     private Geometry attachGrid(Vector3f pos, int size, ColorRGBA color){
