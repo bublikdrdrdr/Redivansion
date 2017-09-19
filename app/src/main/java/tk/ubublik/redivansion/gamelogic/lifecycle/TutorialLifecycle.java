@@ -31,6 +31,9 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
+import tk.ubublik.redivansion.gamelogic.units.Level;
+import tk.ubublik.redivansion.gamelogic.utils.GameLogicProcessor;
+import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
@@ -44,17 +47,24 @@ import static tk.ubublik.redivansion.JmeFragment.BACK_PRESS_EVENT;
 public class TutorialLifecycle extends Lifecycle {
 
     private boolean done = false;
+    private GameLogicProcessor gameLogicProcessor;
+    private CameraControl cameraControl;
 
     public TutorialLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
-        simpleApplication.getInputManager().addListener(touchListener,  new String[]{BACK_PRESS_EVENT});
+        setup();
+        setCamera();
+        setLight();
         addDebugPanel();
-        testContent();
-        addTestModel();
-        CameraControl cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
+        prepareLevel();
     }
 
-    GeometryAnimationManager geometryAnimationManager;
+    private void setup(){
+        //exit on back press
+        simpleApplication.getInputManager().addListener(touchListener,  new String[]{BACK_PRESS_EVENT});
+    }
+
+    /*GeometryAnimationManager geometryAnimationManager;
     private void addTestModel(){
         //surprise: does not work on emulator... but on real device is good
         geometryAnimationManager = (GeometryAnimationManager) NodesCache.getInstance().get("simple");
@@ -62,17 +72,20 @@ public class TutorialLifecycle extends Lifecycle {
             simpleApplication.getRootNode().attachChild(geometryAnimationManager);
             geometryAnimationManager.beginAnimation("build_lvl_1");
         }
-    }
+    }*/
 
-    private void testContent(){
+    private void setCamera(){
         simpleApplication.getCamera().setLocation(new Vector3f(3,6,3));
         simpleApplication.getCamera().setFrustumPerspective(30f, 1.7777f, 0.1f, 500f);
         simpleApplication.getCamera().lookAt(new Vector3f(0,0,0), simpleApplication.getCamera().getUp());
+        cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
+    }
+
+    private void setLight(){
         Light allLight = new AmbientLight(ColorRGBA.DarkGray);
         simpleApplication.getRootNode().addLight(allLight);
         Light light = new DirectionalLight(simpleApplication.getCamera().getDirection());
         simpleApplication.getRootNode().addLight(light);
-        //attachGrid(Vector3f.ZERO, 50, ColorRGBA.Cyan);
     }
 
     private Geometry attachGrid(Vector3f pos, int size, ColorRGBA color){
@@ -84,6 +97,12 @@ public class TutorialLifecycle extends Lifecycle {
         g.center().move(pos);
         simpleApplication.getRootNode().attachChild(g);
         return g;
+    }
+
+    private void prepareLevel(){
+        gameLogicProcessor = new GameLogicProcessor();
+        gameLogicProcessor.setLevel(LevelFactory.getLevels().get("tutorial"));
+        gameLogicProcessor.start();
     }
 
     @Override
@@ -98,8 +117,8 @@ public class TutorialLifecycle extends Lifecycle {
 
     @Override
     public void update() {
-        if (geometryAnimationManager!=null) {
-            geometryAnimationManager.onUpdate();
+        if (gameLogicProcessor!=null) {
+            gameLogicProcessor.onUpdate();
         }
     }
 

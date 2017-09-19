@@ -1,6 +1,8 @@
 package tk.ubublik.redivansion.gamelogic.utils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import tk.ubublik.redivansion.gamelogic.units.Level;
 
@@ -10,7 +12,7 @@ import tk.ubublik.redivansion.gamelogic.units.Level;
 
 public class LevelFactory {
 
-    public List<Level> getLevels(){
+    public static Map<Object, Level> getLevels(){
         return null;
     }
 }
