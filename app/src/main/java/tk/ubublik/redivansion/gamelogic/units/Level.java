@@ -10,10 +10,58 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 public class Level {
 
-    int id;
-    LevelStatus levelStatus;
-    List<WorldObject> worldObjects;
-    long time;
-    int money;
-    LevelGoal levelGoal;
+    private int id;
+    private LevelStatus levelStatus;
+    private List<WorldObject> worldObjects;
+    private long time;
+    private int money;
+    private LevelGoal levelGoal;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public LevelStatus getLevelStatus() {
+        return levelStatus;
+    }
+
+    public void setLevelStatus(LevelStatus levelStatus) {
+        this.levelStatus = levelStatus;
+    }
+
+    public List<WorldObject> getWorldObjects() {
+        return worldObjects;
+    }
+
+    public void setWorldObjects(List<WorldObject> worldObjects) {
+        this.worldObjects = worldObjects;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public LevelGoal getLevelGoal() {
+        return levelGoal;
+    }
+
+    public void setLevelGoal(LevelGoal levelGoal) {
+        this.levelGoal = levelGoal;
+    }
 }

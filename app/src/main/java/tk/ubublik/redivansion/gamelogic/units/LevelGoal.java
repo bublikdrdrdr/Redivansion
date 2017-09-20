@@ -5,9 +5,10 @@ package tk.ubublik.redivansion.gamelogic.units;
  *
  * Level goal, game end condition
  */
-public class LevelGoal {
-
-    public boolean isDone(){
-        return false;
+public abstract class LevelGoal {
+    protected Level level;
+    public LevelGoal(Level level){
+        this.level = level;
     }
+    public abstract boolean isDone();
 }

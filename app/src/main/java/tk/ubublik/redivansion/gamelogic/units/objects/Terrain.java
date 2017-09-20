@@ -3,11 +3,11 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 
 /**
- * Created by Bublik on 31-Aug-17.
+ * Created by Bublik on 20-Sep-17.
  */
 
-public class Water extends WorldObject{
-    public Water(GeometryManager geometryManager) {
+public class Terrain extends WorldObject {
+    public Terrain(GeometryManager geometryManager) {
         super(geometryManager);
     }
 

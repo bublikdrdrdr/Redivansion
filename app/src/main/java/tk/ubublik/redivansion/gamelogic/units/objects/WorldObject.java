@@ -26,12 +26,7 @@ public abstract class WorldObject extends Node{
     private WorldObjectLevel level;
     private boolean permanent;
 
-    public WorldObject(){
-        this(null);
-    };
-
     public WorldObject(GeometryManager geometryManager){
-        this.geometryManager = geometryManager;
         setGeometryManager(geometryManager);
     }
 
@@ -49,4 +44,52 @@ public abstract class WorldObject extends Node{
     public abstract byte[] toBytes();
 
     public abstract void parseBytes();
+
+    public Node getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Node icon) {
+        this.icon = icon;
+    }
+
+    public Point getPosition() {
+        return position;
+    }
+
+    public void setPosition(Point position) {
+        this.position = position;
+    }
+
+    public int getBuildCost() {
+        return buildCost;
+    }
+
+    public void setBuildCost(int buildCost) {
+        this.buildCost = buildCost;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public WorldObjectLevel getLevel() {
+        return level;
+    }
+
+    public void setLevel(WorldObjectLevel level) {
+        this.level = level;
+    }
+
+    public boolean isPermanent() {
+        return permanent;
+    }
+
+    public void setPermanent(boolean permanent) {
+        this.permanent = permanent;
+    }
 }
