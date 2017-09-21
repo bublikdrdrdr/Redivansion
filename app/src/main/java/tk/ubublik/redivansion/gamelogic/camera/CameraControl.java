@@ -1,6 +1,8 @@
 package tk.ubublik.redivansion.gamelogic.camera;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
 import com.jme3.collision.MotionAllowedListener;
 import com.jme3.input.CameraInput;
 import com.jme3.input.ChaseCamera;
@@ -20,10 +22,16 @@ import com.jme3.input.controls.TouchTrigger;
 import com.jme3.input.event.TouchEvent;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Quad;
+
+import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 
 /**
  * Created by Bublik on 09-Sep-17.
@@ -359,5 +367,18 @@ public class CameraControl implements ActionListener, AnalogListener {
         }
     }
 
-
+    public Vector3f getCameraCenterPoint(){
+        // FIXME: 21-Sep-17 get camera ray and horizontal plane collision point
+        CollisionResults collisionResults = new CollisionResults();
+        Ray ray = new Ray(cam.getLocation(), cam.getDirection());
+        Quad quad = new Quad(5000,5000);
+        Geometry geometry = new Geometry("q", quad);
+        geometry.rotate(-FastMath.HALF_PI, 0,0);
+        geometry.center().move(Vector3f.ZERO);
+        geometry.collideWith(ray, collisionResults);
+        if (collisionResults.size()>0){
+            return collisionResults.getCollision(0).getContactPoint();
+        }
+        return Vector3f.ZERO;
+    }
 }

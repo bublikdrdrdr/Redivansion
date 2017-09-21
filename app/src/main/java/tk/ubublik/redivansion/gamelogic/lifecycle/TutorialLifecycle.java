@@ -1,6 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
 import android.app.AlertDialog;
+import android.graphics.Point;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.ChaseCamera;
@@ -12,11 +13,14 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
+import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
@@ -38,11 +42,15 @@ import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.units.Level;
+import tk.ubublik.redivansion.gamelogic.units.WorldMap;
+import tk.ubublik.redivansion.gamelogic.units.objects.Office;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GameLogicProcessor;
 import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
+import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
+import tk.ubublik.redivansion.gamelogic.utils.WorldObjectFactory;
 
 import static com.jme3.input.event.TouchEvent.Type.KEY_UP;
 import static tk.ubublik.redivansion.JmeFragment.BACK_PRESS_EVENT;
@@ -55,8 +63,9 @@ public class TutorialLifecycle extends Lifecycle {
 
     private boolean done = false;
     private GameLogicProcessor gameLogicProcessor;
+    private WorldMap worldMap;
     private CameraControl cameraControl;
-    private List<WorldObject> worldMap;
+    private MapRenderer mapRenderer;
     private Level currentLevel = (Level)NodesCache.getInstance().get("tutorial_level");
 
     public TutorialLifecycle(SimpleApplication simpleApplication) {
@@ -65,12 +74,15 @@ public class TutorialLifecycle extends Lifecycle {
         setCamera();
         setLight();
         addDebugPanel();
+        attachGrid(Vector3f.ZERO, 20, ColorRGBA.Yellow);
         prepareLevel();
+        //putGeometriesToNode();
     }
 
     private void setup(){
         //exit on back press
         simpleApplication.getInputManager().addListener(touchListener,  new String[]{BACK_PRESS_EVENT});
+        mapRenderer = new MapRenderer(simpleApplication.getRootNode());
     }
 
     /*GeometryAnimationManager geometryAnimationManager;
@@ -88,7 +100,7 @@ public class TutorialLifecycle extends Lifecycle {
         simpleApplication.getCamera().setFrustumPerspective(30f, 1.7777f, 0.1f, 500f);
         simpleApplication.getCamera().lookAt(new Vector3f(0,0,0), simpleApplication.getCamera().getUp());
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
-        cameraControl.setEnabled(true);
+        //cameraControl.setEnabled(true);
     }
 
     private void setLight(){
@@ -112,7 +124,12 @@ public class TutorialLifecycle extends Lifecycle {
     private void prepareLevel(){
         gameLogicProcessor = new GameLogicProcessor();
         gameLogicProcessor.setLevel(currentLevel);
+        worldMap = new WorldMap(currentLevel.getWorldObjects());
         gameLogicProcessor.start();
+    }
+
+    private void putGeometriesToNode(){
+        mapRenderer.putObjects(currentLevel.getWorldObjects());
     }
 
     @Override
@@ -148,6 +165,7 @@ public class TutorialLifecycle extends Lifecycle {
     private void addDebugPanel(){
         DebugPanel debugPanel = new DebugPanel(simpleApplication);
         debugPanel.addButton("Console log", commands);
+        debugPanel.addButton("Add building", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -155,9 +173,50 @@ public class TutorialLifecycle extends Lifecycle {
         public void execute(Button source) {
             switch (source.getText()){
                 case "Console log": System.out.println("Console log"); break;
+                case "Add building": addBuilding(); break;
             }
         }
     };
+
+    private Geometry getBox(){
+        Box b = new Box(0.3f, 0.3f, 0.3f); // create cube shape
+        Geometry geom = new Geometry("Box", b);  // create cube geometry from the shape
+        Material mat = new Material(simpleApplication.getAssetManager(),
+                "Common/MatDefs/Misc/Unshaded.j3md");  // create a simple material
+        mat.setColor("Color", new ColorRGBA(0f, 0.5f, 1f, 0.5f));   // set color of material to blue
+        geom.setMaterial(mat);
+        mat.setTransparent(true);
+        return geom;
+    }
+
+    private void addBuilding(){
+        Vector3f vector3f = cameraControl.getCameraCenterPoint();
+        Point position = mapRenderer.worldPointToMap(vector3f);
+        WorldObject worldObject = WorldObjectFactory.get(Office.class);
+        worldObject.setPosition(position);
+        if (worldMap.canPut(worldObject)){
+            worldMap.put(worldObject);
+            //mapRenderer.putObject(worldObject);
+            Geometry geometry = getBox();
+            geometry.move(mapRenderer.mapPointToWorld(position));
+            simpleApplication.getRootNode().attachChild(geometry);
+
+            geometry = getBox();
+            position.x += 1;
+            geometry.move(mapRenderer.mapPointToWorld(position));
+            simpleApplication.getRootNode().attachChild(geometry);
+
+            geometry = getBox();
+            position.y+=1;
+            geometry.move(mapRenderer.mapPointToWorld(position));
+            simpleApplication.getRootNode().attachChild(geometry);
+
+            geometry = getBox();
+            position.x-=1;
+            geometry.move(mapRenderer.mapPointToWorld(position));
+            simpleApplication.getRootNode().attachChild(geometry);
+        }
+    }
 
     MouseListener objectPickListener = new DefaultMouseListener(GUI.CLICK_OFFSET, GUI.CLICK_OFFSET){
         @Override

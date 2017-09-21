@@ -8,7 +8,7 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 
 public class Office extends Building {
     public Office(GeometryManager geometryManager) {
-        super(geometryManager);
+        super(null);
     }
 
     @Override
