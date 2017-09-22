@@ -9,12 +9,16 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.debug.Grid;
+import com.simsilica.lemur.Button;
+import com.simsilica.lemur.Command;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
+import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+import tk.ubublik.redivansion.gamelogic.utils.MapManager;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
@@ -27,6 +31,7 @@ public class TestLifecycle extends Lifecycle {
     private CameraControl cameraControl;
 
     private WorldObject worldObject;
+    private MapManager mapManager;
 
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
@@ -34,6 +39,9 @@ public class TestLifecycle extends Lifecycle {
         addGrid();
         addCamera();
         addLight();
+        addDebugPanel();
+
+        mapManager = new MapManager(simpleApplication.getRootNode(), cameraControl);
 
         worldObject = createWorldObject();
         showObject(worldObject);
@@ -54,6 +62,7 @@ public class TestLifecycle extends Lifecycle {
         if (worldObject!=null){
             worldObject.onUpdate();
         }
+        mapManager.onUpdate();
     }
 
     private void loadSimpleModel(){
@@ -95,5 +104,27 @@ public class TestLifecycle extends Lifecycle {
 
     private void showObject(WorldObject worldObject){
         simpleApplication.getRootNode().attachChild(worldObject);
+    }
+
+    private void addDebugPanel(){
+        DebugPanel debugPanel = new DebugPanel(simpleApplication);
+        debugPanel.addButton("Console log", commands);
+        debugPanel.addButton("Add building", commands);
+        debugPanel.addButton("Show select", commands);
+    }
+
+    Command<Button> commands = new Command<Button>() {
+        @Override
+        public void execute(Button source) {
+            switch (source.getText()){
+                case "Console log": System.out.println("Console log"); break;
+                case "Add building": addBuilding(); break;
+                case "Show select": mapManager.setSelectMode(!mapManager.isSelectMode()); break;
+            }
+        }
+    };
+
+    private void addBuilding(){
+
     }
 }
