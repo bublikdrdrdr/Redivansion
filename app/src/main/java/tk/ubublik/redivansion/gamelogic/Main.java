@@ -39,6 +39,7 @@ import tk.ubublik.redivansion.gamelogic.graphics.ModelManager;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.lifecycle.Lifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.MainLifecycle;
+import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.utils.CustomModelLoader;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
@@ -56,7 +57,8 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         setupApplication();
         initCameraControl();
-        lifecycle = new MainLifecycle(this);
+        //lifecycle = new MainLifecycle(this);
+        lifecycle = new TestLifecycle(this);
     }
 
     @Override
@@ -99,7 +101,12 @@ public class Main extends SimpleApplication {
     long lastLogicShow = System.currentTimeMillis();
     private void logLogic(long nanos){
         if (System.currentTimeMillis()-lastLogicShow>=500) {
-            System.out.println("LOGIC FPS: " + (1000000000L / (System.nanoTime() - nanos)));
+            long elapsed = System.nanoTime() - nanos;
+            //yes, I got divide by zero exception
+            if (elapsed > 0)
+                System.out.println("LOGIC FPS: " + (1000000000L / elapsed));
+            else
+                System.out.println("LOGIC FPS: over9000");
             lastLogicShow = System.currentTimeMillis();
         }
     }

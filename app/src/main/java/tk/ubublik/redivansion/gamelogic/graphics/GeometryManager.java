@@ -8,6 +8,10 @@ import com.jme3.scene.Geometry;
 
 public abstract class GeometryManager extends Geometry{
 
+    public GeometryManager(String name) {
+        super(name);
+    }
+
     public void onUpdate(){
 
     }

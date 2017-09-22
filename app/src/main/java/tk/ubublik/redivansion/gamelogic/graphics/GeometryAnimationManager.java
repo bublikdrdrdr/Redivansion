@@ -16,11 +16,20 @@ public class GeometryAnimationManager extends GeometryManager{
     private Model model;
     private MeshRender meshRender;
 
-    public GeometryAnimationManager(byte[] bytes) {
-        this(new Model(bytes));
+    public GeometryAnimationManager(byte[] bytes){
+        this(null, bytes);
     }
 
     public GeometryAnimationManager(Model model){
+        this(null, model);
+    }
+
+    public GeometryAnimationManager(String name, byte[] bytes) {
+        this(name, new Model(bytes));
+    }
+
+    public GeometryAnimationManager(String name, Model model){
+        super(null);
         if (model==null) throw new NullPointerException("Model can't be null");
         this.model = model;
         setBase();

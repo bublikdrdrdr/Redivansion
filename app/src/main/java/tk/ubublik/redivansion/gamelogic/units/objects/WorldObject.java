@@ -41,6 +41,10 @@ public abstract class WorldObject extends Node{
         }
     }
 
+    public void onUpdate(){
+        this.geometryManager.onUpdate();
+    }
+
     public abstract byte[] toBytes();
 
     public abstract void parseBytes();
