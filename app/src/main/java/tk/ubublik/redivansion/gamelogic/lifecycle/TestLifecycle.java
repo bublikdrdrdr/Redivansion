@@ -1,5 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
+import android.graphics.Point;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -11,11 +13,14 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.debug.Grid;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
+import com.simsilica.lemur.Label;
+import com.simsilica.lemur.Panel;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
+import tk.ubublik.redivansion.gamelogic.test.CameraDebugger;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.MapManager;
@@ -40,11 +45,13 @@ public class TestLifecycle extends Lifecycle {
         addCamera();
         addLight();
         addDebugPanel();
+        addCenterPoint();
 
         mapManager = new MapManager(simpleApplication.getRootNode(), cameraControl);
 
         worldObject = createWorldObject();
-        showObject(worldObject);
+        mapManager.putObject(worldObject);
+        //showObject(worldObject);
     }
 
     @Override
@@ -99,7 +106,7 @@ public class TestLifecycle extends Lifecycle {
     }
 
     private WorldObject createWorldObject(){
-        return new Office();
+        return new Office(new Point(0,0));
     }
 
     private void showObject(WorldObject worldObject){
@@ -126,5 +133,12 @@ public class TestLifecycle extends Lifecycle {
 
     private void addBuilding(){
 
+    }
+
+    private void addCenterPoint(){
+        final float pointSize = simpleApplication.getCamera().getWidth()/100;
+        Panel panel = new Panel(pointSize, pointSize, ColorRGBA.Red);
+        panel.setLocalTranslation(new Vector3f(simpleApplication.getCamera().getWidth()/2, simpleApplication.getCamera().getHeight()/2, 0));
+        simpleApplication.getGuiNode().attachChild(panel);
     }
 }

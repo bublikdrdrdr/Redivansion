@@ -2,6 +2,7 @@ package tk.ubublik.redivansion.gamelogic.utils;
 
 import android.graphics.Point;
 
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -30,15 +31,17 @@ public class MapRenderer {
     }
 
     public Point worldPointToMap(Vector3f vector3f){
-        return new Point((int)(vector3f.getX()/scale), (int)(vector3f.getZ()/scale));
+        final float offset = .5f;
+        return new Point((int)FastMath.floor(offset+vector3f.getX()/scale), (int)FastMath.floor(offset+vector3f.getZ()/scale));
     }
 
     public Vector3f mapPointToWorld(Point point){
-        return new Vector3f(point.x*scale, 0, point.y*scale);
+        final float offset = 0;
+        return new Vector3f((point.x+offset)*scale, 0, (point.y+offset)*scale);
     }
 
     public void putObject(WorldObject worldObject){
-        Vector3f position = new Vector3f(worldObject.getPosition().x*scale, 0, worldObject.getPosition().y*scale);
+        Vector3f position = mapPointToWorld(worldObject.getPosition());
         worldObject.getGeometryManager().setLocalTranslation(position);
         node.attachChild(worldObject);
     }

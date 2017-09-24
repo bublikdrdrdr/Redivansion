@@ -1,15 +1,20 @@
 package tk.ubublik.redivansion.gamelogic.utils;
 
+import android.graphics.Point;
+
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.shader.VarType;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
+import tk.ubublik.redivansion.gamelogic.test.CameraDebugger;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
+import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
  * Created by Bublik on 22-Sep-17.
@@ -53,10 +58,18 @@ public class MapManager {
 
     public void onUpdate(){
         if (selectMode) updateSelectMode();
+
+        //debug
+        if (CameraDebugger.canPrint()) {
+            Vector3f v = cameraControl.getCameraCenterPoint();
+            CameraDebugger.print(v, mapRenderer.worldPointToMap(v));
+        }
     }
 
     private void updateSelectMode(){
-        selectGeometry.setLocalTranslation(cameraControl.getCameraCenterPoint().add(0, 0.5f, 0));
+        Vector3f centerVector = cameraControl.getCameraCenterPoint();
+        Point centerPoint = mapRenderer.worldPointToMap(centerVector);
+        selectGeometry.setLocalTranslation(mapRenderer.mapPointToWorld(centerPoint).add(0,0.5f,0));
     }
 
     private Geometry getSelectNode(){
@@ -73,5 +86,10 @@ public class MapManager {
 
     public boolean isSelectMode(){
         return selectMode;
+    }
+
+    public void putObject(WorldObject worldObject){
+        worldMap.put(worldObject);
+        mapRenderer.putObject(worldObject);
     }
 }

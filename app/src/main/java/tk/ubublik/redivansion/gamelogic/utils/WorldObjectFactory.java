@@ -1,5 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.utils;
 
+import android.graphics.Point;
+
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
@@ -18,7 +20,7 @@ public class WorldObjectFactory {
     }
 
     private static WorldObject getOffice(){
-        Office office = new Office();
+        Office office = new Office(new Point(0,0));
         office.setSize(2);
         return office;
     }
