@@ -58,6 +58,7 @@ public class MapManager {
 
     public void onUpdate(){
         if (selectMode) updateSelectMode();
+        worldMap.onUpdate();
 
         //debug
         if (CameraDebugger.canPrint()) {
@@ -77,7 +78,7 @@ public class MapManager {
         mat.setColor("Diffuse", new ColorRGBA(1, 1, 1, 0.5f));
         mat.setBoolean("UseMaterialColors", true);
         mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
-        float boxSize = 0.5f;
+        float boxSize = 0.4f;
         Box box = new Box(boxSize, boxSize, boxSize);
         Geometry geometry = new Geometry("select box", box);
         geometry.setMaterial(mat);
@@ -88,13 +89,15 @@ public class MapManager {
         return selectMode;
     }
 
-    public void putObject(WorldObject worldObject){
-        worldMap.put(worldObject);
-        mapRenderer.putObject(worldObject);
+    public boolean putObject(WorldObject worldObject){
+        if (worldMap.put(worldObject)) {
+            mapRenderer.putObject(worldObject);
+            return true;
+        } else return false;
     }
 
-    public void putObjectCenter(WorldObject worldObject){
+    public boolean putObjectCenter(WorldObject worldObject){
         worldObject.setPosition(mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint()));
-        putObject(worldObject);
+        return putObject(worldObject);
     }
 }

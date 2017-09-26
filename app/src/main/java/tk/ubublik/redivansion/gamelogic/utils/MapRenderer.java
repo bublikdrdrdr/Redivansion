@@ -70,4 +70,5 @@ public class MapRenderer {
     public void removeObject(int index){
         node.detachChildAt(index);
     }
+
 }

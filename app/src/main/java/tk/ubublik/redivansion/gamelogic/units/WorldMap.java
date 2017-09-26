@@ -25,8 +25,11 @@ public class WorldMap {
         this.worldObjects = worldObjects;
     }
 
-    public void put(WorldObject worldObject){
-        if (canPut(worldObject)) worldObjects.add(worldObject);
+    public boolean put(WorldObject worldObject){
+        if (canPut(worldObject)) {
+            worldObjects.add(worldObject);
+            return true;
+        } else return false;
     }
 
     public boolean canPut(WorldObject worldObject){
@@ -49,5 +52,11 @@ public class WorldMap {
                 return worldObject;
         }
         return null;
+    }
+
+    public void onUpdate() {
+        for (WorldObject worldObject: worldObjects){
+            worldObject.onUpdate();
+        }
     }
 }

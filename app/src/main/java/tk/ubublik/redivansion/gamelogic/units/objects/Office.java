@@ -20,6 +20,7 @@ public class Office extends Building {
     public Office(Point position) {
         //TODO: add "office" model and load it
         super(new GeometryAnimationManager((Model)NodesCache.getInstance().get("officeModel")));
+        setSize(1);
         setPosition(position);
         //getGeometryManager().setLocalTranslation(-.5f, 0,-.5f);
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation("build_lvl_1");

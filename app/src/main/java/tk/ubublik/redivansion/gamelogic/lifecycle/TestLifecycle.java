@@ -17,6 +17,9 @@ import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Label;
 import com.simsilica.lemur.Panel;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
@@ -131,10 +134,10 @@ public class TestLifecycle extends Lifecycle {
         }
     };
 
-    private void addBuilding(){
+    private void addBuilding() {
         Office office = new Office();
-        mapManager.putObjectCenter(office);
-        System.out.println("Object created at "+office.getPosition());
+        if (mapManager.putObjectCenter(office))
+            System.out.println("Object created at " + office.getPosition());
     }
 
     private void addCenterPoint(){
