@@ -12,9 +12,13 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 
 public class Office extends Building {
 
+    public Office(){
+        this(new Point(0,0));
+    }
+
     public Office(Point position) {
         //TODO: add "office" model and load it
-        super((GeometryAnimationManager)NodesCache.getInstance().get("office"));
+        super(((GeometryAnimationManager)NodesCache.getInstance().get("office")).clone());
         setPosition(position);
         //getGeometryManager().setLocalTranslation(-.5f, 0,-.5f);
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation("build_lvl_1");

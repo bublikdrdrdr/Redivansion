@@ -11,7 +11,7 @@ import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter;
  * Created by Bublik on 20-Aug-17.
  */
 
-public class Model {
+public class Model implements Cloneable{
 
     private List<PolyAnimation> animations;
 
@@ -113,4 +113,14 @@ public class Model {
     }
 
     // TODO: 09-Sep-17 override clone method to full clone
+
+
+    @Override
+    public Model clone() {
+        List<PolyAnimation> polyAnimations = new LinkedList<>();
+        for (PolyAnimation polyAnimation: getAnimations()){
+            polyAnimations.add(polyAnimation.clone());
+        }
+        return new Model(polyAnimations);
+    }
 }

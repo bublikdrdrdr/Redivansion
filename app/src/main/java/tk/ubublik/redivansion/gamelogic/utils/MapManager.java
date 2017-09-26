@@ -92,4 +92,9 @@ public class MapManager {
         worldMap.put(worldObject);
         mapRenderer.putObject(worldObject);
     }
+
+    public void putObjectCenter(WorldObject worldObject){
+        worldObject.setPosition(mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint()));
+        putObject(worldObject);
+    }
 }

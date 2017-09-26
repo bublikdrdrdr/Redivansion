@@ -29,7 +29,7 @@ public class GeometryAnimationManager extends GeometryManager{
     }
 
     public GeometryAnimationManager(String name, Model model){
-        super(null);
+        super(name);
         if (model==null) throw new NullPointerException("Model can't be null");
         this.model = model;
         setBase();
@@ -62,6 +62,11 @@ public class GeometryAnimationManager extends GeometryManager{
                 meshRender = null;
             this.updateModelBound();
         }
+    }
+
+    @Override
+    public GeometryManager clone() {
+        return new GeometryAnimationManager(name, model.clone());
     }
 
     public void beginAnimation(String name) {

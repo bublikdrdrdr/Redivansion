@@ -11,6 +11,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.debug.Grid;
+import com.jme3.scene.shape.Box;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Label;
@@ -132,7 +133,9 @@ public class TestLifecycle extends Lifecycle {
     };
 
     private void addBuilding(){
-
+        Office office = new Office();
+        mapManager.putObjectCenter(office);
+        System.out.println("Object created at "+office.getPosition());
     }
 
     private void addCenterPoint(){

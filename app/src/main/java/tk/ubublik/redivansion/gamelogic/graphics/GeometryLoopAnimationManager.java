@@ -116,4 +116,9 @@ public class GeometryLoopAnimationManager extends GeometryManager {
     public interface OnAnimationEndListener{
         void animationEnd();
     }
+
+    @Override
+    public GeometryManager clone() {
+        return new GeometryAnimationManager(model.clone());
+    }
 }

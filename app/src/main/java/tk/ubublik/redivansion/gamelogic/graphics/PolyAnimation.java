@@ -3,6 +3,7 @@ package tk.ubublik.redivansion.gamelogic.graphics;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter;
@@ -16,7 +17,7 @@ import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter;
  * For example: some building must be created, upgraded and destroyed.
  * Every process has own animation and this class - it is.
  */
-public class PolyAnimation{
+public class PolyAnimation implements Cloneable{
 
     //list of single polygons animation
     private List<Polygon> polygons;
@@ -136,5 +137,14 @@ public class PolyAnimation{
 
     public void reset(){
         for (Polygon polygon: polygons) polygon.reset();
+    }
+
+    @Override
+    public PolyAnimation clone() {
+        List<Polygon> polygons = new LinkedList<>();
+        for (Polygon polygon: getPolygons()){
+            polygons.add(polygon.clone());
+        }
+        return new PolyAnimation(getName(), polygons);
     }
 }

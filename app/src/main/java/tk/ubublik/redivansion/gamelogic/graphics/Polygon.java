@@ -9,7 +9,7 @@ import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter;
  * Created by Bublik on 20-Aug-17.
  */
 
-public class Polygon{
+public class Polygon implements Cloneable{
 
     private ColorRGBA startColor;
     private ColorRGBA endColor;
@@ -239,5 +239,10 @@ public class Polygon{
         } catch (NullPointerException e){
             return false;
         }
+    }
+
+    @Override
+    public Polygon clone() {
+        return new Polygon(getStartColor(), getEndColor(), getStartPoints(), getEndPoints(), getDuration(), getDelay());
     }
 }
