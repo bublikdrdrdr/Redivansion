@@ -20,10 +20,13 @@ public class Office extends Building {
     public Office(Point position) {
         //TODO: add "office" model and load it
         super(new GeometryAnimationManager((Model)NodesCache.getInstance().get("officeModel")));
+        //local model scale and move
+        getGeometryManager().setLocalScale(0.9f);
+        getGeometryManager().setLocalTranslation(0,0, 0);
+        //params
         setSize(1);
         setPosition(position);
-        //getGeometryManager().setLocalTranslation(-.5f, 0,-.5f);
-        ((GeometryAnimationManager)getGeometryManager()).beginAnimation("build_lvl_1");
+        beginAnimation("build_lvl_1");
     }
 
     @Override
@@ -38,5 +41,9 @@ public class Office extends Building {
 
     public void setLevel(int level){
 
+    }
+
+    private void beginAnimation(String animationName){
+        ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName);
     }
 }

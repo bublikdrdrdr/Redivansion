@@ -42,7 +42,7 @@ public class MapRenderer {
 
     public void putObject(WorldObject worldObject){
         Vector3f position = mapPointToWorld(worldObject.getPosition());
-        worldObject.getGeometryManager().setLocalTranslation(position);
+        worldObject.setLocalTranslation(position);
         node.attachChild(worldObject);
     }
 

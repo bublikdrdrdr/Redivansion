@@ -85,6 +85,7 @@ public class MeshRender {
                 allDone = false;
                 for (Polygon polygon : polyAnimation.getPolygons()) {
                     float changeAmount = (time - polygon.getDelay()) / (float) polygon.getDuration();
+                    changeAmount = FastMath.clamp(changeAmount, 0f, 1f);
                     renderPolygon(polygon, index, changeAmount);
                     index += 1;
                 }
