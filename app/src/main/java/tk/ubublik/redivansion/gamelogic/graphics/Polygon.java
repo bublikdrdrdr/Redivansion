@@ -140,6 +140,7 @@ public class Polygon implements Cloneable{
         return bytes;
     }
 
+    @Deprecated
     public boolean isUpdating(long time){
         boolean res = (((getDelay()<=time) && ((!lastUpdate) || (getDelay()+getDuration()>=time))) || !init);
         if (init) init = true;
@@ -150,6 +151,7 @@ public class Polygon implements Cloneable{
     private boolean lastUpdate = false;
     private boolean init = false;
     private boolean done = false;
+    @Deprecated
     public boolean isDone(long time){
         if (!done) {
             if (time > delay + duration) done = true;

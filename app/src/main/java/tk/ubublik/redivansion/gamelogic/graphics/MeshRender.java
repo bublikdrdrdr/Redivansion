@@ -22,8 +22,14 @@ public class MeshRender {
     private static long ANIMATION_DISABLED = -1;
     private GeometryLoopAnimationManager.OnAnimationEndListener listener = null;
 
+    private boolean[] polygonStateBuffer;
+    private static final byte POLYGON_NOT_RENDERED =0;
+    private static final byte POLYGON_IN_PROCESS = 1;
+    private static final byte POLYGON_IS_DONE = 2;
+
     public MeshRender(PolyAnimation polyAnimation) {
         this.polyAnimation = polyAnimation;
+        this.polygonStateBuffer = new boolean[polyAnimation.polygonCount()];
     }
 
     public Mesh getMesh() {
@@ -68,51 +74,70 @@ public class MeshRender {
     private VertexBuffer colorVertexBuffer;
     private FloatBuffer colorDataBuffer;
 
+    private boolean firstTime = true;
     public void onUpdate() {
         if (animationStart != ANIMATION_DISABLED) {
             int index = 0;
             long time = System.currentTimeMillis() - animationStart;
             boolean allDone = true;
-            for (Polygon polygon : polyAnimation.getPolygons()) {
-                if (!polygon.isDone(time)) {
+            if (firstTime) {
+                firstTime = false;
+                allDone = false;
+                for (Polygon polygon : polyAnimation.getPolygons()) {
+                    float changeAmount = (time - polygon.getDelay()) / (float) polygon.getDuration();
+                    renderPolygon(polygon, index, changeAmount);
+                    index += 1;
+                }
+            } else {
+                for (Polygon polygon : polyAnimation.getPolygons()) {
+                    float changeAmount = (time - polygon.getDelay()) / (float) polygon.getDuration();
+                    if (changeAmount <= 1f) {
+                        allDone = false;
+                        if (changeAmount >= 0)
+                            renderPolygon(polygon, index, changeAmount);
+                    } else if (polygonStateBuffer[index]!=true) {
+                        polygonStateBuffer[index] = true;
+                        renderPolygon(polygon, index, 1f);
+                    }
+                    index += 1;
+                }
+                /*if (!polygon.isDone(time)) {
                     allDone = false;
                     if (polygon.isUpdating(time)) {
-                        float changeAmount = (time - polygon.getDelay()) / (float) polygon.getDuration();
-                        changeAmount = FastMath.clamp(changeAmount, 0f, 1f);
-
-                        Vector3f[] middleTriangle = getMiddleTriangle(polygon, changeAmount);
-                        Vector3f normalVector = getPolygonNormalVector(middleTriangle);
-                        ColorRGBA middleColor = getMiddleColor(polygon, changeAmount);
-                        System.out.println(middleColor);
-
-                        for (int i = 0; i < 3; i++) {
-                            positionDataBuffer.put(index * 9 + i * 3, middleTriangle[i].getX());
-                            positionDataBuffer.put(index * 9 + i * 3 + 1, middleTriangle[i].getY());
-                            positionDataBuffer.put(index * 9 + i * 3 + 2, middleTriangle[i].getZ());
-
-                            normalDataBuffer.put(index * 9 + i * 3, normalVector.getX());
-                            normalDataBuffer.put(index * 9 + i * 3 + 1, normalVector.getY());
-                            normalDataBuffer.put(index * 9 + i * 3 + 2, normalVector.getZ());
-
-                            colorDataBuffer.put(index*12+i*4, middleColor.getRed());
-                            colorDataBuffer.put(index*12+i*4+1, middleColor.getGreen());
-                            colorDataBuffer.put(index*12+i*4+2, middleColor.getBlue());
-                            colorDataBuffer.put(index*12+i*4+3, middleColor.getAlpha());
-                        }
+                        renderPolygon(polygon, index, time);
                     }
-                }
-                index += 1;
+                }*/
             }
             positionVertexBuffer.setUpdateNeeded();
             normalVertexBuffer.setUpdateNeeded();
             colorVertexBuffer.setUpdateNeeded();
-
-
             if (allDone) {
                 done = true;
                 animationStart = ANIMATION_DISABLED;
                 polyAnimation.reset();
             }
+        }
+    }
+
+    private void renderPolygon(Polygon polygon, int index, float changeAmount){
+        Vector3f[] middleTriangle = getMiddleTriangle(polygon, changeAmount);
+        Vector3f normalVector = getPolygonNormalVector(middleTriangle);
+        ColorRGBA middleColor = getMiddleColor(polygon, changeAmount);
+        System.out.println(middleColor);
+
+        for (int i = 0; i < 3; i++) {
+            positionDataBuffer.put(index * 9 + i * 3, middleTriangle[i].getX());
+            positionDataBuffer.put(index * 9 + i * 3 + 1, middleTriangle[i].getY());
+            positionDataBuffer.put(index * 9 + i * 3 + 2, middleTriangle[i].getZ());
+
+            normalDataBuffer.put(index * 9 + i * 3, normalVector.getX());
+            normalDataBuffer.put(index * 9 + i * 3 + 1, normalVector.getY());
+            normalDataBuffer.put(index * 9 + i * 3 + 2, normalVector.getZ());
+
+            colorDataBuffer.put(index*12+i*4, middleColor.getRed());
+            colorDataBuffer.put(index*12+i*4+1, middleColor.getGreen());
+            colorDataBuffer.put(index*12+i*4+2, middleColor.getBlue());
+            colorDataBuffer.put(index*12+i*4+3, middleColor.getAlpha());
         }
     }
 

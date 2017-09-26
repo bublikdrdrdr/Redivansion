@@ -75,8 +75,7 @@ public class TestLifecycle extends Lifecycle {
 
     private void loadSimpleModel(){
         Model simpleModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/simple.crm");
-        GeometryAnimationManager geometryAnimationManager = new GeometryAnimationManager("office", simpleModel);
-        NodesCache.getInstance().put("office", geometryAnimationManager);
+        NodesCache.getInstance().put("officeModel", simpleModel);
     }
 
     private Geometry addGrid(){

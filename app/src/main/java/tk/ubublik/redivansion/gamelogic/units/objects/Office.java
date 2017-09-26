@@ -4,6 +4,7 @@ import android.graphics.Point;
 
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
+import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 
 /**
@@ -18,7 +19,7 @@ public class Office extends Building {
 
     public Office(Point position) {
         //TODO: add "office" model and load it
-        super(((GeometryAnimationManager)NodesCache.getInstance().get("office")).clone());
+        super(new GeometryAnimationManager((Model)NodesCache.getInstance().get("officeModel")));
         setPosition(position);
         //getGeometryManager().setLocalTranslation(-.5f, 0,-.5f);
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation("build_lvl_1");
