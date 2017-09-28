@@ -67,15 +67,18 @@ public class GeometryLoopAnimationManager extends GeometryManager {
                 if (meshRender.getListener()!=null){
                     meshRender.getListener().animationEnd();
                 }
-                meshRender = null;
-                if (nextAnimation!=null){
-                    prepareAnimation(nextAnimation);
-                    nextAnimation = null;
-                } else if (loopAnimations!=null){
-                    meshRender = new MeshRender(loopAnimations[loopAnimationIndex]);
+                if (loopAnimations!=null){
+                    prepareAnimation(loopAnimations[loopAnimationIndex]);
+                    meshRender.onUpdate();
                     loopAnimationIndex++;
                     if (loopAnimationIndex>=loopAnimations.length){
                         loopAnimationIndex = 0;
+                    }
+                } else {
+                    meshRender = null;
+                    if (nextAnimation != null) {
+                        prepareAnimation(nextAnimation);
+                        nextAnimation = null;
                     }
                 }
             }
@@ -97,6 +100,13 @@ public class GeometryLoopAnimationManager extends GeometryManager {
         } else {
             nextAnimation = polyAnimation;
         }
+    }
+
+    public void beginAnimation(OnAnimationEndListener animationEndListener, String name){
+        PolyAnimation polyAnimation = model.getAnimationByName(name);
+        if (polyAnimation==null) throw new NullPointerException("Can't find animation with name +\""+name+"\"");
+        loopAnimations = null;
+        prepareAnimation(polyAnimation, animationEndListener);
     }
 
     private PolyAnimation[] loopAnimations = null;

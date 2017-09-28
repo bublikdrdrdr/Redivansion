@@ -22,6 +22,7 @@ import java.util.TimerTask;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
+import tk.ubublik.redivansion.gamelogic.graphics.GeometryLoopAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.test.CameraDebugger;
@@ -42,6 +43,8 @@ public class TestLifecycle extends Lifecycle {
     private WorldObject worldObject;
     private MapManager mapManager;
 
+    GeometryLoopAnimationManager geometryLoopAnimationManager;
+
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
         loadSimpleModel();
@@ -53,9 +56,17 @@ public class TestLifecycle extends Lifecycle {
 
         mapManager = new MapManager(simpleApplication.getRootNode(), cameraControl);
 
-        worldObject = createWorldObject();
-        mapManager.putObject(worldObject);
+        //worldObject = createWorldObject();
+        //mapManager.putObject(worldObject);
         //showObject(worldObject);
+        geometryLoopAnimationManager = new GeometryLoopAnimationManager((Model)NodesCache.getInstance().get("treeModel"));
+        geometryLoopAnimationManager.beginAnimation(new GeometryLoopAnimationManager.OnAnimationEndListener() {
+            @Override
+            public void animationEnd() {
+                geometryLoopAnimationManager.beginLoopAnimation(new String[]{"stage1", "stage2"});
+            }
+        }, "build");
+        simpleApplication.getRootNode().attachChild(geometryLoopAnimationManager);
     }
 
     @Override
@@ -73,16 +84,19 @@ public class TestLifecycle extends Lifecycle {
         if (worldObject!=null){
             worldObject.onUpdate();
         }
+        if (geometryLoopAnimationManager!=null) geometryLoopAnimationManager.onUpdate();
         mapManager.onUpdate();
     }
 
     private void loadSimpleModel(){
         Model simpleModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/simple.crm");
         NodesCache.getInstance().put("officeModel", simpleModel);
+        Model treeModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/tree.crm");
+        NodesCache.getInstance().put("treeModel", treeModel);
     }
 
     private Geometry addGrid(){
-        int size = 50;
+        int size = 10;
         ColorRGBA color = ColorRGBA.Magenta;
         Geometry g = new Geometry("wireframe grid", new Grid(size, size, 0.5f));
         Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
@@ -95,8 +109,8 @@ public class TestLifecycle extends Lifecycle {
     }
 
     private void addCamera(){
-        simpleApplication.getCamera().setLocation(new Vector3f(20,40,20));
-        simpleApplication.getCamera().setFrustumPerspective(5f, 1.7777f, 0.1f, 500f);
+        simpleApplication.getCamera().setLocation(new Vector3f(10,20,10));
+        simpleApplication.getCamera().setFrustumPerspective(10f, 1.7777f, 1f, 50f);
         simpleApplication.getCamera().lookAt(new Vector3f(0,0,0), simpleApplication.getCamera().getUp());
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
     }

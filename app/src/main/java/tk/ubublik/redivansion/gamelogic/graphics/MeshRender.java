@@ -115,7 +115,7 @@ public class MeshRender {
             if (allDone) {
                 done = true;
                 animationStart = ANIMATION_DISABLED;
-                polyAnimation.reset();
+                //polyAnimation.reset();
             }
         }
     }
@@ -124,7 +124,6 @@ public class MeshRender {
         Vector3f[] middleTriangle = getMiddleTriangle(polygon, changeAmount);
         Vector3f normalVector = getPolygonNormalVector(middleTriangle);
         ColorRGBA middleColor = getMiddleColor(polygon, changeAmount);
-        System.out.println(middleColor);
 
         for (int i = 0; i < 3; i++) {
             positionDataBuffer.put(index * 9 + i * 3, middleTriangle[i].getX());
