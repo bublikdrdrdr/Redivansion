@@ -27,6 +27,7 @@ import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.test.CameraDebugger;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
+import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.MapManager;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
@@ -59,14 +60,15 @@ public class TestLifecycle extends Lifecycle {
         //worldObject = createWorldObject();
         //mapManager.putObject(worldObject);
         //showObject(worldObject);
-        geometryLoopAnimationManager = new GeometryLoopAnimationManager((Model)NodesCache.getInstance().get("treeModel"));
+        /*geometryLoopAnimationManager = new GeometryLoopAnimationManager((Model)NodesCache.getInstance().get("treeModel"));
         geometryLoopAnimationManager.beginAnimation(new GeometryLoopAnimationManager.OnAnimationEndListener() {
             @Override
             public void animationEnd() {
                 geometryLoopAnimationManager.beginLoopAnimation(new String[]{"stage1", "stage2"});
             }
-        }, "build");
-        simpleApplication.getRootNode().attachChild(geometryLoopAnimationManager);
+        }, "build");*/
+        //simpleApplication.getRootNode().attachChild(geometryLoopAnimationManager);
+        generateStuff();
     }
 
     @Override
@@ -81,11 +83,11 @@ public class TestLifecycle extends Lifecycle {
 
     @Override
     public void update() {
-        if (worldObject!=null){
+        /*if (worldObject!=null){
             worldObject.onUpdate();
         }
-        if (geometryLoopAnimationManager!=null) geometryLoopAnimationManager.onUpdate();
-        mapManager.onUpdate();
+        if (geometryLoopAnimationManager!=null) geometryLoopAnimationManager.onUpdate();*/
+        mapManager.onUpdate(simpleApplication.getCamera());
     }
 
     private void loadSimpleModel(){
@@ -135,6 +137,7 @@ public class TestLifecycle extends Lifecycle {
         debugPanel.addButton("Console log", commands);
         debugPanel.addButton("Add building", commands);
         debugPanel.addButton("Show select", commands);
+        debugPanel.addButton("Add tree", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -144,6 +147,7 @@ public class TestLifecycle extends Lifecycle {
                 case "Console log": System.out.println("Console log"); break;
                 case "Add building": addBuilding(); break;
                 case "Show select": mapManager.setSelectMode(!mapManager.isSelectMode()); break;
+                case "Add tree": addTree(); break;
             }
         }
     };
@@ -154,10 +158,23 @@ public class TestLifecycle extends Lifecycle {
             System.out.println("Object created at " + office.getPosition());
     }
 
+    private void addTree(){
+        Tree tree = new Tree();
+        mapManager.putObjectCenter(tree);
+    }
+
     private void addCenterPoint(){
         final float pointSize = simpleApplication.getCamera().getWidth()/100;
         Panel panel = new Panel(pointSize, pointSize, ColorRGBA.Red);
         panel.setLocalTranslation(new Vector3f(simpleApplication.getCamera().getWidth()/2, simpleApplication.getCamera().getHeight()/2, 0));
         simpleApplication.getGuiNode().attachChild(panel);
+    }
+
+    private void generateStuff(){
+        for (int i = -2; i < 2; i++)
+            for (int j = -2; j < 2; j++){
+                Tree tree = new Tree(new Point(i,j));
+                mapManager.putObject(tree);
+            }
     }
 }

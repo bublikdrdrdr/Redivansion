@@ -6,6 +6,7 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
@@ -56,9 +57,9 @@ public class MapManager {
         }
     }
 
-    public void onUpdate(){
+    public void onUpdate(Camera camera){
         if (selectMode) updateSelectMode();
-        worldMap.onUpdate();
+        worldMap.onUpdate(camera);
 
         //debug
         if (CameraDebugger.canPrint()) {

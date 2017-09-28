@@ -2,6 +2,7 @@ package tk.ubublik.redivansion.gamelogic.units;
 
 import android.graphics.Point;
 
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial;
 import com.simsilica.lemur.component.BorderLayout;
 
@@ -54,8 +55,9 @@ public class WorldMap {
         return null;
     }
 
-    public void onUpdate() {
+    public void onUpdate(Camera camera) {
         for (WorldObject worldObject: worldObjects){
+            if (camera.contains(worldObject.getWorldBound())!= Camera.FrustumIntersect.Outside)
             worldObject.onUpdate();
         }
     }
