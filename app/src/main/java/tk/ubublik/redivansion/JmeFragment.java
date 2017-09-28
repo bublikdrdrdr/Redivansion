@@ -17,6 +17,8 @@ import com.jme3.input.event.TouchEvent;
  */
 public class JmeFragment extends AndroidHarnessFragment {
 
+
+
     public JmeFragment() {
         // Set main project class (fully qualified path)
         appClass = "tk.ubublik.redivansion.gamelogic.Main";

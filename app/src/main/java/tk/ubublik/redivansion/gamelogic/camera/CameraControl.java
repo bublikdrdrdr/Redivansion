@@ -31,6 +31,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
 
+import tk.ubublik.redivansion.MainActivity;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 
 /**
@@ -59,6 +60,7 @@ public class CameraControl implements ActionListener, AnalogListener {
     protected float rotationSpeed = 1f;
     protected float moveSpeed = 3f;
     protected float moveYSpeed = 2f;
+    protected float moveSpeedScale = 550.f/MainActivity.getScreenDPI();
     protected float zoomSpeed = 1f;
     protected MotionAllowedListener motionAllowed = null;
     protected boolean enabled = true;
@@ -310,7 +312,7 @@ public class CameraControl implements ActionListener, AnalogListener {
             vel.normalize();
             vel.multLocal(moveYSpeed);
         }
-        vel.multLocal(value * moveSpeed);
+        vel.multLocal(value * moveSpeed*moveSpeedScale);
 
         if (motionAllowed != null)
             motionAllowed.checkMotionAllowed(pos, vel);
