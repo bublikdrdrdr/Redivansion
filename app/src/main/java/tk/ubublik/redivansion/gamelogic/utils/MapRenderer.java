@@ -31,17 +31,20 @@ public class MapRenderer {
     }
 
     public Point worldPointToMap(Vector3f vector3f){
-        final float offset = .5f;
+        final float offset = 0;
         return new Point((int)FastMath.floor(offset+vector3f.getX()/scale), (int)FastMath.floor(offset+vector3f.getZ()/scale));
     }
 
     public Vector3f mapPointToWorld(Point point){
-        final float offset = 0;
+        return mapPointToWorld(point, 1);
+    }
+    public Vector3f mapPointToWorld(Point point, int size){
+        final float offset = .5f*size;
         return new Vector3f((point.x+offset)*scale, 0, (point.y+offset)*scale);
     }
 
     public void putObject(WorldObject worldObject){
-        Vector3f position = mapPointToWorld(worldObject.getPosition());
+        Vector3f position = mapPointToWorld(worldObject.getPosition(), worldObject.getSize());
         worldObject.setLocalTranslation(position);
         node.attachChild(worldObject);
     }
