@@ -26,6 +26,27 @@ public abstract class WorldObject extends Node{
     private WorldObjectLevel level;
     private boolean permanent;
 
+    public WorldObject(){
+        this(0,0);
+    }
+
+    public WorldObject(int x, int y){
+        this(new Point(x,y));
+    }
+
+    public WorldObject(Point position){
+        this(position, 1);
+    }
+
+    public WorldObject(int x, int y, int size){
+        this(new Point(x,y), size);
+    }
+
+    public WorldObject(Point position, int size){
+        this.position = position;
+        this.size = size;
+    }
+
     public WorldObject(GeometryManager geometryManager){
         setGeometryManager(geometryManager);
     }

@@ -17,6 +17,10 @@ public class Office extends Building {
         this(new Point(0,0));
     }
 
+    public Office(int x, int y){
+        this(new Point(x,y));
+    }
+
     public Office(Point position) {
         //TODO: add "office" model and load it
         super(new GeometryAnimationManager("office", (Model)NodesCache.getInstance().get("officeModel")));

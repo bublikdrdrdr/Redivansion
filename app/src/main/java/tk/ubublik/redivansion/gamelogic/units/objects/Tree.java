@@ -13,9 +13,12 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 
 public class Tree extends WorldObject {
 
+    public Tree(int x, int y){
+        this(new Point(x,y));
+    }
 
     public Tree(){
-        this(new Point(0,0));
+        this(0,0);
     }
 
     public Tree(Point position) {
