@@ -49,4 +49,9 @@ public class LevelFactory {
         throw new IllegalArgumentException("Unregistered level");
     }
 
+    public static Level getLevel(String name){
+        //todo: get level by name
+        return null;
+    }
+
 }

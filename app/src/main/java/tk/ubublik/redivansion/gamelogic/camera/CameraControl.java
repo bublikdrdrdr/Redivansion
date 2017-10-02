@@ -77,6 +77,13 @@ public class CameraControl implements ActionListener, AnalogListener {
         this.cam = cam;
         initialUpVec = cam.getUp().clone();
         registerWithInput(inputManager);
+        setDefaultPosition();
+    }
+
+    public void setDefaultPosition(){
+        cam.setLocation(new Vector3f(10,20,10));
+        cam.setFrustumPerspective(10f, 1.7777f, 1f, 50f);
+        cam.lookAt(new Vector3f(0,0,0), Vector3f.UNIT_Y);
     }
 
     /**

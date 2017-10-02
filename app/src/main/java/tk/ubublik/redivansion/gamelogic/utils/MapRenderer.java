@@ -4,6 +4,7 @@ import android.graphics.Point;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
@@ -20,14 +21,20 @@ public class MapRenderer {
 
     private final float scale;
     private final Node node;
+    private final Camera camera;
 
     public MapRenderer(Node node) {
-        this(node, 1);
+        this(node, null);
     }
 
-    public MapRenderer(Node node, float scale){
+    public MapRenderer(Node node, Camera camera){
+        this(node, 1, camera);
+    }
+
+    public MapRenderer(Node node, float scale, Camera camera){
         this.node = node;
         this.scale = scale;
+        this.camera = camera;
     }
 
     public Point worldPointToMap(Vector3f vector3f){

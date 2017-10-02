@@ -10,7 +10,7 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 /**
  * Created by Bublik on 21-Sep-17.
  */
-
+//todo: we need it?
 public class WorldObjectFactory {
 
     public static WorldObject get(Class<? extends WorldObject> clazz){

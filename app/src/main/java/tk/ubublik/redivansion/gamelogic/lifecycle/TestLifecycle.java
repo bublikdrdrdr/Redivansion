@@ -11,25 +11,23 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.debug.Grid;
-import com.jme3.scene.shape.Box;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
-import com.simsilica.lemur.Label;
 import com.simsilica.lemur.Panel;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryLoopAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
+import tk.ubublik.redivansion.gamelogic.graphics.WorldLight;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
-import tk.ubublik.redivansion.gamelogic.test.CameraDebugger;
+import tk.ubublik.redivansion.gamelogic.gui.GUI;
+import tk.ubublik.redivansion.gamelogic.units.Level;
+import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
-import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+import tk.ubublik.redivansion.gamelogic.utils.GameLogicProcessor;
+import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.MapManager;
+import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
@@ -39,36 +37,32 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 public class TestLifecycle extends Lifecycle {
 
+    private MapManager mapManager;//test
+
     private CameraControl cameraControl;
-
-    private WorldObject worldObject;
-    private MapManager mapManager;
-
-    GeometryLoopAnimationManager geometryLoopAnimationManager;
+    private GameLogicProcessor gameLogicProcessor;
+    private MapRenderer mapRenderer;
+    private WorldMap worldMap;
+    private GUI gui;
+    private WorldLight worldLight;
 
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
-        loadSimpleModel();
-        addGrid();
+        loadModels();
+        cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
+        Level level = LevelFactory.getLevel("test");
+        gameLogicProcessor = new GameLogicProcessor();
+        worldMap = new WorldMap(level.getWorldObjects());
+        mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
+        gui = new GUI(simpleApplication.getGuiNode());
+        worldLight = new WorldLight(simpleApplication.getRootNode(), simpleApplication.getCamera().getDirection());
+
+        /*addGrid();
         addCamera();
         addLight();
         addDebugPanel();
         addCenterPoint();
-
-        mapManager = new MapManager(simpleApplication.getRootNode(), cameraControl);
-
-        //worldObject = createWorldObject();
-        //mapManager.putObject(worldObject);
-        //showObject(worldObject);
-        /*geometryLoopAnimationManager = new GeometryLoopAnimationManager((Model)NodesCache.getInstance().get("treeModel"));
-        geometryLoopAnimationManager.beginAnimation(new GeometryLoopAnimationManager.OnAnimationEndListener() {
-            @Override
-            public void animationEnd() {
-                geometryLoopAnimationManager.beginLoopAnimation(new String[]{"stage1", "stage2"});
-            }
-        }, "build");*/
-        //simpleApplication.getRootNode().attachChild(geometryLoopAnimationManager);
-        generateStuff();
+        generateStuff();*/
     }
 
     @Override
@@ -83,14 +77,10 @@ public class TestLifecycle extends Lifecycle {
 
     @Override
     public void update() {
-        /*if (worldObject!=null){
-            worldObject.onUpdate();
-        }
-        if (geometryLoopAnimationManager!=null) geometryLoopAnimationManager.onUpdate();*/
-        mapManager.onUpdate(simpleApplication.getCamera());
+
     }
 
-    private void loadSimpleModel(){
+    private void loadModels(){
         Model simpleModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/simple.crm");
         NodesCache.getInstance().put("officeModel", simpleModel);
         Model treeModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/tree.crm");
@@ -111,9 +101,6 @@ public class TestLifecycle extends Lifecycle {
     }
 
     private void addCamera(){
-        simpleApplication.getCamera().setLocation(new Vector3f(10,20,10));
-        simpleApplication.getCamera().setFrustumPerspective(10f, 1.7777f, 1f, 50f);
-        simpleApplication.getCamera().lookAt(new Vector3f(0,0,0), simpleApplication.getCamera().getUp());
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
     }
 
@@ -122,14 +109,6 @@ public class TestLifecycle extends Lifecycle {
         simpleApplication.getRootNode().addLight(allLight);
         Light light = new DirectionalLight(simpleApplication.getCamera().getDirection());
         simpleApplication.getRootNode().addLight(light);
-    }
-
-    private WorldObject createWorldObject(){
-        return new Office(new Point(0,0));
-    }
-
-    private void showObject(WorldObject worldObject){
-        simpleApplication.getRootNode().attachChild(worldObject);
     }
 
     private void addDebugPanel(){

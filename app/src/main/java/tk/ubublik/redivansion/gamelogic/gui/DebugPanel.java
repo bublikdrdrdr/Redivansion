@@ -5,6 +5,7 @@ import com.jme3.math.ColorRGBA;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
+import com.simsilica.lemur.Label;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
 
 import tk.ubublik.redivansion.MainActivity;
@@ -28,5 +29,9 @@ public class DebugPanel {
     public void addButton(String text, Command<Button> action){
         Button button = container.addChild(new Button(text));
         button.addClickCommands(action);
+    }
+
+    public Label addLabel(String text){
+        return new Label(text);
     }
 }
