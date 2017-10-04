@@ -9,6 +9,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 import java.util.Collection;
+import java.util.Observable;
+import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
@@ -17,7 +19,7 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
  *
  * Puts geometries on their positions in 3D world
  */
-public class MapRenderer {
+public class MapRenderer implements Observer{
 
     private final float scale;
     private final Node node;
@@ -81,4 +83,8 @@ public class MapRenderer {
         node.detachChildAt(index);
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
 }
