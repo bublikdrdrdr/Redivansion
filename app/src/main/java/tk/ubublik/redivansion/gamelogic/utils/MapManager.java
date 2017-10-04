@@ -59,7 +59,7 @@ public class MapManager {
 
     public void onUpdate(Camera camera){
         if (selectMode) updateSelectMode();
-        worldMap.onUpdate(camera);
+        worldMap.onUpdate();
 
         //debug
         if (CameraDebugger.canPrint()) {

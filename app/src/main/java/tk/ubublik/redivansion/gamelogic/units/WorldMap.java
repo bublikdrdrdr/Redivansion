@@ -33,12 +33,15 @@ public class WorldMap extends Observable{
     public boolean put(WorldObject worldObject){
         if (canPut(worldObject)) {
             worldObjects.add(worldObject);
-            notifyObservers(new WorldMapAction(WorldMapAction.Action.ADD, worldObject));
+            WorldMapAction worldMapAction = new WorldMapAction(WorldMapAction.Action.ADD, worldObject);
+            setChanged();
+            notifyObservers(worldMapAction);
             return true;
         } else return false;
     }
 
     public boolean canPut(WorldObject worldObject){
+        setChanged();
         notifyObservers(new WorldMapAction(WorldMapAction.Action.CHECK, worldObject));
         for (WorldObject object: worldObjects){
             if (objectsIntersect(worldObject, object)) return false;
@@ -49,6 +52,7 @@ public class WorldMap extends Observable{
     public WorldObject get(Point position){
         for (WorldObject worldObject: worldObjects) {
             if (objectInPoint(worldObject, position))
+                setChanged();
                 notifyObservers(new WorldMapAction(WorldMapAction.Action.GET, worldObject));
                 return worldObject;
         }
@@ -63,6 +67,7 @@ public class WorldMap extends Observable{
 
     public boolean remove(WorldObject worldObject){
         if (worldObjects.remove(worldObject)){
+            setChanged();
             notifyObservers(new WorldMapAction(WorldMapAction.Action.REMOVE, worldObject));
             return true;
         } else return false;
@@ -75,6 +80,7 @@ public class WorldMap extends Observable{
             WorldObject worldObject = iterator.next();
             if (objectInPoint(worldObject, position)){
                 iterator.remove();
+                setChanged();
                 notifyObservers(new WorldMapAction(WorldMapAction.Action.REMOVE, worldObject));
                 return true;
             }
@@ -104,14 +110,12 @@ public class WorldMap extends Observable{
         return null;
     }
 
-    public void onUpdate(Camera camera) {
-        for (WorldObject worldObject: worldObjects){
-            if (camera.contains(worldObject.getWorldBound())!= Camera.FrustumIntersect.Outside)
-            worldObject.onUpdate();
-        }
+    public void onUpdate() {
+
     }
 
     public void update(WorldObject worldObject){
+        setChanged();
         notifyObservers(new WorldMapAction(WorldMapAction.Action.UPDATE, worldObject));
     }
 

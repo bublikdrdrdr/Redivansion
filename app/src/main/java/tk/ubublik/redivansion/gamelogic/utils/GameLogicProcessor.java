@@ -1,6 +1,8 @@
 package tk.ubublik.redivansion.gamelogic.utils;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
@@ -11,7 +13,7 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
  *
  * Calculates game units (population/resources)
  */
-public class GameLogicProcessor {
+public class GameLogicProcessor implements Observer {
 
     // TODO: 21-Sep-17 use only needed data from level object, not itself
     private Level level;
@@ -44,5 +46,10 @@ public class GameLogicProcessor {
 
     public void stop(){
         //??
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

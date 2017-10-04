@@ -2,16 +2,23 @@ package tk.ubublik.redivansion.gamelogic.utils;
 
 import android.graphics.Point;
 
+import com.jme3.material.Material;
+import com.jme3.material.RenderState;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
+import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
+import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
@@ -24,6 +31,10 @@ public class MapRenderer implements Observer{
     private final float scale;
     private final Node node;
     private final Camera camera;
+
+    private Spatial selectNode = getSelectNode();
+    private int selectModeSize = 1;
+    private boolean selectMode = false;
 
     public MapRenderer(Node node) {
         this(node, null);
@@ -83,8 +94,62 @@ public class MapRenderer implements Observer{
         node.detachChildAt(index);
     }
 
+    public void onUpdate(){
+        for (Spatial spatial: node.getChildren()){
+            if ((spatial instanceof WorldObject) && ((camera.contains(spatial.getWorldBound())!= Camera.FrustumIntersect.Outside))){
+                ((WorldObject)spatial).onUpdate();
+            }
+        }
+        if (selectMode) updateSelectNode(selectNode, CameraControl.getCameraCenterPoint(camera));
+    }
+
     @Override
     public void update(Observable o, Object arg) {
+        if (arg instanceof WorldMapAction){
+            WorldMapAction worldMapAction = (WorldMapAction) arg;
+            switch (worldMapAction.getAction()){
+                case ADD: putObject(worldMapAction.getWorldObject()); break;
+                case REMOVE: removeObject(worldMapAction.getWorldObject()); break;
+                default: worldMapAction.getWorldObject().onUpdate();
+            }
+        }
+    }
 
+    private void updateSelectNode(Spatial selectNode, Vector3f center){
+        Point centerPoint = worldPointToMap(center);
+        selectNode.setLocalTranslation(mapPointToWorld(centerPoint).add(0,0.5f,0));
+    }
+
+    private Geometry getSelectNode(){
+        Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
+        mat.setColor("Diffuse", new ColorRGBA(1, 1, 1, 0.5f));
+        mat.setBoolean("UseMaterialColors", true);
+        mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+        float boxSize = 0.4f;
+        Box box = new Box(boxSize, boxSize, boxSize);
+        Geometry geometry = new Geometry("select box", box);
+        geometry.setMaterial(mat);
+        return geometry;
+    }
+
+    public boolean isSelectMode() {
+        return selectMode;
+    }
+
+    public void setSelectMode(boolean isActive){
+        setSelectMode(isActive, 1);
+    }
+
+    public void setSelectMode(boolean isActive, int size){
+        if (this.selectMode!=isActive || this.selectModeSize!=size){
+            if (isActive){
+                selectNode.setLocalScale(size);
+                node.attachChild(selectNode);
+            } else {
+                node.detachChild(selectNode);
+            }
+            selectMode = isActive;
+            selectModeSize = size;
+        }
     }
 }

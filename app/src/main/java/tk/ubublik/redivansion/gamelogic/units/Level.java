@@ -1,5 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.units;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
@@ -12,7 +14,7 @@ public class Level {
 
     private int id;
     private LevelStatus levelStatus;
-    private List<WorldObject> worldObjects;
+    private List<WorldObject> worldObjects = new ArrayList<>();
     private long time;
     private int money;
     private LevelGoal levelGoal;

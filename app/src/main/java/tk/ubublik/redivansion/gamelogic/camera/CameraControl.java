@@ -390,4 +390,18 @@ public class CameraControl implements ActionListener, AnalogListener {
         }
         return Vector3f.ZERO;
     }
+
+    public static Vector3f getCameraCenterPoint(Camera camera){
+        CollisionResults collisionResults = new CollisionResults();
+        Ray ray = new Ray(camera.getLocation(), camera.getDirection());
+        Quad quad = new Quad(5000,5000);
+        Geometry geometry = new Geometry("q", quad);
+        geometry.rotate(-FastMath.HALF_PI, 0,0);
+        geometry.center().move(Vector3f.ZERO);
+        geometry.collideWith(ray, collisionResults);
+        if (collisionResults.size()>0){
+            return collisionResults.getCollision(0).getContactPoint();
+        }
+        return Vector3f.ZERO;
+    }
 }

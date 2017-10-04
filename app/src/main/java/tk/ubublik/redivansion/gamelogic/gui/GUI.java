@@ -13,11 +13,9 @@ public class GUI {
 
     public GUI(Node guiNode){
         this.guiNode = guiNode;
-        test();
     }
 
-    private void test(){
-        Test test = new Test();
-        test.testElements(guiNode);
+    public void onUpdate(){
+
     }
 }

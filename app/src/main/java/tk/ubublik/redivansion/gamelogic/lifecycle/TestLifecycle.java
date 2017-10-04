@@ -37,8 +37,6 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 public class TestLifecycle extends Lifecycle {
 
-    private MapManager mapManager;//test
-
     private CameraControl cameraControl;
     private GameLogicProcessor gameLogicProcessor;
     private MapRenderer mapRenderer;
@@ -55,8 +53,14 @@ public class TestLifecycle extends Lifecycle {
         worldMap = new WorldMap(level.getWorldObjects());
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
         gui = new GUI(simpleApplication.getGuiNode());
-        worldLight = new WorldLight(simpleApplication.getRootNode(), simpleApplication.getCamera().getDirection());
+        worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
 
+        worldMap.addObserver(mapRenderer);
+        worldMap.addObserver(gameLogicProcessor);
+
+        addDebugPanel();
+        addGrid();
+        addCenterPoint();
         /*addGrid();
         addCamera();
         addLight();
@@ -77,7 +81,11 @@ public class TestLifecycle extends Lifecycle {
 
     @Override
     public void update() {
-
+        mapRenderer.onUpdate();
+        worldLight.onUpdate();
+        worldMap.onUpdate();
+        gui.onUpdate();
+        gameLogicProcessor.onUpdate();
     }
 
     private void loadModels(){
@@ -100,17 +108,6 @@ public class TestLifecycle extends Lifecycle {
         return g;
     }
 
-    private void addCamera(){
-        cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
-    }
-
-    private void addLight(){
-        Light allLight = new AmbientLight(ColorRGBA.DarkGray);
-        simpleApplication.getRootNode().addLight(allLight);
-        Light light = new DirectionalLight(simpleApplication.getCamera().getDirection());
-        simpleApplication.getRootNode().addLight(light);
-    }
-
     private void addDebugPanel(){
         DebugPanel debugPanel = new DebugPanel(simpleApplication);
         debugPanel.addButton("Console log", commands);
@@ -125,21 +122,22 @@ public class TestLifecycle extends Lifecycle {
             switch (source.getText()){
                 case "Console log": System.out.println("Console log"); break;
                 case "Add building": addBuilding(); break;
-                case "Show select": mapManager.setSelectMode(!mapManager.isSelectMode()); break;
+                case "Show select": mapRenderer.setSelectMode(!mapRenderer.isSelectMode()); break;
                 case "Add tree": addTree(); break;
             }
         }
     };
 
     private void addBuilding() {
-        Office office = new Office();
-        if (mapManager.putObjectCenter(office))
+        Point position = getCenterPoint();
+        Office office = new Office(position);
+        if (worldMap.put(office))
             System.out.println("Object created at " + office.getPosition());
     }
 
     private void addTree(){
-        Tree tree = new Tree();
-        mapManager.putObjectCenter(tree);
+        Tree tree = new Tree(getCenterPoint());
+        worldMap.put(tree);
     }
 
     private void addCenterPoint(){
@@ -153,7 +151,11 @@ public class TestLifecycle extends Lifecycle {
         for (int i = -2; i < 2; i++)
             for (int j = -2; j < 2; j++){
                 Tree tree = new Tree(new Point(i,j));
-                mapManager.putObject(tree);
+                worldMap.put(tree);
             }
+    }
+
+    private Point getCenterPoint(){
+        return mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint());
     }
 }

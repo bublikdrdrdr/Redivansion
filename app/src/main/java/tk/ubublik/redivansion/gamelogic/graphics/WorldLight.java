@@ -40,4 +40,8 @@ public class WorldLight {
     public DirectionalLight getDirectionalLight() {
         return directionalLight;
     }
+
+    public void onUpdate(){
+
+    }
 }

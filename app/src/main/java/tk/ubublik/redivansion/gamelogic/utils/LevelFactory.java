@@ -51,7 +51,8 @@ public class LevelFactory {
 
     public static Level getLevel(String name){
         //todo: get level by name
-        return null;
+        Level level = new Level();
+        return level;
     }
 
 }
