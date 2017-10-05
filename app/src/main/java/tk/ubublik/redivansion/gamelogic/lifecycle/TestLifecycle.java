@@ -86,6 +86,7 @@ public class TestLifecycle extends Lifecycle {
         worldMap.onUpdate();
         gui.onUpdate();
         gameLogicProcessor.onUpdate();
+        cameraControl.onUpdate();
     }
 
     private void loadModels(){
@@ -114,6 +115,7 @@ public class TestLifecycle extends Lifecycle {
         debugPanel.addButton("Add building", commands);
         debugPanel.addButton("Show select", commands);
         debugPanel.addButton("Add tree", commands);
+        debugPanel.addButton("Change FoV", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -124,9 +126,16 @@ public class TestLifecycle extends Lifecycle {
                 case "Add building": addBuilding(); break;
                 case "Show select": mapRenderer.setSelectMode(!mapRenderer.isSelectMode()); break;
                 case "Add tree": addTree(); break;
+                case "Change FoV": changeFoV(); break;
             }
         }
     };
+
+    private boolean wideFoV = false;
+    private void changeFoV(){
+        cameraControl.setFoV(wideFoV?30f:10f);
+        wideFoV = !wideFoV;
+    }
 
     private void addBuilding() {
         Point position = getCenterPoint();

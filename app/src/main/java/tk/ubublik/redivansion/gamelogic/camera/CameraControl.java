@@ -30,6 +30,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
+import com.jme3.system.SystemListener;
 
 import tk.ubublik.redivansion.MainActivity;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
@@ -69,12 +70,15 @@ public class CameraControl implements ActionListener, AnalogListener {
     protected boolean invertY = false;
     protected InputManager inputManager;
 
+    private float screenAspect = 1f;
+
     /**
      * Creates a new FlyByCamera to control the given Camera object.
      * @param cam
      */
     public CameraControl(Camera cam, InputManager inputManager){
         this.cam = cam;
+        screenAspect = cam.getWidth()/(float)cam.getHeight();
         initialUpVec = cam.getUp().clone();
         registerWithInput(inputManager);
         setDefaultPosition();
@@ -82,8 +86,36 @@ public class CameraControl implements ActionListener, AnalogListener {
 
     public void setDefaultPosition(){
         cam.setLocation(new Vector3f(10,20,10));
-        cam.setFrustumPerspective(10f, 1.7777f, 1f, 50f);
+        setFoV(10f);
         cam.lookAt(new Vector3f(0,0,0), Vector3f.UNIT_Y);
+    }
+
+    //zoom inertia
+    private static long zoomTime = 1000;
+    private long lastChange = 0;
+    private float oldFoV = 10f;
+    private float newFoV = 10f;
+    public void setFoV(float fov){
+        newFoV = fov;
+        lastChange = System.currentTimeMillis();
+    }
+
+    public void onUpdate() {
+        if (lastChange>0){
+            long time = System.currentTimeMillis()-lastChange;
+            if (time>=zoomTime){
+                lastChange=0;
+            } else{
+                float percent = time/(float)zoomTime;
+                float fov = percent*newFoV + (1-percent)*oldFoV;
+                cam.setFrustumPerspective(fov, screenAspect, 1f, 50f);
+            }
+        }
+        if (lastChange==0){
+            oldFoV = newFoV;
+            cam.setFrustumPerspective(newFoV, screenAspect, 1f, 50f);
+            lastChange = -1;
+        }
     }
 
     /**
@@ -377,9 +409,13 @@ public class CameraControl implements ActionListener, AnalogListener {
     }
 
     public Vector3f getCameraCenterPoint(){
-        // FIXME: 21-Sep-17 get camera ray and horizontal plane collision point
+        return getCameraCenterPoint(cam);
+    }
+
+    @Deprecated
+    public static Vector3f getCameraCenterPointV1(Camera camera){
         CollisionResults collisionResults = new CollisionResults();
-        Ray ray = new Ray(cam.getLocation(), cam.getDirection());
+        Ray ray = new Ray(camera.getLocation(), camera.getDirection());
         Quad quad = new Quad(5000,5000);
         Geometry geometry = new Geometry("q", quad);
         geometry.rotate(-FastMath.HALF_PI, 0,0);
@@ -392,16 +428,8 @@ public class CameraControl implements ActionListener, AnalogListener {
     }
 
     public static Vector3f getCameraCenterPoint(Camera camera){
-        CollisionResults collisionResults = new CollisionResults();
-        Ray ray = new Ray(camera.getLocation(), camera.getDirection());
-        Quad quad = new Quad(5000,5000);
-        Geometry geometry = new Geometry("q", quad);
-        geometry.rotate(-FastMath.HALF_PI, 0,0);
-        geometry.center().move(Vector3f.ZERO);
-        geometry.collideWith(ray, collisionResults);
-        if (collisionResults.size()>0){
-            return collisionResults.getCollision(0).getContactPoint();
-        }
-        return Vector3f.ZERO;
+        float delta = camera.getLocation().getY()/(camera.getDirection().getY()*-1f);
+        Vector3f fullDirection = camera.getDirection().mult(delta);
+        return camera.getLocation().add(fullDirection);
     }
 }
