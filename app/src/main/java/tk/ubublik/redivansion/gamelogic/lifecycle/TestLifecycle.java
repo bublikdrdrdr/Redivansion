@@ -116,6 +116,7 @@ public class TestLifecycle extends Lifecycle {
         debugPanel.addButton("Show select", commands);
         debugPanel.addButton("Add tree", commands);
         debugPanel.addButton("Change FoV", commands);
+        debugPanel.addButton("Big select", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -124,9 +125,10 @@ public class TestLifecycle extends Lifecycle {
             switch (source.getText()){
                 case "Console log": System.out.println("Console log"); break;
                 case "Add building": addBuilding(); break;
-                case "Show select": mapRenderer.setSelectMode(!mapRenderer.isSelectMode()); break;
+                case "Show select": mapRenderer.setSelectMode(!(mapRenderer.isSelectMode()&&mapRenderer.getSelectModeSize()==1), 1); break;
                 case "Add tree": addTree(); break;
                 case "Change FoV": changeFoV(); break;
+                case "Big select": mapRenderer.setSelectMode(!(mapRenderer.isSelectMode()&&mapRenderer.getSelectModeSize()==2), 2); break;
             }
         }
     };

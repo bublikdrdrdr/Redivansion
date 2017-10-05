@@ -100,7 +100,7 @@ public class MapRenderer implements Observer{
                 ((WorldObject)spatial).onUpdate();
             }
         }
-        if (selectMode) updateSelectNode(selectNode, CameraControl.getCameraCenterPoint(camera));
+        if (selectMode) updateSelectNode(selectNode, CameraControl.getCameraCenterPoint(camera), selectModeSize);
     }
 
     @Override
@@ -115,9 +115,9 @@ public class MapRenderer implements Observer{
         }
     }
 
-    private void updateSelectNode(Spatial selectNode, Vector3f center){
+    private void updateSelectNode(Spatial selectNode, Vector3f center, int size){
         Point centerPoint = worldPointToMap(center);
-        selectNode.setLocalTranslation(mapPointToWorld(centerPoint).add(0,0.5f,0));
+        selectNode.setLocalTranslation(mapPointToWorld(centerPoint, size).add(0,0.5f,0));
     }
 
     private Geometry getSelectNode(){
@@ -136,6 +136,10 @@ public class MapRenderer implements Observer{
         return selectMode;
     }
 
+    public int getSelectModeSize() {
+        return selectModeSize;
+    }
+
     public void setSelectMode(boolean isActive){
         setSelectMode(isActive, 1);
     }
@@ -143,7 +147,7 @@ public class MapRenderer implements Observer{
     public void setSelectMode(boolean isActive, int size){
         if (this.selectMode!=isActive || this.selectModeSize!=size){
             if (isActive){
-                selectNode.setLocalScale(size);
+                selectNode.setLocalScale(size, 1f, size);
                 node.attachChild(selectNode);
             } else {
                 node.detachChild(selectNode);
