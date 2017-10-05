@@ -70,7 +70,7 @@ public class MapManager {
 
     private void updateSelectMode(){
         Vector3f centerVector = cameraControl.getCameraCenterPoint();
-        Point centerPoint = mapRenderer.worldPointToMap(centerVector);
+        Point centerPoint = mapRenderer.worldPointToMap(centerVector, selectModeSize);
         selectGeometry.setLocalTranslation(mapRenderer.mapPointToWorld(centerPoint).add(0,0.5f,0));
     }
 

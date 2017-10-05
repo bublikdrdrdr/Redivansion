@@ -51,7 +51,11 @@ public class MapRenderer implements Observer{
     }
 
     public Point worldPointToMap(Vector3f vector3f){
-        final float offset = 0;
+        return worldPointToMap(vector3f, 1);
+    }
+
+    public Point worldPointToMap(Vector3f vector3f, int size){
+        final float offset = -.5f*size+.5f;
         return new Point((int)FastMath.floor(offset+vector3f.getX()/scale), (int)FastMath.floor(offset+vector3f.getZ()/scale));
     }
 
@@ -116,7 +120,7 @@ public class MapRenderer implements Observer{
     }
 
     private void updateSelectNode(Spatial selectNode, Vector3f center, int size){
-        Point centerPoint = worldPointToMap(center);
+        Point centerPoint = worldPointToMap(center, size);
         selectNode.setLocalTranslation(mapPointToWorld(centerPoint, size).add(0,0.5f,0));
     }
 

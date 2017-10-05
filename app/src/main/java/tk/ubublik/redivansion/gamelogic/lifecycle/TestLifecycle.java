@@ -140,14 +140,14 @@ public class TestLifecycle extends Lifecycle {
     }
 
     private void addBuilding() {
-        Point position = getCenterPoint();
+        Point position = getCenterPoint(2);
         Office office = new Office(position);
         if (worldMap.put(office))
             System.out.println("Object created at " + office.getPosition());
     }
 
     private void addTree(){
-        Tree tree = new Tree(getCenterPoint());
+        Tree tree = new Tree(getCenterPoint(1));
         worldMap.put(tree);
     }
 
@@ -166,7 +166,7 @@ public class TestLifecycle extends Lifecycle {
             }
     }
 
-    private Point getCenterPoint(){
-        return mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint());
+    private Point getCenterPoint(int size){
+        return mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint(), size);
     }
 }
