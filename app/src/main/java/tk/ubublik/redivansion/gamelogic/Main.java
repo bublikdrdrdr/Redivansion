@@ -40,6 +40,7 @@ import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.lifecycle.Lifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.MainLifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
+import tk.ubublik.redivansion.gamelogic.test.CameraCullingTest;
 import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.utils.CustomModelLoader;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
@@ -53,12 +54,15 @@ public class Main extends SimpleApplication {
 
     private Lifecycle lifecycle;
 
+    CameraCullingTest cameraCullingTest;
+
     @Override
     public void simpleInitApp() {
         setupApplication();
         initCameraControl();
         //lifecycle = new MainLifecycle(this);
         lifecycle = new TestLifecycle(this);
+        //cameraCullingTest = new CameraCullingTest();
     }
 
     @Override
@@ -70,6 +74,7 @@ public class Main extends SimpleApplication {
             this.stop();
         }
         logLogic(nanos);
+        //cameraCullingTest.onUpdate();
     }
 
     private void setupApplication(){
