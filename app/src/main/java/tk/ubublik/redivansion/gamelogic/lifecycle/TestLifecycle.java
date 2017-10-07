@@ -23,6 +23,7 @@ import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
+import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.utils.GameLogicProcessor;
 import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
@@ -54,13 +55,14 @@ public class TestLifecycle extends Lifecycle {
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
         gui = new GUI(simpleApplication.getGuiNode());
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
-
+        mapRenderer.addTerrain(new Terrain(5));
         worldMap.addObserver(mapRenderer);
         worldMap.addObserver(gameLogicProcessor);
 
         addDebugPanel();
-        addGrid();
-        addCenterPoint();
+        //addGrid();
+        //addCenterPoint();
+
         /*addGrid();
         addCamera();
         addLight();
@@ -94,6 +96,8 @@ public class TestLifecycle extends Lifecycle {
         NodesCache.getInstance().put("officeModel", simpleModel);
         Model treeModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/tree.crm");
         NodesCache.getInstance().put("treeModel", treeModel);
+        Model terraintModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/terrain.crm");
+        NodesCache.getInstance().put("terrainModel", terraintModel);
     }
 
     private Geometry addGrid(){

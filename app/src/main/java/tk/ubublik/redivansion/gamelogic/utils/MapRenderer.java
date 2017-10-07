@@ -18,7 +18,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
+import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
+import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
@@ -35,6 +37,8 @@ public class MapRenderer implements Observer{
     private Spatial selectNode = getSelectNode();
     private int selectModeSize = 1;
     private boolean selectMode = false;
+
+    private Terrain terrain;
 
     public MapRenderer(Node node) {
         this(node, null);
@@ -105,6 +109,7 @@ public class MapRenderer implements Observer{
             }
         }
         if (selectMode) updateSelectNode(selectNode, CameraControl.getCameraCenterPoint(camera), selectModeSize);
+        if (terrain!=null) terrain.onUpdate();
     }
 
     @Override
@@ -159,5 +164,19 @@ public class MapRenderer implements Observer{
             selectMode = isActive;
             selectModeSize = size;
         }
+    }
+
+    public void addTerrain(Terrain terrain){
+        this.terrain = terrain;
+        node.attachChild(terrain);
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
+    public void removeTerrain(){
+        node.detachChild(terrain);
+        terrain = null;
     }
 }
