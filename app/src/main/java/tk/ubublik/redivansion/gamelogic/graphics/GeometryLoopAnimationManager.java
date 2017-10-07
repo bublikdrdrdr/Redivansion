@@ -123,10 +123,6 @@ public class GeometryLoopAnimationManager extends GeometryManager {
         loopAnimationIndex = 0;
     }
 
-    public interface OnAnimationEndListener{
-        void animationEnd();
-    }
-
     @Override
     public GeometryManager clone() {
         return new GeometryAnimationManager(model.clone());

@@ -52,14 +52,22 @@ public class GeometryAnimationManager extends GeometryManager{
         meshRender = new MeshRender(polyAnimation);
         this.setMesh(meshRender.getMesh());
         meshRender.beginAnimation();
+        done = false;
+    }
+
+    private void prepareAnimation(PolyAnimation polyAnimation, OnAnimationEndListener onAnimationEndListener){
+        prepareAnimation(polyAnimation);
+        meshRender.setListener(onAnimationEndListener);
     }
 
     @Override
     public void onUpdate() {
         if (meshRender!=null){
             meshRender.onUpdate();
-            if (meshRender.isDone())
+            if (meshRender.isDone()) {
                 meshRender = null;
+                done = true;
+            }
             this.updateModelBound();
         }
     }

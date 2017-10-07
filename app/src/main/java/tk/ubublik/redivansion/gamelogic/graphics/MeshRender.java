@@ -49,10 +49,6 @@ public class MeshRender {
         return mesh;
     }
 
-    public void setOnAnimationEndListener(GeometryLoopAnimationManager.OnAnimationEndListener onAnimationEndListener){
-        this.listener = onAnimationEndListener;
-    }
-
     private void setMeshBuffer() {
         int polyCount = polyAnimation.polygonCount();
         mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(polyCount * 3 * 3));

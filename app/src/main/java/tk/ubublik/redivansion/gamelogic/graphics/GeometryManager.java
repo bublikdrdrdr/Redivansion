@@ -8,6 +8,8 @@ import com.jme3.scene.Geometry;
 
 public abstract class GeometryManager extends Geometry implements Cloneable{
 
+    protected boolean done = false;
+
     public GeometryManager(String name) {
         super(name);
     }
@@ -18,4 +20,12 @@ public abstract class GeometryManager extends Geometry implements Cloneable{
 
     @Override
     public abstract GeometryManager clone();
+
+    public interface OnAnimationEndListener{
+        void animationEnd();
+    }
+
+    public boolean isDone() {
+        return done;
+    }
 }
