@@ -61,7 +61,7 @@ public class CameraControl implements ActionListener, AnalogListener {
     protected float rotationSpeed = 1f;
     protected float moveSpeed = 3f;
     protected float moveYSpeed = 2f;
-    protected float moveSpeedScale = 550.f/MainActivity.getScreenDPI();
+    protected float moveSpeedScale = (550.f/MainActivity.getScreenDPI());
     protected float zoomSpeed = 1f;
     protected MotionAllowedListener motionAllowed = null;
     protected boolean enabled = true;
@@ -95,6 +95,8 @@ public class CameraControl implements ActionListener, AnalogListener {
     private long lastChange = 0;
     private float oldFoV = 10f;
     private float newFoV = 10f;
+
+    private float currentFoV = 10f;
     public void setFoV(float fov){
         newFoV = fov;
         lastChange = System.currentTimeMillis();
@@ -107,8 +109,9 @@ public class CameraControl implements ActionListener, AnalogListener {
                 lastChange=0;
             } else{
                 float percent = time/(float)zoomTime;
-                float fov = percent*newFoV + (1-percent)*oldFoV;
-                cam.setFrustumPerspective(fov, screenAspect, 1f, 50f);
+                currentFoV = percent*newFoV + (1-percent)*oldFoV;
+                moveSpeedScale = (550.f/MainActivity.getScreenDPI())*(currentFoV/10);
+                cam.setFrustumPerspective(currentFoV, screenAspect, 1f, 50f);
             }
         }
         if (lastChange==0){
