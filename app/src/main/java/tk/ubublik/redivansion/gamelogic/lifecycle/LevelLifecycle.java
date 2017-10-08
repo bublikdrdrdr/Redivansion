@@ -10,8 +10,8 @@ public class LevelLifecycle extends Lifecycle {
 
     private int levelNumber;
 
-    public LevelLifecycle(int levelNumber, SimpleApplication simpleApplication){
-        super(simpleApplication);
+    public LevelLifecycle(int levelNumber, SimpleApplication SimpleApplication){
+        super(SimpleApplication);
         this.levelNumber = levelNumber;
     }
 

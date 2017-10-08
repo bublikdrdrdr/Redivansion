@@ -8,13 +8,13 @@ import com.jme3.light.Light;
  */
 
 public abstract class Lifecycle {
-    protected SimpleApplication simpleApplication;
-    public Lifecycle(final SimpleApplication simpleApplication){
-        this.simpleApplication = simpleApplication;
-        simpleApplication.getRootNode().detachAllChildren();
-        simpleApplication.getGuiNode().detachAllChildren();
-        simpleApplication.getRootNode().getLocalLightList().clear();
-        simpleApplication.getRootNode().getWorldLightList().clear();
+    protected SimpleApplication SimpleApplication;
+    public Lifecycle(final SimpleApplication SimpleApplication){
+        this.SimpleApplication = SimpleApplication;
+        SimpleApplication.getRootNode().detachAllChildren();
+        SimpleApplication.getGuiNode().detachAllChildren();
+        SimpleApplication.getRootNode().getLocalLightList().clear();
+        SimpleApplication.getRootNode().getWorldLightList().clear();
     }
     public abstract LifecycleType getType();
     public abstract boolean isDone();

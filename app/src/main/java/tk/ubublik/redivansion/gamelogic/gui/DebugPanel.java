@@ -18,12 +18,12 @@ public class DebugPanel {
 
     private final Container container;
 
-    public DebugPanel(SimpleApplication simpleApplication){
+    public DebugPanel(SimpleApplication SimpleApplication){
         container = new Container();
         container.setBackground(new QuadBackgroundComponent(new ColorRGBA(1,1,1,0.3f)));
         container.setLocalScale(MainActivity.getScreenDPI()/150.f);//UI scale
-        container.setLocalTranslation(0,simpleApplication.getCamera().getHeight(), 0); //left top corner
-        simpleApplication.getGuiNode().attachChild(container);
+        container.setLocalTranslation(0,SimpleApplication.getCamera().getHeight(), 0); //left top corner
+        SimpleApplication.getGuiNode().attachChild(container);
     }
 
     public void addButton(String text, Command<Button> action){

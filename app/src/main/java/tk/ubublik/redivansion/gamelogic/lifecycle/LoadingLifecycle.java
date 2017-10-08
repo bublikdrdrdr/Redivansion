@@ -11,8 +11,8 @@ import com.simsilica.lemur.Panel;
 
 public abstract class LoadingLifecycle extends Lifecycle {
 
-    public LoadingLifecycle(SimpleApplication simpleApplication) {
-        super(simpleApplication);
+    public LoadingLifecycle(SimpleApplication SimpleApplication) {
+        super(SimpleApplication);
         setLoadingNode();
     }
 
@@ -20,8 +20,8 @@ public abstract class LoadingLifecycle extends Lifecycle {
     public void update() {
         if (loadingPanel != null)
             loadingPanel.setLocalTranslation(
-                    FastMath.nextRandomInt(0, simpleApplication.getCamera().getWidth()),
-                    FastMath.nextRandomInt(0, simpleApplication.getCamera().getHeight()),
+                    FastMath.nextRandomInt(0, SimpleApplication.getCamera().getWidth()),
+                    FastMath.nextRandomInt(0, SimpleApplication.getCamera().getHeight()),
                     0);
     }
 
@@ -30,6 +30,6 @@ public abstract class LoadingLifecycle extends Lifecycle {
         Label label = new Label("LOADING");
         label.setFontSize(50f);
         loadingPanel = label;
-        simpleApplication.getGuiNode().attachChild(loadingPanel);
+        SimpleApplication.getGuiNode().attachChild(loadingPanel);
     }
 }

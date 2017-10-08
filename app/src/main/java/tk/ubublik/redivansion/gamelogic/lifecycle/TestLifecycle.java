@@ -45,30 +45,30 @@ public class TestLifecycle extends Lifecycle {
     private GUI gui;
     private WorldLight worldLight;
 
-    public TestLifecycle(SimpleApplication simpleApplication) {
-        super(simpleApplication);
+    public TestLifecycle(SimpleApplication SimpleApplication) {
+        super(SimpleApplication);
         loadModels();
-        cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
+        cameraControl = new CameraControl(SimpleApplication.getCamera(), SimpleApplication.getInputManager());
         Level level = LevelFactory.getLevel("test");
         gameLogicProcessor = new GameLogicProcessor();
         worldMap = new WorldMap(level.getWorldObjects());
-        mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
-        gui = new GUI(simpleApplication.getGuiNode());
-        worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
-        mapRenderer.addTerrain(new Terrain(5));
+        mapRenderer = new MapRenderer(SimpleApplication.getRootNode(), 1f, SimpleApplication.getCamera());
+        gui = new GUI(SimpleApplication.getGuiNode());
+        worldLight = new WorldLight(SimpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*SimpleApplication.getCamera().getDirection()*/);
+        mapRenderer.addTerrain(new Terrain(15));
         worldMap.addObserver(mapRenderer);
         worldMap.addObserver(gameLogicProcessor);
 
         addDebugPanel();
         //addGrid();
         //addCenterPoint();
-
+        //generateStuff();
         /*addGrid();
         addCamera();
         addLight();
         addDebugPanel();
         addCenterPoint();
-        generateStuff();*/
+        */
     }
 
     @Override
@@ -109,12 +109,12 @@ public class TestLifecycle extends Lifecycle {
         mat.setColor("Color", color);
         g.setMaterial(mat);
         g.center().move(Vector3f.ZERO);
-        simpleApplication.getRootNode().attachChild(g);
+        SimpleApplication.getRootNode().attachChild(g);
         return g;
     }
 
     private void addDebugPanel(){
-        DebugPanel debugPanel = new DebugPanel(simpleApplication);
+        DebugPanel debugPanel = new DebugPanel(SimpleApplication);
         debugPanel.addButton("Console log", commands);
         debugPanel.addButton("Add building", commands);
         debugPanel.addButton("Show select", commands);
@@ -156,16 +156,22 @@ public class TestLifecycle extends Lifecycle {
     }
 
     private void addCenterPoint(){
-        final float pointSize = simpleApplication.getCamera().getWidth()/100;
+        final float pointSize = SimpleApplication.getCamera().getWidth()/100;
         Panel panel = new Panel(pointSize, pointSize, ColorRGBA.Red);
-        panel.setLocalTranslation(new Vector3f(simpleApplication.getCamera().getWidth()/2, simpleApplication.getCamera().getHeight()/2, 0));
-        simpleApplication.getGuiNode().attachChild(panel);
+        panel.setLocalTranslation(new Vector3f(SimpleApplication.getCamera().getWidth()/2, SimpleApplication.getCamera().getHeight()/2, 0));
+        SimpleApplication.getGuiNode().attachChild(panel);
     }
 
     private void generateStuff(){
-        for (int i = -2; i < 2; i++)
+        for (int i = -1; i < 1; i++)
             for (int j = -2; j < 2; j++){
                 Tree tree = new Tree(new Point(i,j));
+                worldMap.put(tree);
+            }
+
+        for (int i = -5; i < 5; i++)
+            for (int j = -5; j < 5; j++){
+                Office tree = new Office(new Point(i,j));
                 worldMap.put(tree);
             }
     }

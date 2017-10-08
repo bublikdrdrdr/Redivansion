@@ -24,8 +24,8 @@ public class MainLoadingLifecycle extends LoadingLifecycle {
     private volatile boolean done = false;
 
 
-    public MainLoadingLifecycle(final SimpleApplication simpleApplication){
-        super(simpleApplication);
+    public MainLoadingLifecycle(final SimpleApplication SimpleApplication){
+        super(SimpleApplication);
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

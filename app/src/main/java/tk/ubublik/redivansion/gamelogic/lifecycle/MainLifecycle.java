@@ -11,10 +11,10 @@ public class MainLifecycle extends Lifecycle {
     private Lifecycle currentLifecycle;
     private boolean done = false;
 
-    public MainLifecycle(SimpleApplication simpleApplication) {
-        //todo: use simpleApplication to get rootNode, guiNode, listeners etc.
-        super(simpleApplication);
-        currentLifecycle = new MainLoadingLifecycle(simpleApplication);
+    public MainLifecycle(SimpleApplication SimpleApplication) {
+        //todo: use SimpleApplication to get rootNode, guiNode, listeners etc.
+        super(SimpleApplication);
+        currentLifecycle = new MainLoadingLifecycle(SimpleApplication);
     }
 
     @Override
@@ -33,22 +33,22 @@ public class MainLifecycle extends Lifecycle {
         if (currentLifecycle.isDone()) {
             switch (currentLifecycle.getType()) {
                 case MAIN_LOADING:
-                    currentLifecycle = new MenuLifecycle(simpleApplication);
+                    currentLifecycle = new MenuLifecycle(SimpleApplication);
                     break;
                 case MENU:
                     processMenu();
                     break;
                 case LEVEL_LOADING:
-                    currentLifecycle = new LevelLifecycle(((LevelLoadingLifecycle) currentLifecycle).getLevelNumber(), simpleApplication);
+                    currentLifecycle = new LevelLifecycle(((LevelLoadingLifecycle) currentLifecycle).getLevelNumber(), SimpleApplication);
                     break;
                 case LEVEL:
-                    currentLifecycle = new MainLoadingLifecycle(simpleApplication);
+                    currentLifecycle = new MainLoadingLifecycle(SimpleApplication);
                     break;
                 case TUTORIAL_LOADING:
-                    currentLifecycle = new TutorialLifecycle(simpleApplication);
+                    currentLifecycle = new TutorialLifecycle(SimpleApplication);
                     break;
                 case TUTORIAL:
-                    currentLifecycle = new MainLoadingLifecycle(simpleApplication);
+                    currentLifecycle = new MainLoadingLifecycle(SimpleApplication);
                     break;
             }
         }
@@ -57,10 +57,10 @@ public class MainLifecycle extends Lifecycle {
     private void processMenu() {
         switch (((MenuLifecycle) currentLifecycle).menuResult) {
             case START_LEVEL:
-                currentLifecycle = new LevelLoadingLifecycle(((MenuLifecycle) currentLifecycle).startLevelNumber, simpleApplication);
+                currentLifecycle = new LevelLoadingLifecycle(((MenuLifecycle) currentLifecycle).startLevelNumber, SimpleApplication);
                 break;
             case START_TUTORIAL:
-                currentLifecycle = new TutorialLoadingLifecycle(simpleApplication);
+                currentLifecycle = new TutorialLoadingLifecycle(SimpleApplication);
                 break;
             case EXIT:
                 done = true;

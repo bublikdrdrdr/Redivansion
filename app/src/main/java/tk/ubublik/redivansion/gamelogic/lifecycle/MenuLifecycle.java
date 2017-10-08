@@ -36,8 +36,8 @@ public class MenuLifecycle extends Lifecycle {
     public MenuResult menuResult;
     private boolean done = false;
 
-    public MenuLifecycle(SimpleApplication simpleApplication){
-        super(simpleApplication);
+    public MenuLifecycle(SimpleApplication SimpleApplication){
+        super(SimpleApplication);
         createMenuElements();
     }
 
@@ -53,7 +53,7 @@ public class MenuLifecycle extends Lifecycle {
 
     @Override
     public void update() {
-        //loadingPanel.setLocalTranslation(FastMath.nextRandomInt(0, simpleApplication.getCamera().getWidth()), FastMath.nextRandomInt(0, simpleApplication.getCamera().getHeight()), 0);
+        //loadingPanel.setLocalTranslation(FastMath.nextRandomInt(0, SimpleApplication.getCamera().getWidth()), FastMath.nextRandomInt(0, SimpleApplication.getCamera().getHeight()), 0);
     }
 
     Spatial background;
@@ -61,9 +61,9 @@ public class MenuLifecycle extends Lifecycle {
         addBackgroundImage();
 
         final Container myWindow = new Container();
-        simpleApplication.getGuiNode().attachChild(myWindow);
+        SimpleApplication.getGuiNode().attachChild(myWindow);
         myWindow.setLocalScale(4f);
-        myWindow.setLocalTranslation(simpleApplication.getCamera().getWidth()/2-200, simpleApplication.getCamera().getHeight()-200, 0);
+        myWindow.setLocalTranslation(SimpleApplication.getCamera().getWidth()/2-200, SimpleApplication.getCamera().getHeight()-200, 0);
         Label label = myWindow.addChild(new Label("Main menu"));
         label.setColor(ColorRGBA.Cyan);
         Button startGame = myWindow.addChild(new Button("Start game"));
@@ -94,9 +94,9 @@ public class MenuLifecycle extends Lifecycle {
 
     private void addBackgroundImage(){
         Picture backgroundPicture = (Picture)NodesCache.getInstance().get("menu_background");
-        backgroundPicture.setWidth(simpleApplication.getCamera().getWidth());
-        backgroundPicture.setHeight(simpleApplication.getCamera().getHeight());
+        backgroundPicture.setWidth(SimpleApplication.getCamera().getWidth());
+        backgroundPicture.setHeight(SimpleApplication.getCamera().getHeight());
         backgroundPicture.setPosition(0,0);
-        simpleApplication.getGuiNode().attachChild(backgroundPicture);
+        SimpleApplication.getGuiNode().attachChild(backgroundPicture);
     }
 }

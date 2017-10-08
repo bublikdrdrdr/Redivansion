@@ -5,8 +5,12 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.jme3.app.DebugKeysAppState;
 import com.jme3.app.FlyCamAppState;
+import com.jme3.app.ResetStatsState;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.StatsAppState;
+import com.jme3.audio.AudioListenerState;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
 import com.jme3.light.AmbientLight;
@@ -24,6 +28,8 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.event.KeyInterceptState;
+import com.simsilica.lemur.event.TouchAppState;
 
 import org.apache.commons.io.FileUtils;
 
@@ -68,13 +74,13 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        logFps();
+        //logFps();
         long nanos = System.nanoTime();
         lifecycle.update();
         if (lifecycle.isDone()) {
             this.stop();
         }
-        logLogic(nanos);
+        //logLogic(nanos);
         //cameraCullingTest.onUpdate();
     }
 
@@ -116,24 +122,41 @@ public class Main extends SimpleApplication {
         }
     }
 
-    long lastCoreShow = System.currentTimeMillis();
-    private void logCore(long nanos){
-        if (System.currentTimeMillis()-lastCoreShow>=500) {
-            long elapsed = System.nanoTime() - nanos;
-            //yes, I got divide by zero exception
-            if (elapsed > 0)
-                System.out.println("CORE FPS: " + (1000000000L / elapsed));
-            else
-                System.out.println("CORE FPS: over9000");
-            lastCoreShow = System.currentTimeMillis();
+
+    long lastTimerShow = System.currentTimeMillis();
+    long nanosTimer;
+    boolean show = false;
+    private void endShow(){
+        show = false;
+        if (System.currentTimeMillis()-lastTimerShow>=500){
+            lastTimerShow = System.currentTimeMillis();
+            show = true;
+            System.out.println("######################################");
         }
     }
+
+    private void resetTime(){
+        nanosTimer = System.nanoTime();
+    }
+
+    private void logTimer(String name){
+        if (show){
+            long elapsed = System.nanoTime() - nanosTimer;
+            if (elapsed > 0)
+                System.out.println(name+" FPS: " + (1000000000L / elapsed));
+            else
+                System.out.println(name+" FPS: over9000");
+        }
+        resetTime();
+    }
+
     @Override
     public void update() {
-        long nanos = System.nanoTime();
+        resetTime();
         if (prof!=null) prof.appStep(AppStep.BeginFrame);
-
-        super.update(); // makes sure to execute AppTasks
+        logTimer("prof.appStep");
+        inputManager.update(timer.getTimePerFrame());
+        logTimer("input manager");
         if (speed == 0 || paused) {
             return;
         }
@@ -142,30 +165,34 @@ public class Main extends SimpleApplication {
 
         // update states
         if (prof!=null) prof.appStep(AppStep.StateManagerUpdate);
-        stateManager.update(tpf);
-
+        stateManager.detach(stateManager.getState(TouchAppState.class));//remove lags but also remove button clicks
+        stateManager.update(tpf);//TODO: lags here, without this line button click does not work
+        logTimer("stateManager");
         // simple update and root node
         simpleUpdate(tpf);
-
+        logTimer("simpleUpdate");
         if (prof!=null) prof.appStep(AppStep.SpatialUpdate);
         rootNode.updateLogicalState(tpf);
         guiNode.updateLogicalState(tpf);
-
+        logTimer("logicalState");
         rootNode.updateGeometricState();
         guiNode.updateGeometricState();
-
+        logTimer("geometry state");
         // render states
         if (prof!=null) prof.appStep(AppStep.StateManagerRender);
-        stateManager.render(renderManager);
-
+        //stateManager.render(renderManager);
+        logTimer("render");
         if (prof!=null) prof.appStep(AppStep.RenderFrame);
         renderManager.render(tpf, context.isRenderable());
-        simpleRender(renderManager);
-        stateManager.postRender();
-
+        //simpleRender(renderManager);
+        //stateManager.postRender();
+        logTimer("post render");
         if (prof!=null) prof.appStep(AppStep.EndFrame);
-        logCore(nanos);
+        endShow();
     }
+
+
+
 
     /*GUI gui;
 

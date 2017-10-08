@@ -10,8 +10,8 @@ public class LevelLoadingLifecycle extends LoadingLifecycle {
 
     private int levelNumber;
 
-    public LevelLoadingLifecycle(int levelNumber, SimpleApplication simpleApplication){
-        super(simpleApplication);
+    public LevelLoadingLifecycle(int levelNumber, SimpleApplication SimpleApplication){
+        super(SimpleApplication);
         this.levelNumber = levelNumber;
     }
 

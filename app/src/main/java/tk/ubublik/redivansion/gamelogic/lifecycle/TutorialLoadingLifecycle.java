@@ -22,8 +22,8 @@ public class TutorialLoadingLifecycle extends LoadingLifecycle {
 
     private volatile boolean done = false;
 
-    public TutorialLoadingLifecycle(SimpleApplication simpleApplication) {
-        super(simpleApplication);
+    public TutorialLoadingLifecycle(SimpleApplication SimpleApplication) {
+        super(SimpleApplication);
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

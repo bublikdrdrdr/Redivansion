@@ -68,8 +68,8 @@ public class TutorialLifecycle extends Lifecycle {
     private MapRenderer mapRenderer;
     private Level currentLevel = (Level)NodesCache.getInstance().get("tutorial_level");
 
-    public TutorialLifecycle(SimpleApplication simpleApplication) {
-        super(simpleApplication);
+    public TutorialLifecycle(SimpleApplication SimpleApplication) {
+        super(SimpleApplication);
         setup();
         setCamera();
         setLight();
@@ -81,8 +81,8 @@ public class TutorialLifecycle extends Lifecycle {
 
     private void setup(){
         //exit on back press
-        simpleApplication.getInputManager().addListener(touchListener,  new String[]{BACK_PRESS_EVENT});
-        mapRenderer = new MapRenderer(simpleApplication.getRootNode());
+        SimpleApplication.getInputManager().addListener(touchListener,  new String[]{BACK_PRESS_EVENT});
+        mapRenderer = new MapRenderer(SimpleApplication.getRootNode());
     }
 
     /*GeometryAnimationManager geometryAnimationManager;
@@ -90,24 +90,24 @@ public class TutorialLifecycle extends Lifecycle {
         //surprise: does not work on emulator... but on real device is good
         geometryAnimationManager = (GeometryAnimationManager) NodesCache.getInstance().get("simple");
         if (geometryAnimationManager!=null) {
-            simpleApplication.getRootNode().attachChild(geometryAnimationManager);
+            SimpleApplication.getRootNode().attachChild(geometryAnimationManager);
             geometryAnimationManager.beginAnimation("build_lvl_1");
         }
     }*/
 
     private void setCamera(){
-        simpleApplication.getCamera().setLocation(new Vector3f(3,6,3));
-        simpleApplication.getCamera().setFrustumPerspective(30f, 1.7777f, 0.1f, 500f);
-        simpleApplication.getCamera().lookAt(new Vector3f(0,0,0), simpleApplication.getCamera().getUp());
-        cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
+        SimpleApplication.getCamera().setLocation(new Vector3f(3,6,3));
+        SimpleApplication.getCamera().setFrustumPerspective(30f, 1.7777f, 0.1f, 500f);
+        SimpleApplication.getCamera().lookAt(new Vector3f(0,0,0), SimpleApplication.getCamera().getUp());
+        cameraControl = new CameraControl(SimpleApplication.getCamera(), SimpleApplication.getInputManager());
         //cameraControl.setEnabled(true);
     }
 
     private void setLight(){
         Light allLight = new AmbientLight(ColorRGBA.DarkGray);
-        simpleApplication.getRootNode().addLight(allLight);
-        Light light = new DirectionalLight(simpleApplication.getCamera().getDirection());
-        simpleApplication.getRootNode().addLight(light);
+        SimpleApplication.getRootNode().addLight(allLight);
+        Light light = new DirectionalLight(SimpleApplication.getCamera().getDirection());
+        SimpleApplication.getRootNode().addLight(light);
     }
 
     private Geometry attachGrid(Vector3f pos, int size, ColorRGBA color){
@@ -117,7 +117,7 @@ public class TutorialLifecycle extends Lifecycle {
         mat.setColor("Color", color);
         g.setMaterial(mat);
         g.center().move(pos);
-        simpleApplication.getRootNode().attachChild(g);
+        SimpleApplication.getRootNode().attachChild(g);
         return g;
     }
 
@@ -163,7 +163,7 @@ public class TutorialLifecycle extends Lifecycle {
     };
 
     private void addDebugPanel(){
-        DebugPanel debugPanel = new DebugPanel(simpleApplication);
+        DebugPanel debugPanel = new DebugPanel(SimpleApplication);
         debugPanel.addButton("Console log", commands);
         debugPanel.addButton("Add building", commands);
     }
@@ -181,7 +181,7 @@ public class TutorialLifecycle extends Lifecycle {
     private Geometry getBox(){
         Box b = new Box(0.3f, 0.3f, 0.3f); // create cube shape
         Geometry geom = new Geometry("Box", b);  // create cube geometry from the shape
-        Material mat = new Material(simpleApplication.getAssetManager(),
+        Material mat = new Material(SimpleApplication.getAssetManager(),
                 "Common/MatDefs/Misc/Unshaded.j3md");  // create a simple material
         mat.setColor("Color", new ColorRGBA(0f, 0.5f, 1f, 0.5f));   // set color of material to blue
         geom.setMaterial(mat);
@@ -199,22 +199,22 @@ public class TutorialLifecycle extends Lifecycle {
             //mapRenderer.putObject(worldObject);
             Geometry geometry = getBox();
             geometry.move(mapRenderer.mapPointToWorld(position));
-            simpleApplication.getRootNode().attachChild(geometry);
+            SimpleApplication.getRootNode().attachChild(geometry);
 
             geometry = getBox();
             position.x += 1;
             geometry.move(mapRenderer.mapPointToWorld(position));
-            simpleApplication.getRootNode().attachChild(geometry);
+            SimpleApplication.getRootNode().attachChild(geometry);
 
             geometry = getBox();
             position.y+=1;
             geometry.move(mapRenderer.mapPointToWorld(position));
-            simpleApplication.getRootNode().attachChild(geometry);
+            SimpleApplication.getRootNode().attachChild(geometry);
 
             geometry = getBox();
             position.x-=1;
             geometry.move(mapRenderer.mapPointToWorld(position));
-            simpleApplication.getRootNode().attachChild(geometry);
+            SimpleApplication.getRootNode().attachChild(geometry);
         }
     }
 
