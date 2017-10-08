@@ -16,6 +16,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.profile.AppStep;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.debug.Grid;
@@ -92,13 +93,12 @@ public class Main extends SimpleApplication {
         flyCam = null;
     }
 
-    long nano = System.nanoTime();
+
     long fpsCounter = 0;
     private void logFps(){
-        if (System.nanoTime()-nano >= 500000000L){
+        if (System.currentTimeMillis()-lastLogicShow >= 500){
             System.out.println("RENDER FPS: "+fpsCounter*2);
             fpsCounter = 0;
-            nano = System.nanoTime();
         }
         fpsCounter++;
     }
@@ -116,9 +116,56 @@ public class Main extends SimpleApplication {
         }
     }
 
+    long lastCoreShow = System.currentTimeMillis();
+    private void logCore(long nanos){
+        if (System.currentTimeMillis()-lastCoreShow>=500) {
+            long elapsed = System.nanoTime() - nanos;
+            //yes, I got divide by zero exception
+            if (elapsed > 0)
+                System.out.println("CORE FPS: " + (1000000000L / elapsed));
+            else
+                System.out.println("CORE FPS: over9000");
+            lastCoreShow = System.currentTimeMillis();
+        }
+    }
+    @Override
+    public void update() {
+        long nanos = System.nanoTime();
+        if (prof!=null) prof.appStep(AppStep.BeginFrame);
 
+        super.update(); // makes sure to execute AppTasks
+        if (speed == 0 || paused) {
+            return;
+        }
 
+        float tpf = timer.getTimePerFrame() * speed;
 
+        // update states
+        if (prof!=null) prof.appStep(AppStep.StateManagerUpdate);
+        stateManager.update(tpf);
+
+        // simple update and root node
+        simpleUpdate(tpf);
+
+        if (prof!=null) prof.appStep(AppStep.SpatialUpdate);
+        rootNode.updateLogicalState(tpf);
+        guiNode.updateLogicalState(tpf);
+
+        rootNode.updateGeometricState();
+        guiNode.updateGeometricState();
+
+        // render states
+        if (prof!=null) prof.appStep(AppStep.StateManagerRender);
+        stateManager.render(renderManager);
+
+        if (prof!=null) prof.appStep(AppStep.RenderFrame);
+        renderManager.render(tpf, context.isRenderable());
+        simpleRender(renderManager);
+        stateManager.postRender();
+
+        if (prof!=null) prof.appStep(AppStep.EndFrame);
+        logCore(nanos);
+    }
 
     /*GUI gui;
 
