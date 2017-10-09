@@ -49,7 +49,7 @@ public class RoadState{
         this.left = left;
     }
 
-    public final String[] names = {"single", "end", "straight", "turn", "triple", "quadruple"};
+    public final String[] names = {"Lone", "End", "Straight", "Turn", "Triple", "Quadriple"};
 
     //from 0 to 1 (full 360 degrees)
     public float getRotation(){
@@ -88,6 +88,10 @@ public class RoadState{
             default: throw new IllegalArgumentException("Illegal connections count: "+getConnectionsCount());
 
         }
+    }
+
+    public String getModelName(){
+        return names[getModelNameIndex()];
     }
 
     public int getConnectionsCount() {

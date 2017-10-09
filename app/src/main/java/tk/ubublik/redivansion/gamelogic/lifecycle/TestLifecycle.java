@@ -23,6 +23,7 @@ import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
+import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.utils.GameLogicProcessor;
@@ -96,8 +97,10 @@ public class TestLifecycle extends Lifecycle {
         NodesCache.getInstance().put("officeModel", simpleModel);
         Model treeModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/tree.crm");
         NodesCache.getInstance().put("treeModel", treeModel);
-        Model terraintModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/terrain.crm");
-        NodesCache.getInstance().put("terrainModel", terraintModel);
+        Model terrainModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/terrain.crm");
+        NodesCache.getInstance().put("terrainModel", terrainModel);
+        Model roadModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/road.crm");
+        NodesCache.getInstance().put("roadModel", roadModel);
     }
 
     private Geometry addGrid(){
@@ -121,6 +124,7 @@ public class TestLifecycle extends Lifecycle {
         debugPanel.addButton("Add tree", commands);
         debugPanel.addButton("Change FoV", commands);
         debugPanel.addButton("Big select", commands);
+        debugPanel.addButton("Add road", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -133,6 +137,7 @@ public class TestLifecycle extends Lifecycle {
                 case "Add tree": addTree(); break;
                 case "Change FoV": changeFoV(); break;
                 case "Big select": mapRenderer.setSelectMode(!(mapRenderer.isSelectMode()&&mapRenderer.getSelectModeSize()==2), 2); break;
+                case "Add road": addRoad(); break;
             }
         }
     };
@@ -153,6 +158,11 @@ public class TestLifecycle extends Lifecycle {
     private void addTree(){
         Tree tree = new Tree(getCenterPoint(1));
         worldMap.put(tree);
+    }
+
+    private void addRoad(){
+        Road road = new Road(getCenterPoint(1));
+        worldMap.put(road);
     }
 
     private void addCenterPoint(){
