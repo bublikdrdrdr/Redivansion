@@ -35,6 +35,13 @@ public class GeometryAnimationManager extends GeometryManager{
         setBase();
     }
 
+    public GeometryAnimationManager(String name, Material material, Model model, Mesh mesh){
+        super(name);
+        setMaterial(material);
+        this.model = model;
+        this.mesh = mesh;
+    }
+
 
     private void setBase(){
         this.setMesh(new Mesh());
@@ -65,6 +72,7 @@ public class GeometryAnimationManager extends GeometryManager{
         if (meshRender!=null){
             meshRender.onUpdate();
             if (meshRender.isDone()) {
+                if (meshRender.getListener()!=null) meshRender.getListener().animationEnd();
                 meshRender = null;
                 done = true;
             }
@@ -74,6 +82,13 @@ public class GeometryAnimationManager extends GeometryManager{
 
     @Override
     public GeometryManager clone() {
+        GeometryAnimationManager clone = new GeometryAnimationManager(name, getMaterial(), model, mesh);
+        clone.setLocalScale(getLocalScale());
+        clone.setLocalTranslation(getLocalTranslation());
+        return clone;
+    }
+
+    public GeometryManager fullClone(){
         return new GeometryAnimationManager(name, model.clone());
     }
 
@@ -81,5 +96,11 @@ public class GeometryAnimationManager extends GeometryManager{
         PolyAnimation polyAnimation = model.getAnimationByName(name);
         if (polyAnimation==null) throw new NullPointerException("Can't find animation with name +\""+name+"\"");
         prepareAnimation(polyAnimation);
+    }
+
+    public void beginAnimation(String name, OnAnimationEndListener listener) {
+        PolyAnimation polyAnimation = model.getAnimationByName(name);
+        if (polyAnimation==null) throw new NullPointerException("Can't find animation with name +\""+name+"\"");
+        prepareAnimation(polyAnimation, listener);
     }
 }
