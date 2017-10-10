@@ -161,8 +161,11 @@ public class TestLifecycle extends Lifecycle {
     }
 
     private void addRoad(){
-        Road road = new Road(getCenterPoint(1));
-        worldMap.put(road);
+        Point position = getCenterPoint(1);
+        if (worldMap.isFree(position, 1)) {
+            Road road = new Road(position);
+            worldMap.put(road);
+        }
     }
 
     private void addCenterPoint(){

@@ -122,4 +122,16 @@ public class WorldMap extends Observable{
     public List<WorldObject> getWorldObjects() {
         return worldObjects;
     }
+
+    public boolean isFree(Point position, int size){
+        for (WorldObject worldObject: worldObjects){
+            if ((position.x + size > worldObject.getPosition().x) &&
+                    (position.x < worldObject.getPosition().x + worldObject.getSize()) &&
+                    (position.y + size > worldObject.getPosition().y) &&
+                    (position.y < worldObject.getPosition().y + worldObject.getSize())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

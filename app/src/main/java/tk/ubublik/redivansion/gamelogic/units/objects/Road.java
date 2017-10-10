@@ -21,22 +21,23 @@ public class Road extends WorldObject {
         this(position, new RoadState(false, false, false, false));
     }
 
-    public Road(Point position, RoadState roadState) {
+    public Road(Point position, final RoadState roadState) {
         name = roadState.getModelName();
-        if (NodesCache.getInstance().get(MANAGER_NAME+name)==null){
-            GeometryAnimationManager geometryAnimationManager = new GeometryAnimationManager((Model)NodesCache.getInstance().get("roadModel"));
+        GeometryAnimationManager geometryAnimationManager = (GeometryAnimationManager)NodesCache.getInstance().get(MANAGER_NAME+name);
+        if (geometryAnimationManager!=null) {
+            setGeometryManager(((GeometryAnimationManager) NodesCache.getInstance().get(MANAGER_NAME + name)).clone());
+        } else {
+            geometryAnimationManager = new GeometryAnimationManager("road", (Model) NodesCache.getInstance().get("roadModel"));
+            setCacheInstance(MANAGER_NAME + name, geometryAnimationManager);
             geometryAnimationManager.setLocalScale(0.1f);
             geometryAnimationManager.setLocalTranslation(-0.5f, 0, -0.5f);
-            NodesCache.getInstance().put(MANAGER_NAME+name, geometryAnimationManager);
             geometryAnimationManager.beginAnimation("build" + name, new GeometryManager.OnAnimationEndListener() {
                 @Override
                 public void animationEnd() {
-                    NodesCache.getInstance().put(MANAGER_NAME+name, null);
+                    setCacheInstance(MANAGER_NAME + name, null);
                 }
             });
-            setGeometryManager(((GeometryAnimationManager)NodesCache.getInstance().get(MANAGER_NAME+name)));
-        } else{
-            setGeometryManager(((GeometryAnimationManager)NodesCache.getInstance().get(MANAGER_NAME+name)).clone());
+            setGeometryManager(((GeometryAnimationManager) NodesCache.getInstance().get(MANAGER_NAME + name)));
         }
         setPosition(position);
     }
@@ -49,5 +50,17 @@ public class Road extends WorldObject {
     @Override
     public void parseBytes() {
 
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+    }
+
+    private void setCacheInstance(String key, GeometryAnimationManager geometryAnimationManager){
+        synchronized (NodesCache.getInstance()){
+            System.out.println("ROAD: gAM set as "+geometryAnimationManager);
+            NodesCache.getInstance().put(MANAGER_NAME + name, geometryAnimationManager);
+        }
     }
 }
