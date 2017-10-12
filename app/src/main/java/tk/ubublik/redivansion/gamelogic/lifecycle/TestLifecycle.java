@@ -15,6 +15,8 @@ import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Panel;
 
+import java.util.List;
+
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.graphics.WorldLight;
@@ -32,6 +34,8 @@ import tk.ubublik.redivansion.gamelogic.utils.MapManager;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
+import tk.ubublik.redivansion.gamelogic.utils.game_tools.RoadBuilder;
+import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectTool;
 
 /**
  * Created by Bublik on 22-Sep-17.
@@ -45,6 +49,10 @@ public class TestLifecycle extends Lifecycle {
     private WorldMap worldMap;
     private GUI gui;
     private WorldLight worldLight;
+    private SelectTool selectToolManager;
+
+    //test
+    RoadBuilder roadBuilder = new RoadBuilder();
 
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
@@ -125,6 +133,8 @@ public class TestLifecycle extends Lifecycle {
         debugPanel.addButton("Change FoV", commands);
         debugPanel.addButton("Big select", commands);
         debugPanel.addButton("Add road", commands);
+        debugPanel.addButton("Set road points", commands);
+        debugPanel.addButton("Clear road points", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -138,6 +148,8 @@ public class TestLifecycle extends Lifecycle {
                 case "Change FoV": changeFoV(); break;
                 case "Big select": mapRenderer.setSelectMode(!(mapRenderer.isSelectMode()&&mapRenderer.getSelectModeSize()==2), 2); break;
                 case "Add road": addRoad(); break;
+                case "Set road points": setStartEndPoint(); break;
+                case "Clear road points": clearRoadPoints(); break;
             }
         }
     };
@@ -166,6 +178,22 @@ public class TestLifecycle extends Lifecycle {
             Road road = new Road(position);
             worldMap.put(road);
         }
+    }
+
+    private void setStartEndPoint(){
+        if (!roadBuilder.isStartSet()){
+            roadBuilder.setStartPoint(getCenterPoint(1));
+        } else{
+            roadBuilder.setEndPoint(getCenterPoint(1));
+            List<Road> roads = roadBuilder.getRoadObjectsList(worldMap);
+            for (Road road: roads){
+                worldMap.put(road);
+            }
+        }
+    }
+
+    private void clearRoadPoints(){
+        roadBuilder.clean();
     }
 
     private void addCenterPoint(){

@@ -10,6 +10,10 @@ public class RoadState{
     private boolean right;//z+
     private boolean left;//z-
 
+    public RoadState(){
+        this(false, false, false, false);
+    }
+
     public RoadState(boolean front, boolean back, boolean right, boolean left) {
         this.front = front;
         this.back = back;
