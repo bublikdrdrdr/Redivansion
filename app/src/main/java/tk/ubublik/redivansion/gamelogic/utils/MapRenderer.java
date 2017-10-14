@@ -179,4 +179,8 @@ public class MapRenderer implements Observer{
         node.detachChild(terrain);
         terrain = null;
     }
+
+    public float getScale() {
+        return scale;
+    }
 }

@@ -2,6 +2,7 @@ package tk.ubublik.redivansion.gamelogic.utils.game_tools;
 
 import android.graphics.Point;
 
+import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
@@ -16,6 +17,12 @@ import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 public class SelectToolManager {
 
     enum SelectMode {NONE, SINGLE, OBJECT, ROAD};
+
+    private static final float SELECT_OPACITY = 0.5f;
+    public static final ColorRGBA OK_SELECT_COLOR = new ColorRGBA(0,240/256.f, 60/256.f, SELECT_OPACITY);
+    public static final ColorRGBA DEFAULT_SELECT_COLOR = new ColorRGBA(1,1,1,SELECT_OPACITY);
+    public static final ColorRGBA WARNING_SELECT_COLOR = new ColorRGBA(1,1,25/256.f, SELECT_OPACITY);
+    public static final ColorRGBA ERROR_SELECT_COLOR = new ColorRGBA(1,0,0,SELECT_OPACITY);
 
     private WorldMap worldMap;
     private MapRenderer mapRenderer;
@@ -51,7 +58,7 @@ public class SelectToolManager {
 
     public void setObjectSelect(WorldObject worldObject){
         destroyTool();
-        selectTool = new SingleSelectTool();
+        selectTool = new SingleSelectTool(worldObject, mapRenderer, node);
     }
 
     private void destroyTool(){
