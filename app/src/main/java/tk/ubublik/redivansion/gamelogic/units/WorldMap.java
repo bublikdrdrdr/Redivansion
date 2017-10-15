@@ -53,6 +53,36 @@ public class WorldMap extends Observable{
         return true;
     }
 
+    public boolean canPutRectangle(Point p1, Point p2){
+        p1 = new Point(p1);
+        p2 = new Point(p2);
+        if (p1.x>p2.x) swapX(p1, p2);
+        if (p1.y>p2.y) swapY(p1, p2);
+        for (WorldObject object: worldObjects){
+            if (objectInRectangle(object, p1, p2)) return false;
+        }
+        return true;
+    }
+
+    private void swapX(Point p1, Point p2){
+        int x = p1.x;
+        p1.x = p2.x;
+        p2.x = x;
+    }
+
+    private void swapY(Point p1, Point p2){
+        int y = p1.y;
+        p1.y = p2.y;
+        p2.y = y;
+    }
+
+    public boolean objectInRectangle(WorldObject worldObject, Point p1, Point p2){
+        return (worldObject.getPosition().x<=p2.x &&
+                worldObject.getPosition().x+worldObject.getSize() > p1.x &&
+                worldObject.getPosition().y<=p2.y &&
+                worldObject.getPosition().y+worldObject.getSize() > p1.y);
+    }
+
     public WorldObject get(Point position){
         for (WorldObject worldObject: worldObjects) {
             if (objectInPoint(worldObject, position))
