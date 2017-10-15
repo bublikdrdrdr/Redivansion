@@ -26,7 +26,7 @@ public class SelectGeometry extends Geometry{
     }
 
     private static Mesh getMesh(float scale){
-        float fSize = scale;
+        float fSize = scale/2;
         float heightRatio = 0.2f*scale;
         return new Box(fSize, fSize*heightRatio, fSize);
     }
@@ -37,5 +37,9 @@ public class SelectGeometry extends Geometry{
 
     public void setSize(int size){
         this.setLocalScale(size, 1, size);
+    }
+
+    public ColorRGBA getColor(){
+        return (ColorRGBA)this.getMaterial().getParam("Diffuse").getValue();
     }
 }
