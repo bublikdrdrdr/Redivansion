@@ -117,4 +117,6 @@ public abstract class WorldObject extends Node{
     public void setPermanent(boolean permanent) {
         this.permanent = permanent;
     }
+
+    public static int getDefaultSize(){return 1;}
 }

@@ -43,7 +43,7 @@ public class SelectToolManager {
 
     public void setSelectSinglePoint(Class<? extends WorldObject> clazz){
         destroyTool();
-        selectTool = new SingleBuilder();
+        selectTool = new SingleBuilder(clazz, mapRenderer, node, cameraControl, worldMap);
     }
 
     public void setRoadStart(Point point){

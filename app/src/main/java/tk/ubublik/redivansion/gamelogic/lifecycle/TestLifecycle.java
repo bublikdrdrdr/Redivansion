@@ -36,6 +36,7 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 import tk.ubublik.redivansion.gamelogic.utils.game_tools.RoadBuilder;
 import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectTool;
+import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
 
 /**
  * Created by Bublik on 22-Sep-17.
@@ -49,10 +50,10 @@ public class TestLifecycle extends Lifecycle {
     private WorldMap worldMap;
     private GUI gui;
     private WorldLight worldLight;
-    private SelectTool selectToolManager;
+    private SelectToolManager selectToolManager;
 
     //test
-    RoadBuilder roadBuilder = new RoadBuilder();
+    //RoadBuilder roadBuilder = new RoadBuilder();
 
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
@@ -67,6 +68,7 @@ public class TestLifecycle extends Lifecycle {
         mapRenderer.addTerrain(new Terrain(5));
         worldMap.addObserver(mapRenderer);
         worldMap.addObserver(gameLogicProcessor);
+        selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
 
         addDebugPanel();
         //addGrid();
@@ -98,6 +100,7 @@ public class TestLifecycle extends Lifecycle {
         gui.onUpdate();
         gameLogicProcessor.onUpdate();
         cameraControl.onUpdate();
+        selectToolManager.onUpdate();
     }
 
     private void loadModels(){
@@ -135,6 +138,8 @@ public class TestLifecycle extends Lifecycle {
         debugPanel.addButton("Add road", commands);
         debugPanel.addButton("Set road points", commands);
         debugPanel.addButton("Clear road points", commands);
+        debugPanel.addButton("Select v2 tree", commands);
+        debugPanel.addButton("Select v2 office", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -150,6 +155,8 @@ public class TestLifecycle extends Lifecycle {
                 case "Add road": addRoad(); break;
                 case "Set road points": setStartEndPoint(); break;
                 case "Clear road points": clearRoadPoints(); break;
+                case "Select v2 tree": selectToolManager.setSelectSinglePoint(Tree.class); break;
+                case "Select v2 office": selectToolManager.setSelectSinglePoint(Office.class); break;
             }
         }
     };
@@ -181,7 +188,7 @@ public class TestLifecycle extends Lifecycle {
     }
 
     private void setStartEndPoint(){
-        if (!roadBuilder.isStartSet()){
+        /*if (!roadBuilder.isStartSet()){
             roadBuilder.setStartPoint(getCenterPoint(1));
         } else{
             roadBuilder.setEndPoint(getCenterPoint(1));
@@ -189,11 +196,11 @@ public class TestLifecycle extends Lifecycle {
             for (Road road: roads){
                 worldMap.put(road);
             }
-        }
+        }*/
     }
 
     private void clearRoadPoints(){
-        roadBuilder.clean();
+        /*roadBuilder.clean();*/
     }
 
     private void addCenterPoint(){

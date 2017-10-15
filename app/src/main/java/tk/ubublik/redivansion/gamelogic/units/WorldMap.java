@@ -43,8 +43,12 @@ public class WorldMap extends Observable{
     public boolean canPut(WorldObject worldObject){
         setChanged();
         notifyObservers(new WorldMapAction(WorldMapAction.Action.CHECK, worldObject));
+        return canPut(worldObject.getPosition(), worldObject.getSize());
+    }
+
+    public boolean canPut(Point position, int size){
         for (WorldObject object: worldObjects){
-            if (objectsIntersect(worldObject, object)) return false;
+            if (objectsIntersect(object, position, size)) return false;
         }
         return true;
     }
@@ -96,10 +100,18 @@ public class WorldMap extends Observable{
     }
 
     public boolean objectsIntersect(WorldObject o1, WorldObject o2) {
-        return (o1.getPosition().x + o1.getSize() > o2.getPosition().x) &&
-                (o1.getPosition().x < o2.getPosition().x + o2.getSize()) &&
-                (o1.getPosition().y + o1.getSize() > o2.getPosition().y) &&
-                (o1.getPosition().y < o2.getPosition().y + o2.getSize());
+        return objectsIntersect(o1, o2.getPosition(), o2.getSize());
+    }
+
+    public boolean objectsIntersect(WorldObject o1, Point o2Position, int o2Size){
+        return objectsIntersect(o1.getPosition(), o1.getSize(), o2Position, o2Size);
+    }
+
+    public boolean objectsIntersect(Point o1Position, int o1Size, Point o2Position, int o2Size){
+        return (o1Position.x + o1Size > o2Position.x) &&
+                (o1Position.x < o2Position.x + o2Size) &&
+                (o1Position.y + o1Size > o2Position.y) &&
+                (o1Position.y < o2Position.y + o2Size);
     }
 
     public WorldObject getFromSpatial(Spatial spatial){

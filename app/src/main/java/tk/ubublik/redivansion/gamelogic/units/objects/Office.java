@@ -50,4 +50,6 @@ public class Office extends Building {
     private void beginAnimation(String animationName){
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName);
     }
+
+
 }
