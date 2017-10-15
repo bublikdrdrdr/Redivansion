@@ -66,9 +66,10 @@ public class TestLifecycle extends Lifecycle {
         gui = new GUI(simpleApplication.getGuiNode());
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         mapRenderer.addTerrain(new Terrain(5));
+        selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
         worldMap.addObserver(mapRenderer);
         worldMap.addObserver(gameLogicProcessor);
-        selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
+        worldMap.addObserver(selectToolManager);
 
         addDebugPanel();
         //addGrid();

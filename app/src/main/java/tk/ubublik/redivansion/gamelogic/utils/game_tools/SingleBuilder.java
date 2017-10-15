@@ -5,8 +5,12 @@ import android.graphics.Point;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
+import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 
@@ -15,7 +19,7 @@ import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
  */
 
 //select point on the center of screen
-public class SingleBuilder extends SelectTool {
+public class SingleBuilder extends SelectTool implements Observer{
 
     private Class<? extends WorldObject> clazz;
     private int size;
@@ -62,6 +66,10 @@ public class SingleBuilder extends SelectTool {
         return lastValue;
     }
 
+    private void clearLast(){
+        lastPosition = null;
+    }
+
     public WorldObject build(){
         return null;
     }
@@ -85,5 +93,15 @@ public class SingleBuilder extends SelectTool {
 
     private void updateSelectGeometryColor(ColorRGBA colorRGBA){
         if (!selectGeometry.getColor().equals(colorRGBA)) selectGeometry.setColor(colorRGBA);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg instanceof WorldMapAction) {
+            WorldMapAction worldMapAction = (WorldMapAction) arg;
+            if (worldMapAction.getAction() == WorldMapAction.Action.ADD || worldMapAction.getAction() == WorldMapAction.Action.REMOVE){
+                clearLast();
+            }
+        }
     }
 }

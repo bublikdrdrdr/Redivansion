@@ -5,6 +5,9 @@ import android.graphics.Point;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
@@ -14,7 +17,7 @@ import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
  * Created by Bublik on 11-Oct-17.
  */
 
-public class SelectToolManager {
+public class SelectToolManager implements Observer{
 
     enum SelectMode {NONE, SINGLE, OBJECT, ROAD};
 
@@ -92,5 +95,12 @@ public class SelectToolManager {
 
     public void onUpdate(){
         if (selectTool!=null) selectTool.onUpdate();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (selectTool instanceof Observer){
+            ((Observer)selectTool).update(o, arg);
+        }
     }
 }
