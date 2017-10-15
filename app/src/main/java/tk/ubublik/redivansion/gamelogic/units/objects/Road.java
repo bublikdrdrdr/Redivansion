@@ -15,6 +15,7 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 
 public class Road extends WorldObject {
 
+    public static final int DEFAULT_SIZE = 1;
     private static final String MANAGER_NAME = "roadGeometryManager:";
     private RoadState roadState;
 
