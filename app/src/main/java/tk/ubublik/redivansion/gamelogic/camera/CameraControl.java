@@ -18,6 +18,7 @@ import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.input.controls.TouchListener;
 import com.jme3.input.controls.TouchTrigger;
 import com.jme3.input.event.TouchEvent;
 import com.jme3.math.FastMath;
@@ -41,8 +42,9 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
  * @see com.jme3.input.FlyByCamera
  */
 // TODO: 10-Sep-17 CLEAN!
-public class CameraControl implements ActionListener, AnalogListener {
+public class CameraControl implements ActionListener, AnalogListener, TouchListener {
 
+    public static final String TOUCH_MAPPING = "Mapping touch";
     private static String[] mappings = new String[]{
             CameraInput.FLYCAM_STRAFELEFT,
             CameraInput.FLYCAM_STRAFERIGHT,
@@ -53,7 +55,8 @@ public class CameraControl implements ActionListener, AnalogListener {
             CameraInput.FLYCAM_ZOOMOUT,
             CameraInput.FLYCAM_ROTATEDRAG,
 
-            CameraInput.FLYCAM_INVERTY
+            CameraInput.FLYCAM_INVERTY,
+            TOUCH_MAPPING
     };
 
     protected Camera cam;
@@ -61,7 +64,7 @@ public class CameraControl implements ActionListener, AnalogListener {
     protected float rotationSpeed = 1f;
     protected float moveSpeed = 3f;
     protected float moveYSpeed = 2f;
-    protected float moveSpeedScale = (550.f/MainActivity.getScreenDPI());
+    protected float moveSpeedScale = (550.f / MainActivity.getScreenDPI());
     protected float zoomSpeed = 1f;
     protected MotionAllowedListener motionAllowed = null;
     protected boolean enabled = true;
@@ -74,20 +77,21 @@ public class CameraControl implements ActionListener, AnalogListener {
 
     /**
      * Creates a new FlyByCamera to control the given Camera object.
+     *
      * @param cam
      */
-    public CameraControl(Camera cam, InputManager inputManager){
+    public CameraControl(Camera cam, InputManager inputManager) {
         this.cam = cam;
-        screenAspect = cam.getWidth()/(float)cam.getHeight();
+        screenAspect = cam.getWidth() / (float) cam.getHeight();
         initialUpVec = cam.getUp().clone();
         registerWithInput(inputManager);
         setDefaultPosition();
     }
 
-    public void setDefaultPosition(){
-        cam.setLocation(new Vector3f(10,20,10));
+    public void setDefaultPosition() {
+        cam.setLocation(new Vector3f(10, 20, 10));
         setFoV(10f);
-        cam.lookAt(new Vector3f(0,0,0), Vector3f.UNIT_Y);
+        cam.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
     }
 
     //zoom inertia
@@ -97,13 +101,14 @@ public class CameraControl implements ActionListener, AnalogListener {
     private float newFoV = 10f;
 
     private float currentFoV = 10f;
-    public void setFoV(float fov){
+
+    public void setFoV(float fov) {
         newFoV = fov;
         lastChange = System.currentTimeMillis();
     }
 
     public void onUpdate() {
-        if (lastChange>0){
+        /*if (lastChange>0){
             long time = System.currentTimeMillis()-lastChange;
             if (time>=zoomTime){
                 lastChange=0;
@@ -118,55 +123,61 @@ public class CameraControl implements ActionListener, AnalogListener {
             oldFoV = newFoV;
             cam.setFrustumPerspective(newFoV, screenAspect, 1f, 50f);
             lastChange = -1;
-        }
+        }*/
     }
 
     /**
      * Sets the up vector that should be used for the camera.
+     *
      * @param upVec
      */
     public void setUpVector(Vector3f upVec) {
         initialUpVec.set(upVec);
     }
 
-    public void setMotionAllowedListener(MotionAllowedListener listener){
+    public void setMotionAllowedListener(MotionAllowedListener listener) {
         this.motionAllowed = listener;
     }
 
     /**
      * Sets the move speed. The speed is given in world units per second.
+     *
      * @param moveSpeed
      */
-    public void setMoveSpeed(float moveSpeed){
+    public void setMoveSpeed(float moveSpeed) {
         this.moveSpeed = moveSpeed;
     }
 
     /**
      * Gets the move speed. The speed is given in world units per second.
+     *
      * @return moveSpeed
      */
-    public float getMoveSpeed(){
+    public float getMoveSpeed() {
         return moveSpeed;
     }
 
     /**
      * Sets the rotation speed.
+     *
      * @param rotationSpeed
      */
-    public void setRotationSpeed(float rotationSpeed){
+    public void setRotationSpeed(float rotationSpeed) {
         this.rotationSpeed = rotationSpeed;
     }
 
     /**
      * Gets the move speed. The speed is given in world units per second.
+     *
      * @return rotationSpeed
      */
-    public float getRotationSpeed(){
+    public float getRotationSpeed() {
         return rotationSpeed;
     }
 
     /**
      * Sets the zoom speed.
+     *
      * @param zoomSpeed
      */
     public void setZoomSpeed(float zoomSpeed) {
@@ -176,6 +187,7 @@ public class CameraControl implements ActionListener, AnalogListener {
     /**
      * Gets the zoom speed.  The speed is a multiplier to increase/decrease
      * the zoom rate.
+     *
      * @return zoomSpeed
      */
     public float getZoomSpeed() {
@@ -185,9 +197,9 @@ public class CameraControl implements ActionListener, AnalogListener {
     /**
      * @param enable If false, the camera will ignore input.
      */
-    public void setEnabled(boolean enable){
-        if (enabled && !enable){
-            if (inputManager!= null && (!dragToRotate || (dragToRotate && canRotate))){
+    public void setEnabled(boolean enable) {
+        if (enabled && !enable) {
+            if (inputManager != null && (!dragToRotate || (dragToRotate && canRotate))) {
                 inputManager.setCursorVisible(true);
             }
         }
@@ -198,13 +210,12 @@ public class CameraControl implements ActionListener, AnalogListener {
      * @return If enabled
      * @see FlyByCamera#setEnabled(boolean)
      */
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return enabled;
     }
 
     /**
      * @return If drag to rotate feature is enabled.
-     *
      * @see FlyByCamera#setDragToRotate(boolean)
      */
     public boolean isDragToRotate() {
@@ -213,7 +224,7 @@ public class CameraControl implements ActionListener, AnalogListener {
 
     /**
      * Set if drag to rotate mode is enabled.
-     *
+     * <p>
      * When true, the user must hold the mouse button
      * and drag over the screen to rotate the camera, and the cursor is
      * visible until dragged. Otherwise, the cursor is invisible at all times
@@ -232,9 +243,10 @@ public class CameraControl implements ActionListener, AnalogListener {
     /**
      * Registers the FlyByCamera to receive input events from the provided
      * Dispatcher.
+     *
      * @param inputManager
      */
-    public void registerWithInput(InputManager inputManager){
+    public void registerWithInput(InputManager inputManager) {
         this.inputManager = inputManager;
         // mouse only - zoom in/out with wheel, and rotate drag
         inputManager.addMapping(CameraInput.FLYCAM_ZOOMIN, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
@@ -247,6 +259,8 @@ public class CameraControl implements ActionListener, AnalogListener {
         inputManager.addMapping(CameraInput.FLYCAM_BACKWARD, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
         inputManager.addMapping(CameraInput.FLYCAM_RISE, new KeyTrigger(KeyInput.KEY_Q));
         inputManager.addMapping(CameraInput.FLYCAM_LOWER, new KeyTrigger(KeyInput.KEY_Z));
+        String s;
+        inputManager.addMapping(TOUCH_MAPPING, new TouchTrigger(TouchInput.ALL));
 
         inputManager.addListener(this, mappings);
         inputManager.setCursorVisible(dragToRotate || !isEnabled());
@@ -255,7 +269,7 @@ public class CameraControl implements ActionListener, AnalogListener {
     /**
      * Unregisters the FlyByCamera from the event Dispatcher.
      */
-    public void unregisterInput(){
+    public void unregisterInput() {
 
         if (inputManager == null) {
             return;
@@ -263,7 +277,7 @@ public class CameraControl implements ActionListener, AnalogListener {
 
         for (String s : mappings) {
             if (inputManager.hasMapping(s)) {
-                inputManager.deleteMapping( s );
+                inputManager.deleteMapping(s);
             }
         }
 
@@ -271,18 +285,18 @@ public class CameraControl implements ActionListener, AnalogListener {
         inputManager.setCursorVisible(!dragToRotate);
 
         Joystick[] joysticks = inputManager.getJoysticks();
-        if (joysticks != null && joysticks.length > 0){
+        if (joysticks != null && joysticks.length > 0) {
             Joystick joystick = joysticks[0];
 
             // No way to unassing axis
         }
     }
 
-    protected void rotateCamera(float value, Vector3f axis){
-        if (dragToRotate){
-            if (canRotate){
+    protected void rotateCamera(float value, Vector3f axis) {
+        if (dragToRotate) {
+            if (canRotate) {
 //                value = -value;
-            }else{
+            } else {
                 return;
             }
         }
@@ -305,7 +319,7 @@ public class CameraControl implements ActionListener, AnalogListener {
         cam.setAxes(q);
     }
 
-    protected void zoomCamera(float value){
+    protected void zoomCamera(float value) {
         // derive fovY value
         float h = cam.getFrustumTop();
         float w = cam.getFrustumRight();
@@ -321,7 +335,7 @@ public class CameraControl implements ActionListener, AnalogListener {
             fovY = newFovY;
         }
 
-        h = FastMath.tan( fovY * FastMath.DEG_TO_RAD * .5f) * near;
+        h = FastMath.tan(fovY * FastMath.DEG_TO_RAD * .5f) * near;
         w = h * aspect;
 
         cam.setFrustumTop(h);
@@ -330,7 +344,7 @@ public class CameraControl implements ActionListener, AnalogListener {
         cam.setFrustumRight(w);
     }
 
-    protected void riseCamera(float value){
+    protected void riseCamera(float value) {
         Vector3f vel = new Vector3f(0, value * moveSpeed, 0);
         Vector3f pos = cam.getLocation().clone();
 
@@ -342,19 +356,19 @@ public class CameraControl implements ActionListener, AnalogListener {
         cam.setLocation(pos);
     }
 
-    protected void moveCamera(float value, boolean sideways){
+    protected void moveCamera(float value, boolean sideways) {
         Vector3f vel = new Vector3f();
         Vector3f pos = cam.getLocation().clone();
 
-        if (sideways){
+        if (sideways) {
             cam.getLeft(vel);
-        }else{
+        } else {
             cam.getDirection(vel);
             vel.setY(0);
             vel.normalize();
             vel.multLocal(moveYSpeed);
         }
-        vel.multLocal(value * moveSpeed*moveSpeedScale);
+        vel.multLocal(value * moveSpeed * moveSpeedScale);
 
         if (motionAllowed != null)
             motionAllowed.checkMotionAllowed(pos, vel);
@@ -363,17 +377,18 @@ public class CameraControl implements ActionListener, AnalogListener {
 
         cam.setLocation(pos);
     }
+
     @Override
     public void onAction(String name, boolean value, float tpf) {
         if (!enabled)
             return;
 
-        if (name.equals(CameraInput.FLYCAM_ROTATEDRAG) && dragToRotate){
+        if (name.equals(CameraInput.FLYCAM_ROTATEDRAG) && dragToRotate) {
             canRotate = value;
             inputManager.setCursorVisible(!value);
         } else if (name.equals(CameraInput.FLYCAM_INVERTY)) {
             // Toggle on the up.
-            if( !value ) {
+            if (!value) {
                 invertY = !invertY;
             }
         }
@@ -384,55 +399,78 @@ public class CameraControl implements ActionListener, AnalogListener {
         if (!enabled)
             return;
 
-        if (name.equals(CameraInput.FLYCAM_LEFT)){
+        if (name.equals(CameraInput.FLYCAM_LEFT)) {
             rotateCamera(value, initialUpVec);
-        }else if (name.equals(CameraInput.FLYCAM_RIGHT)){
+        } else if (name.equals(CameraInput.FLYCAM_RIGHT)) {
             rotateCamera(-value, initialUpVec);
-        }else if (name.equals(CameraInput.FLYCAM_UP)){
+        } else if (name.equals(CameraInput.FLYCAM_UP)) {
             rotateCamera(-value * (invertY ? -1 : 1), cam.getLeft());
-        }else if (name.equals(CameraInput.FLYCAM_DOWN)){
+        } else if (name.equals(CameraInput.FLYCAM_DOWN)) {
             rotateCamera(value * (invertY ? -1 : 1), cam.getLeft());
-        }else if (name.equals(CameraInput.FLYCAM_FORWARD)){
+        } else if (name.equals(CameraInput.FLYCAM_FORWARD)) {
             moveCamera(value, false);
-        }else if (name.equals(CameraInput.FLYCAM_BACKWARD)){
+        } else if (name.equals(CameraInput.FLYCAM_BACKWARD)) {
             moveCamera(-value, false);
-        }else if (name.equals(CameraInput.FLYCAM_STRAFELEFT)){
+        } else if (name.equals(CameraInput.FLYCAM_STRAFELEFT)) {
             moveCamera(-value, true);
-        }else if (name.equals(CameraInput.FLYCAM_STRAFERIGHT)){
+        } else if (name.equals(CameraInput.FLYCAM_STRAFERIGHT)) {
             moveCamera(value, true);
-        }else if (name.equals(CameraInput.FLYCAM_RISE)){
+        } else if (name.equals(CameraInput.FLYCAM_RISE)) {
             riseCamera(value);
-        }else if (name.equals(CameraInput.FLYCAM_LOWER)){
+        } else if (name.equals(CameraInput.FLYCAM_LOWER)) {
             riseCamera(-value);
-        }else if (name.equals(CameraInput.FLYCAM_ZOOMIN)){
+        } else if (name.equals(CameraInput.FLYCAM_ZOOMIN)) {
             zoomCamera(value);
-        }else if (name.equals(CameraInput.FLYCAM_ZOOMOUT)){
+        } else if (name.equals(CameraInput.FLYCAM_ZOOMOUT)) {
             zoomCamera(-value);
         }
     }
 
-    public Vector3f getCameraCenterPoint(){
+    public Vector3f getCameraCenterPoint() {
         return getCameraCenterPoint(cam);
     }
 
     @Deprecated
-    public static Vector3f getCameraCenterPointV1(Camera camera){
+    public static Vector3f getCameraCenterPointV1(Camera camera) {
         CollisionResults collisionResults = new CollisionResults();
         Ray ray = new Ray(camera.getLocation(), camera.getDirection());
-        Quad quad = new Quad(5000,5000);
+        Quad quad = new Quad(5000, 5000);
         Geometry geometry = new Geometry("q", quad);
-        geometry.rotate(-FastMath.HALF_PI, 0,0);
+        geometry.rotate(-FastMath.HALF_PI, 0, 0);
         geometry.center().move(Vector3f.ZERO);
         geometry.collideWith(ray, collisionResults);
-        if (collisionResults.size()>0){
+        if (collisionResults.size() > 0) {
             return collisionResults.getCollision(0).getContactPoint();
         }
         return Vector3f.ZERO;
     }
 
-    public static Vector3f getCameraCenterPoint(Camera camera){
-        float delta = camera.getLocation().getY()/(camera.getDirection().getY()*-1f);
+    public static Vector3f getCameraCenterPoint(Camera camera) {
+        float delta = camera.getLocation().getY() / (camera.getDirection().getY() * -1f);
         Vector3f fullDirection = camera.getDirection().mult(delta);
         return camera.getLocation().add(fullDirection);
+    }
+
+    float minFov = 10f;
+    float maxFov = 30f;
+
+    @Override
+    public void onTouch(String name, TouchEvent event, float tpf) {
+        if (event.getType() == TouchEvent.Type.SCALE_START) {
+
+        } else if (event.getType() == TouchEvent.Type.SCALE_MOVE) {
+            if (event.getDeltaScaleSpan() > 0) {
+                if (currentFoV > minFov)
+                    currentFoV -= 0.5f;
+            } else if (event.getDeltaScaleSpan() < 0) {
+                if (currentFoV < maxFov) {
+                    currentFoV += 0.5f;
+                }
+            }
+            moveSpeedScale = (550.f / MainActivity.getScreenDPI()) * (currentFoV / 10);
+            cam.setFrustumPerspective(currentFoV, screenAspect, 1f, 50f);
+        } else if (event.getType() == TouchEvent.Type.SCALE_END) {
+
+        }
     }
 }
