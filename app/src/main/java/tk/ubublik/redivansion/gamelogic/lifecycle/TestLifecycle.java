@@ -134,7 +134,6 @@ public class TestLifecycle extends Lifecycle {
         debugPanel.addButton("Add building", commands);
         debugPanel.addButton("Show select", commands);
         debugPanel.addButton("Add tree", commands);
-        debugPanel.addButton("Change FoV", commands);
         debugPanel.addButton("Big select", commands);
         debugPanel.addButton("Add road", commands);
         debugPanel.addButton("Set road points", commands);
@@ -151,7 +150,6 @@ public class TestLifecycle extends Lifecycle {
                 case "Add building": addBuilding(); break;
                 case "Show select": mapRenderer.setSelectMode(!(mapRenderer.isSelectMode()&&mapRenderer.getSelectModeSize()==1), 1); break;
                 case "Add tree": addTree(); break;
-                case "Change FoV": changeFoV(); break;
                 case "Big select": mapRenderer.setSelectMode(!(mapRenderer.isSelectMode()&&mapRenderer.getSelectModeSize()==2), 2); break;
                 case "Add road": addRoad(); break;
                 case "Set road points": setStartEndPoint(); break;
@@ -162,11 +160,6 @@ public class TestLifecycle extends Lifecycle {
         }
     };
 
-    private boolean wideFoV = false;
-    private void changeFoV(){
-        cameraControl.setFoV(wideFoV?30f:10f);
-        wideFoV = !wideFoV;
-    }
 
     private void addBuilding() {
         Point position = getCenterPoint(2);
