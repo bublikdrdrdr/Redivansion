@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
+import com.jme3.audio.AudioContext;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
 import com.jme3.light.AmbientLight;
@@ -16,6 +17,8 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.niftygui.NiftyJmeDisplay;
+import com.jme3.profile.AppStep;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.debug.Grid;
@@ -54,11 +57,12 @@ public class Main extends SimpleApplication {
 
     private Lifecycle lifecycle;
 
-    CameraCullingTest cameraCullingTest;
+    public static NiftyJmeDisplay niftyDisplay;
 
     @Override
     public void simpleInitApp() {
         setupApplication();
+        initNiftyGui();
         initCameraControl();
         //lifecycle = new MainLifecycle(this);
         lifecycle = new TestLifecycle(this);
@@ -77,9 +81,17 @@ public class Main extends SimpleApplication {
         //cameraCullingTest.onUpdate();
     }
 
+    private void initNiftyGui(){
+        niftyDisplay = new NiftyJmeDisplay(StaticAssetManager.getAssetManager(),
+                inputManager,
+                audioRenderer,
+                guiViewPort);
+        guiViewPort.addProcessor(niftyDisplay);
+    }
+
     private void setupApplication(){
         inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
-        GuiGlobals.initialize(this);
+        //GuiGlobals.initialize(this);
         this.setDisplayStatView(false);
         this.setDisplayFps(false);
         StaticAssetManager.setAssetManager(assetManager);
@@ -115,9 +127,6 @@ public class Main extends SimpleApplication {
             lastLogicShow = System.currentTimeMillis();
         }
     }
-
-
-
 
 
     /*GUI gui;

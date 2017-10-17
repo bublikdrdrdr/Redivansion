@@ -130,16 +130,13 @@ public class TestLifecycle extends Lifecycle {
 
     private void addDebugPanel(){
         DebugPanel debugPanel = new DebugPanel(simpleApplication);
-        debugPanel.addButton("Console log", commands);
         debugPanel.addButton("Add building", commands);
-        debugPanel.addButton("Show select", commands);
         debugPanel.addButton("Add tree", commands);
-        debugPanel.addButton("Big select", commands);
         debugPanel.addButton("Add road", commands);
         debugPanel.addButton("Set road points", commands);
-        debugPanel.addButton("Clear road points", commands);
-        debugPanel.addButton("Select v2 tree", commands);
-        debugPanel.addButton("Select v2 office", commands);
+        debugPanel.addButton("Select tree", commands);
+        debugPanel.addButton("Select office", commands);
+        debugPanel.addButton("Clear select", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -148,14 +145,12 @@ public class TestLifecycle extends Lifecycle {
             switch (source.getText()){
                 case "Console log": System.out.println("Console log"); break;
                 case "Add building": addBuilding(); break;
-                case "Show select": mapRenderer.setSelectMode(!(mapRenderer.isSelectMode()&&mapRenderer.getSelectModeSize()==1), 1); break;
                 case "Add tree": addTree(); break;
-                case "Big select": mapRenderer.setSelectMode(!(mapRenderer.isSelectMode()&&mapRenderer.getSelectModeSize()==2), 2); break;
                 case "Add road": addRoad(); break;
-                case "Set road points": setStartEndPoint(); break;
-                case "Clear road points": clearRoadPoints(); break;
-                case "Select v2 tree": selectToolManager.setSelectSinglePoint(Tree.class); break;
-                case "Select v2 office": selectToolManager.setSelectSinglePoint(Office.class); break;
+                case "Set road points": selectToolManager.setRoadSelect(); break;
+                case "Select tree": selectToolManager.setSelectSinglePoint(Tree.class); break;
+                case "Select office": selectToolManager.setSelectSinglePoint(Office.class); break;
+                case "Clear select": selectToolManager.cancel(); break;
             }
         }
     };
@@ -179,22 +174,6 @@ public class TestLifecycle extends Lifecycle {
             Road road = new Road(position);
             worldMap.put(road);
         }
-    }
-
-    private void setStartEndPoint(){
-        /*if (!roadBuilder.isStartSet()){
-            roadBuilder.setStartPoint(getCenterPoint(1));
-        } else{
-            roadBuilder.setEndPoint(getCenterPoint(1));
-            List<Road> roads = roadBuilder.getRoadObjectsList(worldMap);
-            for (Road road: roads){
-                worldMap.put(road);
-            }
-        }*/
-    }
-
-    private void clearRoadPoints(){
-        /*roadBuilder.clean();*/
     }
 
     private void addCenterPoint(){

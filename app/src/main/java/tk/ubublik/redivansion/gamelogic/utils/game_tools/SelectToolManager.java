@@ -10,6 +10,7 @@ import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
+import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 
@@ -49,14 +50,40 @@ public class SelectToolManager implements Observer{
         selectTool = new SingleBuilder(clazz, mapRenderer, node, cameraControl, worldMap);
     }
 
+    @Deprecated
     public void setRoadStart(Point point){
         checkRoadBuilder();
-        ((RoadBuilder)selectTool).setStartPoint(point);
+        ((RoadBuilderOld)selectTool).setStartPoint(point);
     }
 
+    @Deprecated
     public void setRoadEnd(Point point){
         checkRoadBuilder();
-        ((RoadBuilder)selectTool).setEndPoint(point);
+        ((RoadBuilderOld)selectTool).setEndPoint(point);
+    }
+
+    public void setRoadSelectStart(){
+        checkRoadBuilder();
+        ((RoadBuilder)selectTool).setSelectStage(RoadBuilder.SelectStage.START);
+    }
+
+    public void setRoadSelectEnd(){
+        checkRoadBuilder();
+        ((RoadBuilder)selectTool).setSelectStage(RoadBuilder.SelectStage.END);
+    }
+
+    public void setRoadSelect(){
+        checkRoadBuilder();
+        RoadBuilder rb = (RoadBuilder)selectTool;
+        switch (rb.getSelectStage()){
+            case NONE: rb.setSelectStage(RoadBuilder.SelectStage.START); break;
+            case START: rb.setSelectStage(RoadBuilder.SelectStage.END); break;
+        }
+    }
+
+    public void cancel(){
+        destroyTool();
+        selectTool = null;
     }
 
     public void setObjectSelect(WorldObject worldObject){
@@ -71,7 +98,7 @@ public class SelectToolManager implements Observer{
     private void checkRoadBuilder(){
         if (!(selectTool instanceof RoadBuilder)) {
             destroyTool();
-            selectTool = new RoadBuilder();
+            selectTool = new RoadBuilder(mapRenderer, node, cameraControl, worldMap);
         }
     }
 

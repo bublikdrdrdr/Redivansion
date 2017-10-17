@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty>
+    <screen id="start" controller="jme3test.niftygui.TestNiftyGui">
+        <layer id="layer" backgroundColor="#0000" childLayout="center">
+            <panel id="panel" height="25%" width="35%" align="left" valign="top" backgroundColor="#f60f" childLayout="center" visibleToMouse="true">
+
+            <text id="text" font="aurulent-sans-16.fnt" color="#000f" text="Hello from jME3" align="center" valign="center" />
+        </panel>
+            <panel id="panel" height="25%" width="35%" align="right" valign="top" backgroundColor="#f60f" childLayout="center" visibleToMouse="true">
+
+                <text id="text" font="aurulent-sans-16.fnt" color="#000f" text="Hello from jME3" align="center" valign="center" />
+            </panel>
+
+            <panel id="panel" height="25%" width="35%" align="left" valign="bottom" backgroundColor="#f60f" childLayout="center" visibleToMouse="true">
+
+                <text id="text" font="aurulent-sans-16.fnt" color="#000f" text="Hello from jME3" align="center" valign="center" />
+            </panel>
+            <panel id="panel" height="25%" width="35%" align="right" valign="bottom" backgroundColor="#f60f" childLayout="center" visibleToMouse="true">
+
+                <text id="text" font="aurulent-sans-16.fnt" color="#000f" text="Hello from jME3" align="center" valign="center" />
+            </panel>
+        </layer>
+    </screen>
+    <screen id="end" controller="jme3test.niftygui.TestNiftyGui">
+        <layer id="layer" backgroundColor="#0000" childLayout="center">
+            <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="center">
+                <control name="button" label="Start" id="StartButton" align="center" valign="center"
+                    visibleToMouse="true" >
+                    <interact onClick="startGame(hud)"/>
+                </control>
+            </panel>
+        </layer>
+    </screen>
+</nifty>
