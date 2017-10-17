@@ -132,7 +132,6 @@ public class TestLifecycle extends Lifecycle {
         DebugPanel debugPanel = new DebugPanel(simpleApplication);
         debugPanel.addButton("Add building", commands);
         debugPanel.addButton("Add tree", commands);
-        debugPanel.addButton("Change FoV", commands);
         debugPanel.addButton("Add road", commands);
         debugPanel.addButton("Set road points", commands);
         debugPanel.addButton("Select tree", commands);
@@ -147,7 +146,6 @@ public class TestLifecycle extends Lifecycle {
                 case "Console log": System.out.println("Console log"); break;
                 case "Add building": addBuilding(); break;
                 case "Add tree": addTree(); break;
-                case "Change FoV": changeFoV(); break;
                 case "Add road": addRoad(); break;
                 case "Set road points": selectToolManager.setRoadSelect(); break;
                 case "Select tree": selectToolManager.setSelectSinglePoint(Tree.class); break;
@@ -157,11 +155,6 @@ public class TestLifecycle extends Lifecycle {
         }
     };
 
-    private boolean wideFoV = false;
-    private void changeFoV(){
-        cameraControl.setFoV(wideFoV?30f:10f);
-        wideFoV = !wideFoV;
-    }
 
     private void addBuilding() {
         Point position = getCenterPoint(2);
