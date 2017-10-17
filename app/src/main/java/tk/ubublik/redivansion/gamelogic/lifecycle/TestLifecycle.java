@@ -59,7 +59,7 @@ public class TestLifecycle extends Lifecycle {
         super(simpleApplication);
         loadModels();
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
-        Level level = LevelFactory.getLevel("test");
+        Level level = LevelFactory.getLevel(0);
         gameLogicProcessor = new GameLogicProcessor();
         worldMap = new WorldMap(level.getWorldObjects());
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());

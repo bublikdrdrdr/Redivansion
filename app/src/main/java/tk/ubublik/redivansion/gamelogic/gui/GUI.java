@@ -24,8 +24,8 @@ public class GUI {
 
     public GUI(Node guiNode){
         this.guiNode = guiNode;
-        nifty = Main.niftyDisplay.getNifty();
-        nifty.fromXml("Interface/HelloJme.xml", "start");
+        /*nifty = Main.niftyDisplay.getNifty();
+        nifty.fromXml("Interface/HelloJme.xml", "start");*/
     }
 
     public void onUpdate(){
