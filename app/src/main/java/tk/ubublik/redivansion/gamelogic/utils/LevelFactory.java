@@ -25,7 +25,7 @@ public class LevelFactory {
 
     public static Level getLevel(Object key, Map<String, GeometryManager> models){
         Level level = new Level();
-        if (key.equals("tutorial")){
+        /*if (key.equals("tutorial")){
             GeometryManager simpleModel = models.get("simple");
             level.setLevelStatus(LevelStatus.ENABLED);
             LevelGoal levelGoal = new LevelGoal(level) {
@@ -45,11 +45,11 @@ public class LevelFactory {
             house.setPosition(new Point(0,0));
             level.setWorldObjects(worldObjects);
             return level;
-        }
+        }*/
         throw new IllegalArgumentException("Unregistered level");
     }
 
-    public static Level getLevel(String name){
+    public static Level getLevel(int id){
         //todo: get level by name
         Level level = new Level();
         return level;
