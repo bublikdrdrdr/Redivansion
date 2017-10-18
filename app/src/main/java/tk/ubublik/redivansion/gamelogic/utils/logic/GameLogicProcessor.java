@@ -5,6 +5,7 @@ import java.util.*;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
+import tk.ubublik.redivansion.gamelogic.units.objects.PowerPlant;
 
 /**
  * Created by Bublik on 31-Aug-17.
@@ -16,16 +17,23 @@ public class GameLogicProcessor implements Observer {
     private final Level level;
     private Timer timer;
     private final WorldMap worldMap;
+    private boolean stateChanged = true;
 
+    private RoadConnectionChecker roadConnectionChecker;
+    private PowerChecker powerChecker;
 
     public GameLogicProcessor(WorldMap worldMap, Level level) {
         this.worldMap = worldMap;
         this.level = level;
         timer = new Timer();
+        roadConnectionChecker = new RoadConnectionChecker(worldMap);
+        powerChecker = new PowerChecker(worldMap);
     }
 
     public void onUpdate() {
         if (timer.isPaused()) return;
+        if (stateChanged) roadConnectionChecker.refresh();
+        powerChecker.refresh();
     }
 
     public void start(){
