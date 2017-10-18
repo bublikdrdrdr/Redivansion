@@ -28,7 +28,7 @@ import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
-import tk.ubublik.redivansion.gamelogic.utils.GameLogicProcessor;
+import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
@@ -92,7 +92,7 @@ public class TutorialLifecycle extends Lifecycle {
     }
 
     private Geometry attachGrid(Vector3f pos, int size, ColorRGBA color){
-        Geometry g = new Geometry("wireframe grid", new Grid(size, size, 0.5f) );
+        Geometry g = new Geometry("wireframe grid", new Grid(size, size, 0.5f));
         Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", color);
@@ -103,8 +103,7 @@ public class TutorialLifecycle extends Lifecycle {
     }
 
     private void prepareLevel(){
-        gameLogicProcessor = new GameLogicProcessor();
-        gameLogicProcessor.setLevel(currentLevel);
+        gameLogicProcessor = new GameLogicProcessor(worldMap, currentLevel);
         worldMap = new WorldMap();
         gameLogicProcessor.start();
     }
