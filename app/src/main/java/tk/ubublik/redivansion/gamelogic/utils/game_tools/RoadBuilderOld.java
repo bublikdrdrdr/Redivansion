@@ -7,12 +7,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import tk.ubublik.redivansion.R;
-import tk.ubublik.redivansion.gamelogic.lifecycle.Lifecycle;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.RoadState;
-import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
  * Created by Bublik on 10-Oct-17.

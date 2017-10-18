@@ -3,7 +3,6 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 import android.graphics.Point;
 
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryLoopAnimationManager;
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 

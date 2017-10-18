@@ -1,19 +1,12 @@
 package tk.ubublik.redivansion.gamelogic.utils;
 
-import android.graphics.Point;
-
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.units.Level;
-import tk.ubublik.redivansion.gamelogic.units.LevelGoal;
-import tk.ubublik.redivansion.gamelogic.units.LevelStatus;
-import tk.ubublik.redivansion.gamelogic.units.objects.House;
-import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+import tk.ubublik.redivansion.gamelogic.units.objects.Office;
+import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 
 /**
  * Created by Bublik on 01-Sep-17.
@@ -52,6 +45,9 @@ public class LevelFactory {
     public static Level getLevel(int id){
         //todo: get level by name
         Level level = new Level();
+        level.getWorldObjects().add(new Office(0,-1));
+        level.getWorldObjects().add(new Office(0,2));
+        level.getWorldObjects().add(new Tree(2,1));
         return level;
     }
 

@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'groovyx.grooid.groovy-android'
+//apply plugin: 'groovyx.grooid.groovy-android'
 
 android {
     compileSdkVersion 25
@@ -32,7 +32,7 @@ dependencies {
     compile "org.jmonkeyengine:jme3-android-native:$jmeVersion"
     compile "org.jmonkeyengine:jme3-core:$jmeVersion"
     compile "org.jmonkeyengine:jme3-effects:$jmeVersion"
-    compile "org.jmonkeyengine:jme3-niftygui:$jmeVersion"
+    //compile "org.jmonkeyengine:jme3-niftygui:$jmeVersion"
     //compile "org.jmonkeyengine:jme3-jogg:$jmeVersion"
     //compile "org.jmonkeyengine:jme3-plugins:$jmeVersion"
     //compile "org.jmonkeyengine:jme3-terrain:$jmeVersion"
@@ -43,7 +43,6 @@ dependencies {
     compile 'com.simsilica:lemur:1.10.1'
     //compile "com.simsilica:lemur-proto:1.9.1"
     //nifty
-    //compile group: 'com.github.nifty-gui', name: 'nifty', version: '1.4.2'
     //needed for Lemur
     //compile 'com.google.guava:guava:23.0-android'
     //compile 'org.codehaus.groovy:groovy:2.4.0:grooid'

@@ -1,17 +1,14 @@
 package tk.ubublik.redivansion.gamelogic.units;
 
 import android.graphics.Point;
-import android.net.wifi.WifiManager;
 
-import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial;
-import com.simsilica.lemur.component.BorderLayout;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
@@ -20,14 +17,14 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
  */
 public class WorldMap extends Observable{
 
-    private List<WorldObject> worldObjects;
+    private List<WorldObject> worldObjects = new LinkedList<>();
 
-    public WorldMap(){
-        this(new LinkedList<WorldObject>());
-    }
-
-    public WorldMap(List<WorldObject> worldObjects){
-        this.worldObjects = worldObjects;
+    public boolean put(Collection<WorldObject> worldObjects){
+        boolean res = true;
+        for (WorldObject worldObject: worldObjects){
+            if (!put(worldObject)) res = false;
+        }
+        return res;
     }
 
     public boolean put(WorldObject worldObject){

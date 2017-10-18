@@ -3,19 +3,9 @@ package tk.ubublik.redivansion.gamelogic.lifecycle;
 import android.graphics.Point;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.light.Light;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.debug.Grid;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
-import com.simsilica.lemur.Panel;
-
-import java.util.List;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
@@ -30,12 +20,9 @@ import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.utils.GameLogicProcessor;
 import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
-import tk.ubublik.redivansion.gamelogic.utils.MapManager;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
-import tk.ubublik.redivansion.gamelogic.utils.game_tools.RoadBuilder;
-import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectTool;
 import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
 
 /**
@@ -52,35 +39,25 @@ public class TestLifecycle extends Lifecycle {
     private WorldLight worldLight;
     private SelectToolManager selectToolManager;
 
-    //test
-    //RoadBuilder roadBuilder = new RoadBuilder();
-
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
         loadModels();
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
         Level level = LevelFactory.getLevel(0);
         gameLogicProcessor = new GameLogicProcessor();
-        worldMap = new WorldMap(level.getWorldObjects());
+        worldMap = new WorldMap();
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
         gui = new GUI(simpleApplication.getGuiNode());
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         mapRenderer.addTerrain(new Terrain(5));
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
+        cameraControl.setTouchInputHook(gui);
         worldMap.addObserver(mapRenderer);
         worldMap.addObserver(gameLogicProcessor);
         worldMap.addObserver(selectToolManager);
+        worldMap.put(level.getWorldObjects());
 
         addDebugPanel();
-        //addGrid();
-        //addCenterPoint();
-
-        /*addGrid();
-        addCamera();
-        addLight();
-        addDebugPanel();
-        addCenterPoint();
-        generateStuff();*/
     }
 
     @Override
@@ -113,19 +90,6 @@ public class TestLifecycle extends Lifecycle {
         NodesCache.getInstance().put("terrainModel", terrainModel);
         Model roadModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/road.crm");
         NodesCache.getInstance().put("roadModel", roadModel);
-    }
-
-    private Geometry addGrid(){
-        int size = 10;
-        ColorRGBA color = ColorRGBA.Magenta;
-        Geometry g = new Geometry("wireframe grid", new Grid(size, size, 0.5f));
-        Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.getAdditionalRenderState().setWireframe(true);
-        mat.setColor("Color", color);
-        g.setMaterial(mat);
-        g.center().move(Vector3f.ZERO);
-        simpleApplication.getRootNode().attachChild(g);
-        return g;
     }
 
     private void addDebugPanel(){
@@ -174,21 +138,6 @@ public class TestLifecycle extends Lifecycle {
             Road road = new Road(position);
             worldMap.put(road);
         }
-    }
-
-    private void addCenterPoint(){
-        final float pointSize = simpleApplication.getCamera().getWidth()/100;
-        Panel panel = new Panel(pointSize, pointSize, ColorRGBA.Red);
-        panel.setLocalTranslation(new Vector3f(simpleApplication.getCamera().getWidth()/2, simpleApplication.getCamera().getHeight()/2, 0));
-        simpleApplication.getGuiNode().attachChild(panel);
-    }
-
-    private void generateStuff(){
-        for (int i = -2; i < 2; i++)
-            for (int j = -2; j < 2; j++){
-                Tree tree = new Tree(new Point(i,j));
-                worldMap.put(tree);
-            }
     }
 
     private Point getCenterPoint(int size){

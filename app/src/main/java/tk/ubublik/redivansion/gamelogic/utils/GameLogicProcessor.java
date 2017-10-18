@@ -1,12 +1,9 @@
 package tk.ubublik.redivansion.gamelogic.utils;
 
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.units.Level;
-import tk.ubublik.redivansion.gamelogic.units.WorldMap;
-import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
  * Created by Bublik on 31-Aug-17.

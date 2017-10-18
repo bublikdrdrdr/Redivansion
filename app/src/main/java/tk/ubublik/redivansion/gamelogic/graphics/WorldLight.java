@@ -1,17 +1,10 @@
 package tk.ubublik.redivansion.gamelogic.graphics;
 
-import com.jme3.app.SimpleApplication;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
-import com.jme3.light.Light;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 
 /**
  * Created by Bublik on 02-Oct-17.

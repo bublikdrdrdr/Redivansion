@@ -8,8 +8,6 @@ import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
 import com.simsilica.lemur.Label;
 
-import java.util.Random;
-
 /**
  * Created by Bublik on 31-Aug-17.
  */

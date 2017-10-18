@@ -1,7 +1,6 @@
 package tk.ubublik.redivansion.gamelogic.units;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;

@@ -1,10 +1,8 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
-import android.app.AlertDialog;
 import android.graphics.Point;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.input.ChaseCamera;
 import com.jme3.input.controls.TouchListener;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.TouchEvent;
@@ -13,46 +11,29 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Quad;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
-import com.simsilica.lemur.Container;
 import com.simsilica.lemur.event.DefaultMouseListener;
 import com.simsilica.lemur.event.MouseListener;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
-
-import tk.ubublik.redivansion.JmeFragment;
-import tk.ubublik.redivansion.MainActivity;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
-import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
-import tk.ubublik.redivansion.gamelogic.test.ExampleModel;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GameLogicProcessor;
-import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 import tk.ubublik.redivansion.gamelogic.utils.WorldObjectFactory;
 
-import static com.jme3.input.event.TouchEvent.Type.KEY_UP;
 import static tk.ubublik.redivansion.JmeFragment.BACK_PRESS_EVENT;
 
 /**
@@ -124,7 +105,7 @@ public class TutorialLifecycle extends Lifecycle {
     private void prepareLevel(){
         gameLogicProcessor = new GameLogicProcessor();
         gameLogicProcessor.setLevel(currentLevel);
-        worldMap = new WorldMap(currentLevel.getWorldObjects());
+        worldMap = new WorldMap();
         gameLogicProcessor.start();
     }
 

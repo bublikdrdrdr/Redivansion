@@ -2,16 +2,12 @@ package tk.ubublik.redivansion.gamelogic.utils.game_tools;
 
 import android.graphics.Point;
 
-import com.jme3.effect.influencers.NewtonianParticleInfluencer;
-import com.jme3.math.FastMath;
 import com.jme3.scene.Node;
 
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
-import tk.ubublik.redivansion.gamelogic.lifecycle.Lifecycle;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 

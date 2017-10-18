@@ -1,17 +1,8 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.TextureKey;
-import com.jme3.material.Material;
-import com.jme3.math.FastMath;
-import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
-import com.simsilica.lemur.Label;
-import com.simsilica.lemur.Panel;
 
-import java.util.Objects;
-
-import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 

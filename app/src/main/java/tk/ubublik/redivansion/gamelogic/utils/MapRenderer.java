@@ -18,7 +18,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
 import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;

@@ -2,7 +2,6 @@ package tk.ubublik.redivansion.gamelogic.graphics;
 
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
