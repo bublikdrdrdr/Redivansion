@@ -15,4 +15,5 @@ public abstract class Checker {
     }
 
     public abstract void refresh();
+    public abstract boolean isDone();
 }

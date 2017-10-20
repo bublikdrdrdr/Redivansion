@@ -26,7 +26,7 @@ public class GameLogicProcessor implements Observer {
         this.worldMap = worldMap;
         this.level = level;
         timer = new Timer();
-        roadConnectionChecker = new RoadConnectionChecker(worldMap);
+        roadConnectionChecker = new RoadConnectionChecker(worldMap, level.getMainRoad());
         powerChecker = new PowerChecker(worldMap);
     }
 
