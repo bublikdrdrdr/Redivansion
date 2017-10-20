@@ -52,6 +52,10 @@ public class GameLogicProcessor implements Observer {
         return timer.elapsed();
     }
 
+    public void setGameSpeed(int speed){
+        timer.setGameSpeed(speed);
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof WorldMapAction){

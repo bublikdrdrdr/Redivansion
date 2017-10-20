@@ -45,10 +45,13 @@ public class Timer {
     }
 
     public void setGameSpeed(int speed){
+        boolean pausedState = paused;
+        setPaused(false);
         long c = System.currentTimeMillis();
         long d = c-startTime;
         startTime = c-d*gameSpeed+d-d/speed;
         gameSpeed = speed;
+        setPaused(pausedState);
     }
 
     public boolean calculateReady(){
