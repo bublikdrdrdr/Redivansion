@@ -58,11 +58,17 @@ public class Road extends WorldObject {
     }
 
     public void setRoadState(RoadState roadState) {
+        // TODO: 21-Oct-17 fix it with animation cache
         this.roadState = roadState;
         String animationName = roadState.getModelName();
         float rotation = roadState.getRotation();
-        setName(MANAGER_NAME+animationName+Float.toString(rotation));
-        GeometryAnimationManager geometryAnimationManager = (GeometryAnimationManager)NodesCache.getInstance().get(name);
+        if (getGeometryManager()!=null){
+            this.detachChild(getGeometryManager());
+        }
+        String newName = MANAGER_NAME+animationName+Float.toString(rotation);
+        GeometryAnimationManager geometryAnimationManager = (GeometryAnimationManager)NodesCache.getInstance().get(newName);
+        if (newName.equals(name)) geometryAnimationManager = null;
+        name = newName;
         if (geometryAnimationManager!=null) {
             setGeometryManager(((GeometryAnimationManager) NodesCache.getInstance().get(name)).clone());
         } else {
@@ -78,7 +84,7 @@ public class Road extends WorldObject {
             });
             setGeometryManager(((GeometryAnimationManager) NodesCache.getInstance().get(name)));
         }
-        this.rotate(0,rotation*FastMath.TWO_PI, 0);
+        this.setLocalRotation(getLocalRotation().fromAngles(0,rotation*FastMath.TWO_PI, 0));
     }
 
     public static void updateRoadStates(Point startPoint, Point endPoint, List<Road> nearbyRoads){
@@ -92,7 +98,6 @@ public class Road extends WorldObject {
     }
 
     private static void updateSingleRoadStateFromArray(Road[][] array, int i, int j){
-        // TODO: 20-Oct-17  CHECK
         RoadState rs = array[i][j].getRoadState();
         if (i>0){
             rs.setRight(array[i-1][j]!=null);
@@ -107,7 +112,6 @@ public class Road extends WorldObject {
             rs.setBack(array[i][j+1]!=null);
         }
         array[i][j].setRoadState(rs);
-        System.out.println("ROAD position: "+array[i][j].getPosition()+", state: "+rs.getModelName()+", rot "+rs.getRotation());
     }
 
     private static Road[][] toArray(Point startPoint, Point endPoint, List<Road> roads, Point offsetCallback){
