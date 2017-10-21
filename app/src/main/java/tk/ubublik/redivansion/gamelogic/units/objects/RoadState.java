@@ -67,10 +67,10 @@ public class RoadState{
             case 2:
                 if (front) return 0; else return 0.25f;
             case 3:
-                if (front&&right) return 0;
-                else if (right&&back) return 0.25f;
-                else if (left&&back) return 0.5f;
-                else return 0.75f;
+                if (front&&right) return 0.5f;
+                else if (right&&back) return 0.75f;
+                else if (left&&back) return 0;
+                else return 0.25f;
             case 4: if (!front) return 0.25f;
             else if (!right) return 0.5f;
             else if (!back) return 0.75f;

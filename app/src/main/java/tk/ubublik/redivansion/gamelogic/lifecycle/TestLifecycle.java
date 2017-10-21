@@ -16,6 +16,7 @@ import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
 import tk.ubublik.redivansion.gamelogic.units.objects.Road;
+import tk.ubublik.redivansion.gamelogic.units.objects.RoadState;
 import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
@@ -133,10 +134,8 @@ public class TestLifecycle extends Lifecycle {
     }
 
     private void addRoad(){
-        Point position = getCenterPoint(1);
-        if (worldMap.isFree(position, 1)) {
-            Road road = new Road(position);
-            worldMap.put(road);
+        if (selectToolManager.buildRoad()){
+            selectToolManager.cancel();
         }
     }
 
