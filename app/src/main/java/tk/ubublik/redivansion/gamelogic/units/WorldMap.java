@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 
+import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
@@ -172,5 +173,39 @@ public class WorldMap extends Observable{
             }
         }
         return true;
+    }
+
+    public List<Road> getNearbyRoads(Point p1, Point p2){
+        p1 = new Point(p1);
+        p2 = new Point(p2);
+        if (p1.x>p2.x) swapX(p1, p2);
+        if (p1.y>p2.y) swapY(p1, p2);
+        pointShift(p1, false);
+        pointShift(p2, true);
+        List<Road> list = new LinkedList<>();
+        for (WorldObject worldObject: worldObjects)
+            if (worldObject instanceof Road && objectInRectangle(worldObject, p1, p2))
+                list.add((Road)worldObject);
+        return list;
+    }
+
+    private void pointShift(Point point, boolean increment){
+        int shift = increment?1:-1;
+        point.x+=shift;
+        point.y+=shift;
+    }
+
+    public List<WorldObject> getNearbyObjects(Point p1, Point p2){
+        p1 = new Point(p1);
+        p2 = new Point(p2);
+        if (p1.x>p2.x) swapX(p1, p2);
+        if (p1.y>p2.y) swapY(p1, p2);
+        pointShift(p1, false);
+        pointShift(p2, true);
+        List<WorldObject> list = new LinkedList<>();
+        for (WorldObject worldObject: worldObjects)
+            if (objectInRectangle(worldObject, p1, p2))
+                list.add(worldObject);
+        return list;
     }
 }
