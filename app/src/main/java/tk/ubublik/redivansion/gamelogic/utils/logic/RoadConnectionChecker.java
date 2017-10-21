@@ -25,4 +25,9 @@ public class RoadConnectionChecker extends Checker implements Runnable {
     public void refresh() {
 
     }
+
+    @Override
+    public boolean isDone() {
+        return false;
+    }
 }

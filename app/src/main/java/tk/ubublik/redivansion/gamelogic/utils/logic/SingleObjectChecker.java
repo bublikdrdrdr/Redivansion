@@ -16,4 +16,9 @@ public class SingleObjectChecker extends Checker {
     public void refresh() {
 
     }
+
+    @Override
+    public boolean isDone() {
+        return false;
+    }
 }
