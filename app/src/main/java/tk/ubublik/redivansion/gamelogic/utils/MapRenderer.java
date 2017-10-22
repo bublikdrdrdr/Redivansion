@@ -90,9 +90,11 @@ public class MapRenderer implements Observer{
     }
 
     public void removeObject(WorldObject worldObject){
-        removeObject(worldObject.getGeometryManager());
+        node.detachChild(worldObject);
+        //removeObject(worldObject.getGeometryManager());
     }
 
+    @Deprecated
     public void removeObject(Spatial spatial){
         node.detachChild(spatial);
     }
