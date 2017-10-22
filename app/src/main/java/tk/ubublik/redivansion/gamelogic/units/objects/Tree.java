@@ -21,7 +21,7 @@ public class Tree extends WorldObject {
     }
 
     public Tree(Point position) {
-        super(new GeometryLoopAnimationManager("tree", (Model) NodesCache.getInstance().get("treeModel")));
+        setGeometryManager(new GeometryLoopAnimationManager("tree", (Model) NodesCache.getInstance().get("treeModel")));
         setSize(1);
         setPosition(position);
         buildAnimation();

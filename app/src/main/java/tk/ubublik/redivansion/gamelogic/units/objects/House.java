@@ -9,8 +9,7 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 public class House extends Building {
 
 
-    public House(GeometryManager geometryManager) {
-        super(geometryManager);
+    public House() {
     }
 
     @Override

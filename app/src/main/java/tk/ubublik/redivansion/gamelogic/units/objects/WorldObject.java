@@ -3,9 +3,16 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 
 import android.graphics.Point;
 
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.shape.Box;
 
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
+import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
  * Created by Bublik on 20-Aug-17.
@@ -13,11 +20,14 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 
 public abstract class WorldObject extends Node{
 
+    public enum IconState {NONE, WARNING, ERROR};
+
     //only 3D model
     private GeometryManager geometryManager;
 
     //notification icon (if something wrong with the object)
-    private Node icon;
+    private Node icon = new Node("icon");
+    private IconState iconState = IconState.NONE;
 
     //game logic properties
     private Point position;
@@ -45,10 +55,8 @@ public abstract class WorldObject extends Node{
     public WorldObject(Point position, int size){
         this.position = position;
         this.size = size;
-    }
-
-    public WorldObject(GeometryManager geometryManager){
-        setGeometryManager(geometryManager);
+        icon.setLocalTranslation(0,1,0);
+        attachChild(icon);
     }
 
     public GeometryManager getGeometryManager() {
@@ -119,4 +127,29 @@ public abstract class WorldObject extends Node{
     }
 
     public static int getDefaultSize(){return 1;}
+
+    public IconState getIconState() {
+        return iconState;
+    }
+
+    public void setIconState(IconState iconState) {
+        if (iconState != this.iconState){
+            this.iconState = iconState;
+            icon.detachAllChildren();
+            switch (iconState){
+                case WARNING: addIconBox(ColorRGBA.Yellow); break;
+                case ERROR: addIconBox(ColorRGBA.Red); break;
+            }
+        }
+    }
+
+    private void addIconBox(ColorRGBA color){
+        float boxSize = 0.2f;
+        Box box = new Box(boxSize, boxSize, boxSize);
+        Material material = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        material.setColor("Color", color);
+        Geometry iconBox = new Geometry("icon box", box);
+        iconBox.setMaterial(material);
+        icon.attachChild(iconBox);
+    }
 }

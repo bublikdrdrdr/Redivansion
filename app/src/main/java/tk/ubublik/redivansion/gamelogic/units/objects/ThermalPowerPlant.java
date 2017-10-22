@@ -7,9 +7,7 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
  */
 
 public class ThermalPowerPlant extends PowerPlant {
-    public ThermalPowerPlant(GeometryManager geometryManager) {
-        super(geometryManager);
-    }
+
 
     @Override
     public byte[] toBytes() {

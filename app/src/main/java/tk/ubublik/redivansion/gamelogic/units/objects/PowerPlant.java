@@ -7,7 +7,4 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
  */
 
 public abstract class PowerPlant extends WorldObject {
-    public PowerPlant(GeometryManager geometryManager) {
-        super(geometryManager);
-    }
 }
