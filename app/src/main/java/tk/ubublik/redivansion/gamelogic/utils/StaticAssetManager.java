@@ -1,6 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.utils;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.font.BitmapFont;
 
 /**
  * Created by Bublik on 25-Aug-17.
@@ -8,6 +9,7 @@ import com.jme3.asset.AssetManager;
 
 public class StaticAssetManager {
     private static AssetManager assetManager;
+    private static BitmapFont bitmapFont;
 
     public StaticAssetManager(AssetManager assetManager){
         StaticAssetManager.assetManager = assetManager;
@@ -21,4 +23,11 @@ public class StaticAssetManager {
         StaticAssetManager.assetManager = assetManager;
     }
 
+    public static BitmapFont getBitmapFont() {
+        return bitmapFont;
+    }
+
+    public static void setBitmapFont(BitmapFont bitmapFont) {
+        StaticAssetManager.bitmapFont = bitmapFont;
+    }
 }

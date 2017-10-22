@@ -41,6 +41,7 @@ public class Main extends SimpleApplication {
         this.setDisplayStatView(false);
         this.setDisplayFps(false);
         StaticAssetManager.setAssetManager(assetManager);
+        StaticAssetManager.setBitmapFont(guiFont);
         assetManager.registerLoader(CustomModelLoader.class, "crm");
     }
 
