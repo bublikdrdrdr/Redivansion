@@ -83,10 +83,11 @@ public class WorldMap extends Observable{
 
     public WorldObject get(Point position){
         for (WorldObject worldObject: worldObjects) {
-            if (objectInPoint(worldObject, position))
+            if (objectInPoint(worldObject, position)) {
                 setChanged();
                 notifyObservers(new WorldMapAction(WorldMapAction.Action.GET, worldObject));
                 return worldObject;
+            }
         }
         return null;
     }

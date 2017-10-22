@@ -19,6 +19,7 @@ import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.RoadState;
 import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
+import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
 import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
@@ -102,6 +103,8 @@ public class TestLifecycle extends Lifecycle {
         debugPanel.addButton("Select tree", commands);
         debugPanel.addButton("Select office", commands);
         debugPanel.addButton("Clear select", commands);
+        debugPanel.addButton("Remove", commands);
+        debugPanel.addButton("Set icon", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -116,9 +119,20 @@ public class TestLifecycle extends Lifecycle {
                 case "Select tree": selectToolManager.setSelectSinglePoint(Tree.class); break;
                 case "Select office": selectToolManager.setSelectSinglePoint(Office.class); break;
                 case "Clear select": selectToolManager.cancel(); break;
+                case "Remove": remove(); break;
+                case "Set icon": testSetIcon(); break;
             }
         }
     };
+
+    private void remove() {
+        worldMap.fastRemove(getCenterPoint(1));
+    }
+
+    private void testSetIcon() {
+        WorldObject worldObject = worldMap.get(getCenterPoint(1));
+        if (worldObject!=null) worldObject.setIconState(WorldObject.IconState.WARNING);
+    }
 
 
     private void addBuilding() {
