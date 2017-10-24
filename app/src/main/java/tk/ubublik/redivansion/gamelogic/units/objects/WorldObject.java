@@ -20,7 +20,7 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 public abstract class WorldObject extends Node{
 
-    public enum IconState {NONE, WARNING, ERROR};
+    public enum IconState {NONE, WARNING, ERROR}
 
     //only 3D model
     private GeometryManager geometryManager;
@@ -78,6 +78,35 @@ public abstract class WorldObject extends Node{
 
     public abstract void parseBytes();
 
+    public static int getDefaultSize(){return 1;}
+
+    public IconState getIconState() {
+        return iconState;
+    }
+
+    public void setIconState(IconState iconState) {
+        if (iconState != this.iconState){
+            this.iconState = iconState;
+            icon.detachAllChildren();
+            switch (iconState){
+                case WARNING: addIconBox(ColorRGBA.Yellow); break;
+                case ERROR: addIconBox(ColorRGBA.Red); break;
+            }
+        }
+    }
+
+    private void addIconBox(ColorRGBA color){
+        float boxSize = 0.2f;
+        Box box = new Box(boxSize, boxSize, boxSize);
+        Material material = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        material.setColor("Color", color);
+        Geometry iconBox = new Geometry("icon box", box);
+        iconBox.setMaterial(material);
+        icon.attachChild(iconBox);
+    }
+
+    //////////////////////
+
     public Node getIcon() {
         return icon;
     }
@@ -124,32 +153,5 @@ public abstract class WorldObject extends Node{
 
     public void setPermanent(boolean permanent) {
         this.permanent = permanent;
-    }
-
-    public static int getDefaultSize(){return 1;}
-
-    public IconState getIconState() {
-        return iconState;
-    }
-
-    public void setIconState(IconState iconState) {
-        if (iconState != this.iconState){
-            this.iconState = iconState;
-            icon.detachAllChildren();
-            switch (iconState){
-                case WARNING: addIconBox(ColorRGBA.Yellow); break;
-                case ERROR: addIconBox(ColorRGBA.Red); break;
-            }
-        }
-    }
-
-    private void addIconBox(ColorRGBA color){
-        float boxSize = 0.2f;
-        Box box = new Box(boxSize, boxSize, boxSize);
-        Material material = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        material.setColor("Color", color);
-        Geometry iconBox = new Geometry("icon box", box);
-        iconBox.setMaterial(material);
-        icon.attachChild(iconBox);
     }
 }
