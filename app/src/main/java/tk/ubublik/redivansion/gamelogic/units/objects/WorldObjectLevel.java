@@ -5,7 +5,25 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
  */
 
 public class WorldObjectLevel {
-    private int upgradeCost;
-    private int number;
-    private Params params;
+    private final int upgradeCost;
+    private final int number;
+    private final Params params;
+
+    public WorldObjectLevel(int upgradeCost, int number, Params params) {
+        this.upgradeCost = upgradeCost;
+        this.number = number;
+        this.params = params;
+    }
+
+    public int getUpgradeCost() {
+        return upgradeCost;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public Params getParams() {
+        return params;
+    }
 }

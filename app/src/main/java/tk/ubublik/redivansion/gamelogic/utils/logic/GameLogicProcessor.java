@@ -32,8 +32,15 @@ public class GameLogicProcessor implements Observer {
 
     public void onUpdate() {
         if (timer.isPaused()) return;
-        if (stateChanged) roadConnectionChecker.refresh();
-        powerChecker.refresh();
+        if (roadConnectionChecker.isDone()){
+
+        }
+        if (timer.calculateReady()){
+            //full calculation
+        } else {
+            if (stateChanged) roadConnectionChecker.refresh();
+            powerChecker.refresh();
+        }
     }
 
     public void start(){
@@ -65,4 +72,7 @@ public class GameLogicProcessor implements Observer {
             }
         }
     }
+
+    //when some house population is more than N% of max population - show alert icon
+    public final static float HOUSE_POPULATION_ALERT_PERCENT = 0.9f;
 }
