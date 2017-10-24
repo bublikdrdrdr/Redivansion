@@ -216,7 +216,7 @@ public class WorldMap extends Observable implements Cloneable{
     }
 
     @Override
-    protected WorldMap clone() throws CloneNotSupportedException {
+    public WorldMap clone() {
         return new WorldMap((LinkedList<WorldObject>)((LinkedList)getWorldObjects()).clone());
     }
 }

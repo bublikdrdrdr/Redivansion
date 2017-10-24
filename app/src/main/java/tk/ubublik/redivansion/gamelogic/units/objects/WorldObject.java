@@ -36,6 +36,9 @@ public abstract class WorldObject extends Node{
     private WorldObjectLevel level;
     private boolean permanent;
 
+    //state variables
+    public boolean roadConnected = false; //mb volatile?
+
     public WorldObject(){
         this(0,0);
     }

@@ -1,15 +1,16 @@
 package tk.ubublik.redivansion.gamelogic.utils.logic;
 
-
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 
 /**
- * Created by Bublik on 18-Oct-17.
+ * Created by Bublik on 25-Oct-17.
  */
 
-public class PowerChecker extends Checker{
 
-    public PowerChecker(WorldMap worldMap) {
+//blaha muha, ne mozu nazwy prydumaty, roma help
+public class FinalChecker extends Checker{
+
+    public FinalChecker(WorldMap worldMap) {
         super(worldMap);
     }
 
@@ -20,11 +21,6 @@ public class PowerChecker extends Checker{
 
     @Override
     public boolean isDone() {
-        return false;
-    }
-
-    @Override
-    public boolean isWorking() {
         return false;
     }
 }

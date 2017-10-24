@@ -6,6 +6,7 @@ import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
 import tk.ubublik.redivansion.gamelogic.units.objects.PowerPlant;
+import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
  * Created by Bublik on 31-Aug-17.
@@ -16,6 +17,8 @@ public class GameLogicProcessor implements Observer {
 
     static final Object threadLock = new Object();
 
+    enum LogicStage{NONE, WAIT_FOR_ROAD, ROAD, RESOURCES, RESULTS, DONE}
+
     private final Level level;
     private Timer timer;
     private final WorldMap worldMap;
@@ -23,6 +26,8 @@ public class GameLogicProcessor implements Observer {
 
     private RoadConnectionChecker roadConnectionChecker;
     private PowerChecker powerChecker;
+    private SingleObjectChecker singleObjectChecker;
+    private FinalChecker finalChecker;
 
     public GameLogicProcessor(WorldMap worldMap, Level level) {
         this.worldMap = worldMap;
@@ -35,13 +40,12 @@ public class GameLogicProcessor implements Observer {
     public void onUpdate() {
         if (timer.isPaused()) return;
         if (roadConnectionChecker.isDone()){
-
+            if (!(powerChecker.isWorking()||singleObjectChecker.isWorking()||finalChecker.isWorking())){
+                synchronizeRoadResults();
+            }
         }
-        if (timer.calculateReady()){
+        if (timer.calculateReady()) {
             //full calculation
-        } else {
-            if (stateChanged) roadConnectionChecker.refresh();
-            powerChecker.refresh();
         }
     }
 
@@ -55,6 +59,10 @@ public class GameLogicProcessor implements Observer {
 
     public void stop(){
         setPaused(true);
+    }
+
+    public void invalidateRoad(){
+        roadConnectionChecker.refresh();
     }
 
     private long elapsed(){
@@ -71,6 +79,22 @@ public class GameLogicProcessor implements Observer {
             WorldMapAction worldMapAction = (WorldMapAction) arg;
             switch (worldMapAction.getAction()){
 
+            }
+        }
+    }
+
+    private void synchronizeRoadResults(){
+        List<RoadConnectionChecker.WorldObjectRoadConnectionStatus> results = roadConnectionChecker.getResult();
+        Iterator<RoadConnectionChecker.WorldObjectRoadConnectionStatus> iterator = results.iterator();
+        for (WorldObject worldObject: worldMap.getWorldObjects()){
+            while (iterator.hasNext()){
+                RoadConnectionChecker.WorldObjectRoadConnectionStatus current = iterator.next();
+                if (worldObject == current.worldObject){
+                    worldObject.roadConnected = current.connected;
+                    break;
+                } else{
+                    iterator.remove();
+                }
             }
         }
     }

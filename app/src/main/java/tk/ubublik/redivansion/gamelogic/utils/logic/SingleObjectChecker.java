@@ -21,4 +21,9 @@ public class SingleObjectChecker extends Checker {
     public boolean isDone() {
         return false;
     }
+
+    @Override
+    public boolean isWorking() {
+        return false;
+    }
 }
