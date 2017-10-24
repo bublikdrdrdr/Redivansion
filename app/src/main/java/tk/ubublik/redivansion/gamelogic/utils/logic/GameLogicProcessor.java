@@ -14,6 +14,8 @@ import tk.ubublik.redivansion.gamelogic.units.objects.PowerPlant;
  */
 public class GameLogicProcessor implements Observer {
 
+    static final Object threadLock = new Object();
+
     private final Level level;
     private Timer timer;
     private final WorldMap worldMap;

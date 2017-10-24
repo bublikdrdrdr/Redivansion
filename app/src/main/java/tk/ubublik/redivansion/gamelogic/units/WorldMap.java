@@ -12,13 +12,18 @@ import java.util.Observable;
 
 import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
 
 /**
  * Created by Bublik on 21-Sep-17.
  */
-public class WorldMap extends Observable{
+public class WorldMap extends Observable implements Cloneable{
 
     private List<WorldObject> worldObjects = new LinkedList<>();
+
+    private WorldMap(List<WorldObject> worldObjects){
+        this.worldObjects = worldObjects;
+    }
 
     public boolean put(Collection<WorldObject> worldObjects){
         boolean res = true;
@@ -208,5 +213,10 @@ public class WorldMap extends Observable{
             if (objectInRectangle(worldObject, p1, p2))
                 list.add(worldObject);
         return list;
+    }
+
+    @Override
+    protected WorldMap clone() throws CloneNotSupportedException {
+        return new WorldMap((LinkedList<WorldObject>)((LinkedList)getWorldObjects()).clone());
     }
 }
