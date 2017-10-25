@@ -21,8 +21,8 @@ public class Level {
     private LevelGoal levelGoal;
     private Road mainRoad;
 
-    public Level(){
-
+    public Level(List<WorldObject> worldObjects){
+        setWorldObjects(worldObjects);
     }
 
     public Level(byte[] bytes){
