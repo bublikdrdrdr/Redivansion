@@ -1,5 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.utils.logic;
 
+import android.graphics.Point;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,8 +30,42 @@ public class RoadConnectionChecker extends Checker implements Runnable {
 
     @Override
     public void run() {
-        done = true;
+        try{
+            for (WorldObjectRoadConnectionStatus status: result){
+                if (status.worldObject==mainRoad){
+                    checkNeighbors(status);
+                    break;
+                }
+                if (thread.isInterrupted()) throw new InterruptedException();
+            }
+            done = true;
+        } catch (InterruptedException ignored){
+            done = false;
+        }
     }
+
+    private void checkNeighbors(WorldObjectRoadConnectionStatus status) throws InterruptedException{ //list mode
+        if (thread.isInterrupted()) throw new InterruptedException();
+        if (status==null || status.connected) return;
+        status.connected = true;
+        if (!(status.worldObject instanceof Road)) return;
+        checkNeighbors(getByPosition(new Point(status.worldObject.getPosition().x+1, status.worldObject.getPosition().y)));
+        checkNeighbors(getByPosition(new Point(status.worldObject.getPosition().x-1, status.worldObject.getPosition().y)));
+        checkNeighbors(getByPosition(new Point(status.worldObject.getPosition().x, status.worldObject.getPosition().y+1)));
+        checkNeighbors(getByPosition(new Point(status.worldObject.getPosition().x, status.worldObject.getPosition().y-1)));
+    }
+
+    private WorldObjectRoadConnectionStatus getByPosition(Point position) throws InterruptedException {
+        for (WorldObjectRoadConnectionStatus status: result){
+            if (thread.isInterrupted()) throw new InterruptedException();
+            if (worldMap.objectInPoint(status.worldObject, position)){
+                return status;
+            }
+        }
+        return null;
+    }
+
+    //TODO: check difference between 2D array check speed
 
     @Override
     public void refresh() {
@@ -38,6 +74,7 @@ public class RoadConnectionChecker extends Checker implements Runnable {
         }
         done = false;
         thread = new Thread(this);
+        result = cloneMap(worldMap);
         thread.start();
     }
 
@@ -48,7 +85,7 @@ public class RoadConnectionChecker extends Checker implements Runnable {
 
     @Override
     public boolean isWorking() {
-        return false;
+        return (thread!=null && thread.isAlive());
     }
 
     private List<WorldObjectRoadConnectionStatus> cloneMap(WorldMap worldMap){

@@ -21,6 +21,10 @@ public class WorldMap extends Observable implements Cloneable{
 
     private List<WorldObject> worldObjects = new LinkedList<>();
 
+    public WorldMap(){
+
+    }
+
     private WorldMap(List<WorldObject> worldObjects){
         this.worldObjects = worldObjects;
     }

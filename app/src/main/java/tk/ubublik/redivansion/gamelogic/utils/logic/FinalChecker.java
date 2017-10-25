@@ -23,4 +23,9 @@ public class FinalChecker extends Checker{
     public boolean isDone() {
         return false;
     }
+
+    @Override
+    public boolean isWorking() {
+        return false;
+    }
 }

@@ -35,13 +35,15 @@ public class GameLogicProcessor implements Observer {
         timer = new Timer();
         roadConnectionChecker = new RoadConnectionChecker(worldMap, level.getMainRoad());
         powerChecker = new PowerChecker(worldMap);
+        singleObjectChecker = new SingleObjectChecker(worldMap);
+        finalChecker = new FinalChecker(worldMap);
     }
 
     public void onUpdate() {
         if (timer.isPaused()) return;
         if (roadConnectionChecker.isDone()){
             if (!(powerChecker.isWorking()||singleObjectChecker.isWorking()||finalChecker.isWorking())){
-                synchronizeRoadResults();
+                synchronizeRoadResults(true);
             }
         }
         if (timer.calculateReady()) {
@@ -77,20 +79,20 @@ public class GameLogicProcessor implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof WorldMapAction){
             WorldMapAction worldMapAction = (WorldMapAction) arg;
-            switch (worldMapAction.getAction()){
-
-            }
+            if (worldMapAction.getAction() == WorldMapAction.Action.ADD || worldMapAction.getAction() == WorldMapAction.Action.REMOVE) invalidateRoad();
         }
     }
 
-    private void synchronizeRoadResults(){
+    private void synchronizeRoadResults(boolean showWarningIcon){
         List<RoadConnectionChecker.WorldObjectRoadConnectionStatus> results = roadConnectionChecker.getResult();
         Iterator<RoadConnectionChecker.WorldObjectRoadConnectionStatus> iterator = results.iterator();
         for (WorldObject worldObject: worldMap.getWorldObjects()){
             while (iterator.hasNext()){
                 RoadConnectionChecker.WorldObjectRoadConnectionStatus current = iterator.next();
                 if (worldObject == current.worldObject){
+                    System.out.println("DDD: "+current.worldObject+", "+current.connected);
                     worldObject.roadConnected = current.connected;
+                    if (showWarningIcon) worldObject.setIconState(current.connected||!current.worldObject.needsRoad()?WorldObject.IconState.NONE:WorldObject.IconState.WARNING);
                     break;
                 } else{
                     iterator.remove();
