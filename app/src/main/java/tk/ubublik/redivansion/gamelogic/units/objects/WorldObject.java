@@ -38,6 +38,7 @@ public abstract class WorldObject extends Node{
 
     //state variables
     public boolean roadConnected = false; //mb volatile?
+    protected boolean needsRoad = false;
 
     public WorldObject(){
         this(0,0);
@@ -156,5 +157,9 @@ public abstract class WorldObject extends Node{
 
     public void setPermanent(boolean permanent) {
         this.permanent = permanent;
+    }
+
+    public boolean needsRoad() {
+        return needsRoad;
     }
 }

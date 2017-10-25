@@ -29,6 +29,7 @@ public class Office extends Building {
         //params
         setSize(2);
         setPosition(position);
+        needsRoad = true;
         beginAnimation("build_lvl_1");
     }
 
