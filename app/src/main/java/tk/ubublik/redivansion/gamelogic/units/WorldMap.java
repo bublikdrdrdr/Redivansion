@@ -2,6 +2,7 @@ package tk.ubublik.redivansion.gamelogic.units;
 
 import android.graphics.Point;
 
+import com.jme3.math.FastMath;
 import com.jme3.scene.Spatial;
 
 import java.util.Collection;
@@ -217,6 +218,16 @@ public class WorldMap extends Observable implements Cloneable{
             if (objectInRectangle(worldObject, p1, p2))
                 list.add(worldObject);
         return list;
+    }
+
+    // TODO: 26-Oct-17 check which works correct
+    public float getDistanceSqr(WorldObject w1, WorldObject w2){ //means without sqrt
+        return FastMath.sqr(w1.getPosition().x-w2.getPosition().x)+FastMath.sqr(w1.getPosition().y-w2.getPosition().y);
+    }
+
+    public float getDistanceSqr2(WorldObject w1, WorldObject w2){
+        float dS = w1.getSize()/2.f-w2.getSize()/2.f;//check with int
+        return FastMath.sqr(dS+w1.getPosition().x-w2.getPosition().x)+FastMath.sqr(dS+w1.getPosition().y-w2.getPosition().y);
     }
 
     @Override

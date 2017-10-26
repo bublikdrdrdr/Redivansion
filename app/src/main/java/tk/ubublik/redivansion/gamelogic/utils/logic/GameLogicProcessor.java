@@ -111,7 +111,6 @@ public class GameLogicProcessor implements Observer {
             while (iterator.hasNext()){
                 RoadConnectionChecker.WorldObjectRoadConnectionStatus current = iterator.next();
                 if (worldObject == current.worldObject){
-                    System.out.println("DDD: "+current.worldObject+", "+current.connected);
                     worldObject.roadConnected = current.connected;
                     if (showWarningIcon) worldObject.setIconState(current.connected||!current.worldObject.needsRoad()?WorldObject.IconState.NONE:WorldObject.IconState.WARNING);
                     break;
