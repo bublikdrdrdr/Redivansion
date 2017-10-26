@@ -88,6 +88,11 @@ public class RoadConnectionChecker extends Checker implements Runnable {
         return (thread!=null && thread.isAlive());
     }
 
+    @Override
+    public void join() throws InterruptedException{
+        if (thread!=null && thread.isAlive()) thread.join();
+    }
+
     private List<WorldObjectRoadConnectionStatus> cloneMap(WorldMap worldMap){
         List<WorldObjectRoadConnectionStatus> list = new LinkedList<>();//worldMap.getWorldObjects().size()
         for (WorldObject worldObject: worldMap.getWorldObjects()){

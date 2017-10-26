@@ -23,6 +23,7 @@ public class GameLogicProcessor implements Observer {
     private Timer timer;
     private final WorldMap worldMap;
     private boolean stateChanged = true;
+    private Thread logicThread;
 
     private RoadConnectionChecker roadConnectionChecker;
     private PowerChecker powerChecker;
@@ -47,7 +48,21 @@ public class GameLogicProcessor implements Observer {
             }
         }
         if (timer.calculateReady()) {
+            if (logicThread!=null && logicThread.isAlive()) logicThread.interrupt();
             //full calculation
+            logicThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        powerChecker.refresh();
+                        powerChecker.join();
+                        finalChecker.refresh();
+                        finalChecker.join();
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+            });
+            logicThread.start();
         }
     }
 
@@ -73,6 +88,12 @@ public class GameLogicProcessor implements Observer {
 
     public void setGameSpeed(int speed){
         timer.setGameSpeed(speed);
+    }
+
+    private void onLogicLoopEnd(){
+        synchronized (threadLock){
+
+        }
     }
 
     @Override

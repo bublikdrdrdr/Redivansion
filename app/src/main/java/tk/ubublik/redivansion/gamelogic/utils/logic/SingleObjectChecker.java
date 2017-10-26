@@ -26,4 +26,9 @@ public class SingleObjectChecker extends Checker {
     public boolean isWorking() {
         return false;
     }
+
+    @Override
+    public void join() throws InterruptedException {
+
+    }
 }

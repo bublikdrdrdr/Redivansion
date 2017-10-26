@@ -27,4 +27,10 @@ public class PowerChecker extends Checker{
     public boolean isWorking() {
         return false;
     }
+
+    @Override
+    public void join() throws InterruptedException {
+
+    }
+
 }
