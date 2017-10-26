@@ -104,6 +104,7 @@ public class MapRenderer implements Observer{
     }
 
     public void onUpdate(){
+        // TODO: 26-Oct-17 OPTIMIZE
         for (Spatial spatial: node.getChildren()){
             if ((spatial instanceof WorldObject) && ((camera.contains(spatial.getWorldBound())!= Camera.FrustumIntersect.Outside))){
                 ((WorldObject)spatial).onUpdate();

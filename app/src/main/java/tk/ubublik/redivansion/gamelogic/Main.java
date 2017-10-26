@@ -5,6 +5,7 @@ import com.simsilica.lemur.GuiGlobals;
 
 import tk.ubublik.redivansion.gamelogic.lifecycle.Lifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
+import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
 import tk.ubublik.redivansion.gamelogic.utils.CustomModelLoader;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
@@ -14,6 +15,7 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 public class Main extends SimpleApplication {
 
+    private FpsMeter fpsMeter = FpsMeter.getInstance();
     private Lifecycle lifecycle;
 
     @Override
@@ -26,13 +28,13 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        logFps();
+        fpsMeter.logFps();
         long nanos = System.nanoTime();
         lifecycle.update();
         if (lifecycle.isDone()) {
             this.stop();
         }
-        logLogic(nanos);
+        fpsMeter.logLogic(nanos);
     }
 
     private void setupApplication(){
@@ -51,28 +53,6 @@ public class Main extends SimpleApplication {
         flyCam = null;
     }
 
-    long nano = System.nanoTime();
-    long fpsCounter = 0;
-    private void logFps(){
-        if (System.nanoTime()-nano >= 500000000L){
-            System.out.println("RENDER FPS: "+fpsCounter*2);
-            fpsCounter = 0;
-            nano = System.nanoTime();
-        }
-        fpsCounter++;
-    }
 
-    long lastLogicShow = System.currentTimeMillis();
-    private void logLogic(long nanos){
-        if (System.currentTimeMillis()-lastLogicShow>=500) {
-            long elapsed = System.nanoTime() - nanos;
-            //yes, I got divide by zero exception
-            if (elapsed > 0)
-                System.out.println("LOGIC FPS: " + (1000000000L / elapsed));
-            else
-                System.out.println("LOGIC FPS: over9000");
-            lastLogicShow = System.currentTimeMillis();
-        }
-    }
 
 }

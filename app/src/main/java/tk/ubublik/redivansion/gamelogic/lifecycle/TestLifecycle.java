@@ -12,6 +12,7 @@ import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.graphics.WorldLight;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
+import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
@@ -41,6 +42,8 @@ public class TestLifecycle extends Lifecycle {
     private WorldLight worldLight;
     private SelectToolManager selectToolManager;
 
+    private FpsMeter fpsMeter = FpsMeter.getInstance();
+
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
         loadModels();
@@ -51,7 +54,7 @@ public class TestLifecycle extends Lifecycle {
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
         gui = new GUI(simpleApplication.getGuiNode());
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
-        mapRenderer.addTerrain(new Terrain(5));
+        mapRenderer.addTerrain(new Terrain(4));
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
         cameraControl.setTouchInputHook(gui);
         worldMap.addObserver(mapRenderer);
@@ -74,13 +77,14 @@ public class TestLifecycle extends Lifecycle {
 
     @Override
     public void update() {
-        mapRenderer.onUpdate();
-        worldLight.onUpdate();
-        worldMap.onUpdate();
-        gui.onUpdate();
-        gameLogicProcessor.onUpdate();
-        cameraControl.onUpdate();
-        selectToolManager.onUpdate();
+        fpsMeter.beginCustom();
+        mapRenderer.onUpdate();fpsMeter.logCustom("MAP RENDERER");
+        worldLight.onUpdate();fpsMeter.logCustom("LIGHT");
+        worldMap.onUpdate();fpsMeter.logCustom("MAP");
+        gui.onUpdate();fpsMeter.logCustom("GUI");
+        gameLogicProcessor.onUpdate();fpsMeter.logCustom("LOGIC");
+        cameraControl.onUpdate();fpsMeter.logCustom("CAMERA");
+        selectToolManager.onUpdate();fpsMeter.logCustom("SELECT");
     }
 
     private void loadModels(){
