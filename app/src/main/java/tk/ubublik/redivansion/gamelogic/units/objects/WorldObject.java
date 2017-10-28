@@ -38,7 +38,7 @@ public abstract class WorldObject extends Node{
 
     //state variables
     public boolean roadConnected = false; //mb volatile?
-    protected boolean needsRoad = false;
+    private boolean needsRoad = false;
 
     public WorldObject(){
         this(0,0);
@@ -115,10 +115,6 @@ public abstract class WorldObject extends Node{
         return icon;
     }
 
-    public void setIcon(Node icon) {
-        this.icon = icon;
-    }
-
     public Point getPosition() {
         return position;
     }
@@ -131,7 +127,7 @@ public abstract class WorldObject extends Node{
         return buildCost;
     }
 
-    public void setBuildCost(int buildCost) {
+    protected void setBuildCost(int buildCost) {
         this.buildCost = buildCost;
     }
 
@@ -147,7 +143,7 @@ public abstract class WorldObject extends Node{
         return level;
     }
 
-    public void setLevel(WorldObjectLevel level) {
+    protected void setLevel(WorldObjectLevel level) {
         this.level = level;
     }
 
@@ -161,5 +157,9 @@ public abstract class WorldObject extends Node{
 
     public boolean needsRoad() {
         return needsRoad;
+    }
+
+    public void setNeedsRoad(boolean needsRoad) {
+        this.needsRoad = needsRoad;
     }
 }

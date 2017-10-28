@@ -11,6 +11,7 @@ import tk.ubublik.redivansion.R;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
+import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 
 /**
@@ -30,6 +31,9 @@ public class Road extends WorldObject {
     public Road(Point position, final RoadState roadState) {
         setRoadState(roadState);
         setPosition(position);
+        setSize(DEFAULT_SIZE);
+        setNeedsRoad(true);
+        setBuildCost(GameParams.ROAD_BUILD_COST);
     }
 
     @Override

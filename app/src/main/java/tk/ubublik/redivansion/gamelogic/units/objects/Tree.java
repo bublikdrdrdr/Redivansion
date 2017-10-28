@@ -4,6 +4,7 @@ import android.graphics.Point;
 
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryLoopAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
+import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 
 /**
@@ -24,6 +25,8 @@ public class Tree extends WorldObject {
         setGeometryManager(new GeometryLoopAnimationManager("tree", (Model) NodesCache.getInstance().get("treeModel")));
         setSize(1);
         setPosition(position);
+        setNeedsRoad(false);
+        setBuildCost(GameParams.TREE_BUILD_COST);
         buildAnimation();
     }
 
