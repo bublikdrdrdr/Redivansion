@@ -17,7 +17,7 @@ import static tk.ubublik.redivansion.gamelogic.utils.GameParams.*;
  */
 public final class WorldObjectLevelFactory {
 
-    private ArrayList<CachedWorldObjectLevel> cachedWorldObjectLevels;
+    private static ArrayList<CachedWorldObjectLevel> cachedWorldObjectLevels = new ArrayList<>();
 
     public static WorldObjectLevel getDefaultLevel(Class<WorldObject> worldObjectClass) {
         final String objectClassName = worldObjectClass.getName();
@@ -34,6 +34,24 @@ public final class WorldObjectLevelFactory {
         }
         return null;
         //throw new UnsupportedClassVersionError("No default level for "+objectClassName);
+    }
+
+    public static void initializeLevels(){
+        // TODO: 28-Oct-17 create levels
+    }
+
+    public static void destroyLevels(){
+        cachedWorldObjectLevels.clear();
+    }
+
+    public static WorldObjectLevel getObjectLevel(Class<WorldObject> objectClass, int level){
+        String objectClassName = objectClass.getName();
+        for (CachedWorldObjectLevel cachedWorldObjectLevel: cachedWorldObjectLevels){
+            if (cachedWorldObjectLevel.levelNumber==level && cachedWorldObjectLevel.objectClassName.equals(objectClassName)){
+                return cachedWorldObjectLevel.worldObjectLevel;
+            }
+        }
+        throw new IllegalArgumentException("No level with current params: "+objectClassName+" - level "+Integer.toString(level));
     }
 
     private class CachedWorldObjectLevel{
