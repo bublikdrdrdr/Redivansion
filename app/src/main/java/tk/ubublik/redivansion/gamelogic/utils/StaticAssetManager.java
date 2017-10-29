@@ -30,4 +30,8 @@ public class StaticAssetManager {
     public static void setBitmapFont(BitmapFont bitmapFont) {
         StaticAssetManager.bitmapFont = bitmapFont;
     }
+
+    public static BitmapFont loadFont(String name){
+        return assetManager.loadFont(name);
+    }
 }

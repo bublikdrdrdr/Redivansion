@@ -21,6 +21,7 @@ import tk.ubublik.redivansion.gamelogic.units.objects.RoadState;
 import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
 import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
@@ -32,7 +33,7 @@ import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
  * Created by Bublik on 22-Sep-17.
  */
 
-public class TestLifecycle extends Lifecycle {
+public class TestLifecycle extends Lifecycle implements GUIListener {
 
     private CameraControl cameraControl;
     private GameLogicProcessor gameLogicProcessor;
@@ -52,7 +53,7 @@ public class TestLifecycle extends Lifecycle {
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
-        gui = new GUI(simpleApplication.getGuiNode());
+        gui = new GUI(simpleApplication.getGuiNode(), this);
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         mapRenderer.addTerrain(new Terrain(4));
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
@@ -61,8 +62,7 @@ public class TestLifecycle extends Lifecycle {
         worldMap.addObserver(gameLogicProcessor);
         worldMap.addObserver(selectToolManager);
         worldMap.put(level.getWorldObjects());
-
-        addDebugPanel();
+        //addDebugPanel();
     }
 
     @Override
@@ -129,7 +129,8 @@ public class TestLifecycle extends Lifecycle {
         }
     };
 
-    private void remove() {
+    @Override
+    public void remove() {
         worldMap.fastRemove(getCenterPoint(1));
     }
 
@@ -139,19 +140,22 @@ public class TestLifecycle extends Lifecycle {
     }
 
 
-    private void addBuilding() {
+    @Override
+    public void addBuilding() {
         Point position = getCenterPoint(2);
         Office office = new Office(position);
         if (worldMap.put(office))
             System.out.println("Object created at " + office.getPosition());
     }
 
-    private void addTree(){
+    @Override
+    public void addTree(){
         Tree tree = new Tree(getCenterPoint(1));
         worldMap.put(tree);
     }
 
-    private void addRoad(){
+    @Override
+    public void addRoad(){
         if (selectToolManager.buildRoad()){
             selectToolManager.cancel();
         }
@@ -159,5 +163,25 @@ public class TestLifecycle extends Lifecycle {
 
     private Point getCenterPoint(int size){
         return mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint(), size);
+    }
+
+    @Override
+    public void setRoadPoints() {
+        selectToolManager.setRoadSelect();
+    }
+
+    @Override
+    public void selectTree() {
+        selectToolManager.setSelectSinglePoint(Tree.class);
+    }
+
+    @Override
+    public void selectOffice() {
+        selectToolManager.setSelectSinglePoint(Office.class);
+    }
+
+    @Override
+    public void selectClear() {
+        selectToolManager.cancel();
     }
 }
