@@ -1,6 +1,7 @@
 package tk.ubublik.redivansion;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -33,6 +34,14 @@ public class MainActivity extends AppCompatActivity {
 
     public static int getScreenDPI(){
         return screenDPI;
+    }
+
+    public static float getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public static float getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
 }
