@@ -62,7 +62,6 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
         worldMap.addObserver(gameLogicProcessor);
         worldMap.addObserver(selectToolManager);
         worldMap.put(level.getWorldObjects());
-
         //addDebugPanel();
     }
 
