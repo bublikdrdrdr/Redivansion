@@ -1,29 +1,15 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
-import android.view.Menu;
-
 import com.jme3.app.SimpleApplication;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
 import com.jme3.ui.Picture;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Container;
-import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.Label;
-import com.simsilica.lemur.Panel;
-import com.simsilica.lemur.component.BoxLayout;
-import com.simsilica.lemur.component.IconComponent;
-import com.simsilica.lemur.component.SpringGridLayout;
 
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
-import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
  * Created by Bublik on 02-Sep-17.

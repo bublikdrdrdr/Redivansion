@@ -1,7 +1,6 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.light.Light;
 
 /**
  * Created by Bublik on 01-Sep-17.

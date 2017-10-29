@@ -1,33 +1,41 @@
 package tk.ubublik.redivansion.gamelogic.units;
 
 import android.graphics.Point;
-import android.net.wifi.WifiManager;
 
-import com.jme3.renderer.Camera;
+import com.jme3.math.FastMath;
 import com.jme3.scene.Spatial;
-import com.simsilica.lemur.component.BorderLayout;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
+import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
 
 /**
  * Created by Bublik on 21-Sep-17.
  */
-public class WorldMap extends Observable{
+public class WorldMap extends Observable implements Cloneable{
 
-    private List<WorldObject> worldObjects;
+    private List<WorldObject> worldObjects = new LinkedList<>();
 
     public WorldMap(){
-        this(new LinkedList<WorldObject>());
+
     }
 
-    public WorldMap(List<WorldObject> worldObjects){
+    private WorldMap(List<WorldObject> worldObjects){
         this.worldObjects = worldObjects;
+    }
+
+    public boolean put(Collection<WorldObject> worldObjects){
+        boolean res = true;
+        for (WorldObject worldObject: worldObjects){
+            if (!put(worldObject)) res = false;
+        }
+        return res;
     }
 
     public boolean put(WorldObject worldObject){
@@ -53,12 +61,43 @@ public class WorldMap extends Observable{
         return true;
     }
 
+    public boolean canPutRectangle(Point p1, Point p2){
+        p1 = new Point(p1);
+        p2 = new Point(p2);
+        if (p1.x>p2.x) swapX(p1, p2);
+        if (p1.y>p2.y) swapY(p1, p2);
+        for (WorldObject object: worldObjects){
+            if (objectInRectangle(object, p1, p2)) return false;
+        }
+        return true;
+    }
+
+    private void swapX(Point p1, Point p2){
+        int x = p1.x;
+        p1.x = p2.x;
+        p2.x = x;
+    }
+
+    private void swapY(Point p1, Point p2){
+        int y = p1.y;
+        p1.y = p2.y;
+        p2.y = y;
+    }
+
+    public boolean objectInRectangle(WorldObject worldObject, Point p1, Point p2){
+        return (worldObject.getPosition().x<=p2.x &&
+                worldObject.getPosition().x+worldObject.getSize() > p1.x &&
+                worldObject.getPosition().y<=p2.y &&
+                worldObject.getPosition().y+worldObject.getSize() > p1.y);
+    }
+
     public WorldObject get(Point position){
         for (WorldObject worldObject: worldObjects) {
-            if (objectInPoint(worldObject, position))
+            if (objectInPoint(worldObject, position)) {
                 setChanged();
                 notifyObservers(new WorldMapAction(WorldMapAction.Action.GET, worldObject));
                 return worldObject;
+            }
         }
         return null;
     }
@@ -145,5 +184,54 @@ public class WorldMap extends Observable{
             }
         }
         return true;
+    }
+
+    public List<Road> getNearbyRoads(Point p1, Point p2){
+        p1 = new Point(p1);
+        p2 = new Point(p2);
+        if (p1.x>p2.x) swapX(p1, p2);
+        if (p1.y>p2.y) swapY(p1, p2);
+        pointShift(p1, false);
+        pointShift(p2, true);
+        List<Road> list = new LinkedList<>();
+        for (WorldObject worldObject: worldObjects)
+            if (worldObject instanceof Road && objectInRectangle(worldObject, p1, p2))
+                list.add((Road)worldObject);
+        return list;
+    }
+
+    private void pointShift(Point point, boolean increment){
+        int shift = increment?1:-1;
+        point.x+=shift;
+        point.y+=shift;
+    }
+
+    public List<WorldObject> getNearbyObjects(Point p1, Point p2){
+        p1 = new Point(p1);
+        p2 = new Point(p2);
+        if (p1.x>p2.x) swapX(p1, p2);
+        if (p1.y>p2.y) swapY(p1, p2);
+        pointShift(p1, false);
+        pointShift(p2, true);
+        List<WorldObject> list = new LinkedList<>();
+        for (WorldObject worldObject: worldObjects)
+            if (objectInRectangle(worldObject, p1, p2))
+                list.add(worldObject);
+        return list;
+    }
+
+    // TODO: 26-Oct-17 check which works correct
+    public float getDistanceSqr(WorldObject w1, WorldObject w2){ //means without sqrt
+        return FastMath.sqr(w1.getPosition().x-w2.getPosition().x)+FastMath.sqr(w1.getPosition().y-w2.getPosition().y);
+    }
+
+    public float getDistanceSqr2(WorldObject w1, WorldObject w2){
+        float dS = w1.getSize()/2.f-w2.getSize()/2.f;//check with int
+        return FastMath.sqr(dS+w1.getPosition().x-w2.getPosition().x)+FastMath.sqr(dS+w1.getPosition().y-w2.getPosition().y);
+    }
+
+    @Override
+    public WorldMap clone() {
+        return new WorldMap((LinkedList<WorldObject>)((LinkedList)getWorldObjects()).clone());
     }
 }

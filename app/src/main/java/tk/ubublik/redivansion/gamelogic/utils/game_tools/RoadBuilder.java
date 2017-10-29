@@ -2,169 +2,168 @@ package tk.ubublik.redivansion.gamelogic.utils.game_tools;
 
 import android.graphics.Point;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 
-import tk.ubublik.redivansion.R;
-import tk.ubublik.redivansion.gamelogic.lifecycle.Lifecycle;
+import java.util.Observable;
+import java.util.Observer;
+
+import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.Road;
-import tk.ubublik.redivansion.gamelogic.units.objects.RoadState;
-import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 
 /**
- * Created by Bublik on 10-Oct-17.
+ * Created by Bublik on 15-Oct-17.
  */
 
-//select two points and build road between them
-public class RoadBuilder extends SelectTool{
-    //todo: rewrite
+public class RoadBuilder extends SelectTool implements Observer {
+
+    public enum SelectStage {START, END, NONE};
+
     private Point startPoint;
     private Point endPoint;
+    private SelectStage selectStage;
 
-    public RoadBuilder() {
+    private MapRenderer mapRenderer;
+    private Node node;
+    private CameraControl cameraControl;
+    private WorldMap worldMap;
+
+    private SelectLineGeometry selectLineGeometry;
+
+    public RoadBuilder(MapRenderer mapRenderer, Node node, CameraControl cameraControl, WorldMap worldMap) {
+        this.mapRenderer = mapRenderer;
+        this.node = node;
+        this.cameraControl = cameraControl;
+        this.worldMap = worldMap;
+        this.selectLineGeometry = new SelectLineGeometry(mapRenderer, SelectToolManager.DEFAULT_SELECT_COLOR, node);
+        selectStage = SelectStage.NONE;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
+
+    @Override
+    public void destroy() {
+        selectLineGeometry.clearGeometries();
+    }
+
+    private Point lastStartPoint, lastEndPoint;
+    private boolean lastValue;
+    @Override
+    public boolean canPut() {
+        if (lastStartPoint!=null && lastEndPoint!=null && lastStartPoint.equals(startPoint) && lastEndPoint.equals(endPoint)) return lastValue;
+        if (startPoint==null || endPoint==null) return false;
+        lastStartPoint = startPoint;
+        lastEndPoint = endPoint;
+        lastValue = worldMap.canPutRectangle(startPoint, endPoint);
+        return lastValue;
+    }
+
+    @Override
+    public void onUpdate() {
+        if (selectStage==SelectStage.NONE) return;
+        Point current = mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint());
+        if (selectStage == SelectStage.START) {
+            startPoint = current;
+            endPoint = startPoint;
+        } else {
+            if (Math.abs(startPoint.x-current.x)>Math.abs(startPoint.y-current.y))
+                current.y = startPoint.y;
+            else
+                current.x = startPoint.x;
+
+            endPoint = current;
+        }
+        selectLineGeometry.setPoints(startPoint, endPoint);
+        if (canPut()) selectLineGeometry.setColor(SelectToolManager.OK_SELECT_COLOR);
+        else selectLineGeometry.setColor(SelectToolManager.ERROR_SELECT_COLOR);
+    }
+
+    public void setSelectStage(SelectStage selectStage) {
+        switch (selectStage){
+            case NONE:
+                this.startPoint = null;
+                this.endPoint = null;
+                break;
+            case START:
+                this.startPoint = null;
+                this.endPoint = null;
+                break;
+            case END:
+                if (startPoint==null) throw new IllegalArgumentException("Can't switch to END point mode, start point is null");
+                this.endPoint = null;
+        }
+        this.selectStage = selectStage;
+    }
+
+    public boolean build() {
+        return !(selectStage != SelectStage.END || !canPut()) && build(startPoint, endPoint);
+    }
+
+    private boolean build(Point start, Point end){
+        boolean result = true;
+        switch (getAxis(start, end)){
+            case NONE: throw new IllegalArgumentException("Points are not on one axis");
+            case X:
+                    if (start.y > end.y) {
+                        Point startCopy = start;
+                        start = new Point(end);
+                        end = new Point(startCopy);
+                    }
+                    for (int i = start.y; i <= end.y; i++) {
+                        if (!worldMap.put(new Road(new Point(start.x, i)))) result = false;
+                    }
+                    break;
+            case Y:
+                    if (start.x > end.x) {
+                        Point startCopy = start;
+                        start = new Point(end);
+                        end = new Point(startCopy);
+                    }
+                    for (int i = start.x; i <= end.x; i++)
+                        if (!worldMap.put(new Road(new Point(i, start.y)))) result = false;
+                    break;
+        }
+        resetRoadStates(start, end);
+        return result;
+    }
+
+    private void resetRoadStates(Point startPoint, Point endPoint){
+        Road.updateRoadStates(startPoint, endPoint, worldMap.getNearbyRoads(startPoint, endPoint));
+    }
+
+    private enum Axis{NONE, X, Y}
+
+    private Axis getAxis(Point p1, Point p2){
+        if (p1.x == p2.x) return Axis.X;
+        if (p1.y == p2.y) return Axis.Y;
+        return Axis.NONE;
+    }
+
+
+    ////////////////////////////
+
+    public boolean isStartSet(){
+        return startPoint!=null;
+    }
+
+    public boolean isEndSet(){
+        return endPoint!=null;
     }
 
     public Point getStartPoint() {
         return startPoint;
     }
 
-    public void setStartPoint(Point startPoint) {
-        this.startPoint = startPoint;
-    }
-
     public Point getEndPoint() {
         return endPoint;
     }
 
-    public void setEndPoint(Point endPoint) {
-        this.endPoint = endPoint;
-    }
-
-    public List<Road> getRoadObjectsList(WorldMap worldMap){
-        try { //kill me pls
-            List<Point> points = getPoints();
-            if (!canPut(worldMap, points)) throw new IllegalArgumentException("Can't put road on this line");
-            ArrayList<Road> roads = new ArrayList<>(points.size());
-            Point previousPoint = null;
-            Iterator<Point> iterator = points.iterator();
-            while (iterator.hasNext()){
-                Point temp = iterator.next();
-                RoadState roadState;
-                if (previousPoint==null){//first point
-                    if (iterator.hasNext()){//not single
-                        roadState = getPointState(temp, worldMap);
-                        Point nextPoint = points.get(1);
-                        if (temp.x==nextPoint.x){
-                            if (nextPoint.y<temp.y) roadState.setRight(true); else roadState.setLeft(true);
-                        } else {
-                            if (nextPoint.x<temp.x) roadState.setFront(true); else roadState.setBack(true);
-                        }
-                    } else {//single
-                        roadState = getPointState(temp, worldMap);
-                    }
-                } else if (!iterator.hasNext()){ //last point
-                    roadState = getPointState(temp, worldMap);
-                    if (temp.x==previousPoint.x){
-                        if (previousPoint.y<temp.y) roadState.setRight(true); else roadState.setLeft(true);
-                    } else {
-                        if (previousPoint.x<temp.x) roadState.setFront(true); else roadState.setBack(true);
-                    }
-                } else {//default
-                    roadState = getPointState(temp, worldMap);
-                    if (temp.x==previousPoint.x){
-                        roadState.setFront(true);
-                        roadState.setBack(true);
-                    } else {
-                        roadState.setLeft(true);
-                        roadState.setRight(true);
-                    }
-                }
-                roads.add(new Road(temp, roadState));
-                previousPoint = temp;
-            }
-            clean();//
-            return roads;
-        } catch (IllegalArgumentException e){
-            return new LinkedList<>();
-        }
-    }
-
-    public boolean canPut(WorldMap worldMap){
-        return canPut(worldMap, getPoints());
-    }
-
-    public boolean canPut(WorldMap worldMap, List<Point> list){
-        if (!isStraightLine()) return false;
-        for (Point point: list){
-            if (!worldMap.isFree(point, 1)) return false;
-        }
-        return true;
-    }
-
-    public List<Point> getPoints(){
-        if (!isStraightLine()) throw new IllegalArgumentException("Road is not straight");
-        boolean byX = (startPoint.x==endPoint.x);
-        int from, to;
-        if (byX){
-            from = startPoint.y;
-            to = endPoint.y;
-        } else{
-            from = startPoint.x;
-            to = endPoint.x;
-        }
-        if (from>to){
-            int temp = from;
-            from = to;
-            to = temp;
-        }
-        ArrayList<Point> list = new ArrayList<>(to-from+1);
-        for (int i = from; i <= to; i++){
-            Point point;
-            if (byX) point = new Point(startPoint.x, i);
-            else point = new Point(i, startPoint.y);
-
-            list.add(point);
-        }
-        return list;
-    }
-
-    private boolean isStraightLine(){
-        return (startPoint.x==endPoint.x || startPoint.y==endPoint.y);
-    }
-
-    public void clean(){
-        startPoint = null;
-        endPoint = null;
-    }
-
-    public RoadState getPointState(Point point, WorldMap worldMap){
-        RoadState roadState = new RoadState();
-        if (worldMap.get(new Point(point.x+1, point.y)) instanceof Road) roadState.setFront(true);
-        if (worldMap.get(new Point(point.x-1, point.y)) instanceof Road) roadState.setBack(true);
-        if (worldMap.get(new Point(point.x, point.y+1)) instanceof Road) roadState.setRight(true);
-        if (worldMap.get(new Point(point.x, point.y-1)) instanceof Road) roadState.setLeft(true);
-        return roadState;
-    }
-
-
-    public boolean isStartSet(){
-        return (startPoint!=null);
-    }
-
-    @Override
-    public void destroy() {
-
-    }
-
-    @Override
-    public boolean canPut() {
-        return false;
-    }
-
-    public boolean build(){
-        return false;
+    public SelectStage getSelectStage() {
+        return selectStage;
     }
 }

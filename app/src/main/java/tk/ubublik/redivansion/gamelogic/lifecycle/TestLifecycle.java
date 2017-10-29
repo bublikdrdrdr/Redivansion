@@ -3,46 +3,37 @@ package tk.ubublik.redivansion.gamelogic.lifecycle;
 import android.graphics.Point;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.light.Light;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.debug.Grid;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
-import com.simsilica.lemur.Panel;
-
-import java.util.List;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.graphics.WorldLight;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
+import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
 import tk.ubublik.redivansion.gamelogic.units.objects.Road;
+import tk.ubublik.redivansion.gamelogic.units.objects.RoadState;
 import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
-import tk.ubublik.redivansion.gamelogic.utils.GameLogicProcessor;
+import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
+import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
 import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
-import tk.ubublik.redivansion.gamelogic.utils.MapManager;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
-import tk.ubublik.redivansion.gamelogic.utils.game_tools.RoadBuilder;
-import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectTool;
 import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
 
 /**
  * Created by Bublik on 22-Sep-17.
  */
 
-public class TestLifecycle extends Lifecycle {
+public class TestLifecycle extends Lifecycle implements GUIListener {
 
     private CameraControl cameraControl;
     private GameLogicProcessor gameLogicProcessor;
@@ -52,35 +43,27 @@ public class TestLifecycle extends Lifecycle {
     private WorldLight worldLight;
     private SelectToolManager selectToolManager;
 
-    //test
-    //RoadBuilder roadBuilder = new RoadBuilder();
+    private FpsMeter fpsMeter = FpsMeter.getInstance();
 
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
         loadModels();
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
-        Level level = LevelFactory.getLevel("test");
-        gameLogicProcessor = new GameLogicProcessor();
-        worldMap = new WorldMap(level.getWorldObjects());
+        Level level = LevelFactory.getLevel(0);
+        worldMap = new WorldMap();
+        gameLogicProcessor = new GameLogicProcessor(worldMap, level);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
-        gui = new GUI(simpleApplication.getGuiNode());
+        gui = new GUI(simpleApplication.getGuiNode(), this);
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
-        mapRenderer.addTerrain(new Terrain(5));
+        mapRenderer.addTerrain(new Terrain(4));
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
+        cameraControl.setTouchInputHook(gui);
         worldMap.addObserver(mapRenderer);
         worldMap.addObserver(gameLogicProcessor);
         worldMap.addObserver(selectToolManager);
+        worldMap.put(level.getWorldObjects());
 
-        addDebugPanel();
-        //addGrid();
-        //addCenterPoint();
-
-        /*addGrid();
-        addCamera();
-        addLight();
-        addDebugPanel();
-        addCenterPoint();
-        generateStuff();*/
+        //addDebugPanel();
     }
 
     @Override
@@ -95,13 +78,14 @@ public class TestLifecycle extends Lifecycle {
 
     @Override
     public void update() {
-        mapRenderer.onUpdate();
-        worldLight.onUpdate();
-        worldMap.onUpdate();
-        gui.onUpdate();
-        gameLogicProcessor.onUpdate();
-        cameraControl.onUpdate();
-        selectToolManager.onUpdate();
+        fpsMeter.beginCustom();
+        mapRenderer.onUpdate();fpsMeter.logCustom("MAP RENDERER");
+        worldLight.onUpdate();fpsMeter.logCustom("LIGHT");
+        worldMap.onUpdate();fpsMeter.logCustom("MAP");
+        gui.onUpdate();fpsMeter.logCustom("GUI");
+        gameLogicProcessor.onUpdate();fpsMeter.logCustom("LOGIC");
+        cameraControl.onUpdate();fpsMeter.logCustom("CAMERA");
+        selectToolManager.onUpdate();fpsMeter.logCustom("SELECT");
     }
 
     private void loadModels(){
@@ -115,31 +99,17 @@ public class TestLifecycle extends Lifecycle {
         NodesCache.getInstance().put("roadModel", roadModel);
     }
 
-    private Geometry addGrid(){
-        int size = 10;
-        ColorRGBA color = ColorRGBA.Magenta;
-        Geometry g = new Geometry("wireframe grid", new Grid(size, size, 0.5f));
-        Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.getAdditionalRenderState().setWireframe(true);
-        mat.setColor("Color", color);
-        g.setMaterial(mat);
-        g.center().move(Vector3f.ZERO);
-        simpleApplication.getRootNode().attachChild(g);
-        return g;
-    }
-
     private void addDebugPanel(){
         DebugPanel debugPanel = new DebugPanel(simpleApplication);
-        debugPanel.addButton("Console log", commands);
         debugPanel.addButton("Add building", commands);
-        debugPanel.addButton("Show select", commands);
         debugPanel.addButton("Add tree", commands);
-        debugPanel.addButton("Big select", commands);
         debugPanel.addButton("Add road", commands);
         debugPanel.addButton("Set road points", commands);
-        debugPanel.addButton("Clear road points", commands);
-        debugPanel.addButton("Select v2 tree", commands);
-        debugPanel.addButton("Select v2 office", commands);
+        debugPanel.addButton("Select tree", commands);
+        debugPanel.addButton("Select office", commands);
+        debugPanel.addButton("Clear select", commands);
+        debugPanel.addButton("Remove", commands);
+        debugPanel.addButton("Set icon", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -148,71 +118,71 @@ public class TestLifecycle extends Lifecycle {
             switch (source.getText()){
                 case "Console log": System.out.println("Console log"); break;
                 case "Add building": addBuilding(); break;
-                case "Show select": mapRenderer.setSelectMode(!(mapRenderer.isSelectMode()&&mapRenderer.getSelectModeSize()==1), 1); break;
                 case "Add tree": addTree(); break;
-                case "Big select": mapRenderer.setSelectMode(!(mapRenderer.isSelectMode()&&mapRenderer.getSelectModeSize()==2), 2); break;
                 case "Add road": addRoad(); break;
-                case "Set road points": setStartEndPoint(); break;
-                case "Clear road points": clearRoadPoints(); break;
-                case "Select v2 tree": selectToolManager.setSelectSinglePoint(Tree.class); break;
-                case "Select v2 office": selectToolManager.setSelectSinglePoint(Office.class); break;
+                case "Set road points": selectToolManager.setRoadSelect(); break;
+                case "Select tree": selectToolManager.setSelectSinglePoint(Tree.class); break;
+                case "Select office": selectToolManager.setSelectSinglePoint(Office.class); break;
+                case "Clear select": selectToolManager.cancel(); break;
+                case "Remove": remove(); break;
+                case "Set icon": testSetIcon(); break;
             }
         }
     };
 
+    @Override
+    public void remove() {
+        worldMap.fastRemove(getCenterPoint(1));
+    }
 
-    private void addBuilding() {
+    private void testSetIcon() {
+        WorldObject worldObject = worldMap.get(getCenterPoint(1));
+        if (worldObject!=null) worldObject.setIconState(WorldObject.IconState.WARNING);
+    }
+
+
+    @Override
+    public void addBuilding() {
         Point position = getCenterPoint(2);
         Office office = new Office(position);
         if (worldMap.put(office))
             System.out.println("Object created at " + office.getPosition());
     }
 
-    private void addTree(){
+    @Override
+    public void addTree(){
         Tree tree = new Tree(getCenterPoint(1));
         worldMap.put(tree);
     }
 
-    private void addRoad(){
-        Point position = getCenterPoint(1);
-        if (worldMap.isFree(position, 1)) {
-            Road road = new Road(position);
-            worldMap.put(road);
+    @Override
+    public void addRoad(){
+        if (selectToolManager.buildRoad()){
+            selectToolManager.cancel();
         }
-    }
-
-    private void setStartEndPoint(){
-        /*if (!roadBuilder.isStartSet()){
-            roadBuilder.setStartPoint(getCenterPoint(1));
-        } else{
-            roadBuilder.setEndPoint(getCenterPoint(1));
-            List<Road> roads = roadBuilder.getRoadObjectsList(worldMap);
-            for (Road road: roads){
-                worldMap.put(road);
-            }
-        }*/
-    }
-
-    private void clearRoadPoints(){
-        /*roadBuilder.clean();*/
-    }
-
-    private void addCenterPoint(){
-        final float pointSize = simpleApplication.getCamera().getWidth()/100;
-        Panel panel = new Panel(pointSize, pointSize, ColorRGBA.Red);
-        panel.setLocalTranslation(new Vector3f(simpleApplication.getCamera().getWidth()/2, simpleApplication.getCamera().getHeight()/2, 0));
-        simpleApplication.getGuiNode().attachChild(panel);
-    }
-
-    private void generateStuff(){
-        for (int i = -2; i < 2; i++)
-            for (int j = -2; j < 2; j++){
-                Tree tree = new Tree(new Point(i,j));
-                worldMap.put(tree);
-            }
     }
 
     private Point getCenterPoint(int size){
         return mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint(), size);
+    }
+
+    @Override
+    public void setRoadPoints() {
+        selectToolManager.setRoadSelect();
+    }
+
+    @Override
+    public void selectTree() {
+        selectToolManager.setSelectSinglePoint(Tree.class);
+    }
+
+    @Override
+    public void selectOffice() {
+        selectToolManager.setSelectSinglePoint(Office.class);
+    }
+
+    @Override
+    public void selectClear() {
+        selectToolManager.cancel();
     }
 }

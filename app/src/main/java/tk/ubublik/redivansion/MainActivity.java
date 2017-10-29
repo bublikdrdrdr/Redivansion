@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
         return screenDPI;
     }
 
-    public static float getScreenWidth() {
+    public static float getScreenWidth(){
         return Resources.getSystem().getDisplayMetrics().widthPixels;
     }
 
-    public static float getScreenHeight() {
+    public static float getScreenHeight(){
         return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 

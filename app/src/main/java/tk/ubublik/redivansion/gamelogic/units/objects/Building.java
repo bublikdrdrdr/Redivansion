@@ -7,8 +7,4 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
  */
 
 public abstract class Building extends WorldObject {
-
-    public Building(GeometryManager geometryManager) {
-        super(geometryManager);
-    }
 }

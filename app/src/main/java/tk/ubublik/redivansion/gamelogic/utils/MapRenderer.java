@@ -18,7 +18,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
 import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
@@ -91,9 +90,11 @@ public class MapRenderer implements Observer{
     }
 
     public void removeObject(WorldObject worldObject){
-        removeObject(worldObject.getGeometryManager());
+        node.detachChild(worldObject);
+        //removeObject(worldObject.getGeometryManager());
     }
 
+    @Deprecated
     public void removeObject(Spatial spatial){
         node.detachChild(spatial);
     }
@@ -103,6 +104,7 @@ public class MapRenderer implements Observer{
     }
 
     public void onUpdate(){
+        // TODO: 26-Oct-17 OPTIMIZE
         for (Spatial spatial: node.getChildren()){
             if ((spatial instanceof WorldObject) && ((camera.contains(spatial.getWorldBound())!= Camera.FrustumIntersect.Outside))){
                 ((WorldObject)spatial).onUpdate();

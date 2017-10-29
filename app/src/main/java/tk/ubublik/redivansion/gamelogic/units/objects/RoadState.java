@@ -67,13 +67,13 @@ public class RoadState{
             case 2:
                 if (front) return 0; else return 0.25f;
             case 3:
-                if (front&&right) return 0;
-                else if (right&&back) return 0.25f;
-                else if (left&&back) return 0.5f;
+                if (left&&front) return 0;
+                else if (right&&front) return 0.25f;
+                else if (back&&right) return 0.5f;
                 else return 0.75f;
-            case 4: if (!front) return 0.25f;
-            else if (!right) return 0.5f;
-            else if (!back) return 0.75f;
+            case 4: if (!left) return 0.25f;
+            else if (!front) return 0.5f;
+            else if (!right) return 0.75f;
             else return 0;
             case 5: return 0;
             default: throw new IllegalArgumentException("Illegal model name index: "+getModelNameIndex());

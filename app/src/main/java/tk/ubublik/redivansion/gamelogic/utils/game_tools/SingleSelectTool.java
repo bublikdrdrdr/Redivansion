@@ -1,18 +1,9 @@
 package tk.ubublik.redivansion.gamelogic.utils.game_tools;
 
-import com.jme3.effect.influencers.NewtonianParticleInfluencer;
-import com.jme3.material.Material;
-import com.jme3.material.RenderState;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
 
-import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
-import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
  * Created by Bublik on 11-Oct-17.

@@ -8,9 +8,9 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 
 public class House extends Building {
 
+    private int population;
 
-    public House(GeometryManager geometryManager) {
-        super(geometryManager);
+    public House() {
     }
 
     @Override
@@ -21,5 +21,14 @@ public class House extends Building {
     @Override
     public void parseBytes() {
 
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
+        population = Math.max(population, getLevel().getParams().getPollution());
     }
 }

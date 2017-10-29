@@ -7,9 +7,6 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
  */
 
 public class Water extends WorldObject{
-    public Water(GeometryManager geometryManager) {
-        super(geometryManager);
-    }
 
     @Override
     public byte[] toBytes() {

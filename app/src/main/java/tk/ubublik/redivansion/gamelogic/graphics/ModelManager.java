@@ -1,7 +1,6 @@
 package tk.ubublik.redivansion.gamelogic.graphics;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 import tk.ubublik.redivansion.gamelogic.exceptions.ModelNotFoundException;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;

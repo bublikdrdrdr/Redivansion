@@ -2,8 +2,6 @@ package tk.ubublik.redivansion.gamelogic.utils;
 
 import android.graphics.Point;
 
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 

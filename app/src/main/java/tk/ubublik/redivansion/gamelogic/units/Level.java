@@ -1,9 +1,9 @@
 package tk.ubublik.redivansion.gamelogic.units;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
+import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
@@ -13,11 +13,26 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 public class Level {
 
     private int id;
+    private String levelName;
     private LevelStatus levelStatus;
     private List<WorldObject> worldObjects = new ArrayList<>();
     private long time;
     private int money;
     private LevelGoal levelGoal;
+    private Road mainRoad;
+
+    public Level(List<WorldObject> worldObjects){
+        setWorldObjects(worldObjects);
+    }
+
+    public Level(byte[] bytes){
+
+    }
+
+    public byte[] getBytes(){
+        return null;
+    }
+
 
     public int getId() {
         return id;
@@ -41,6 +56,7 @@ public class Level {
 
     public void setWorldObjects(List<WorldObject> worldObjects) {
         this.worldObjects = worldObjects;
+        mainRoad = findMainRoad();
     }
 
     public long getTime() {
@@ -65,5 +81,20 @@ public class Level {
 
     public void setLevelGoal(LevelGoal levelGoal) {
         this.levelGoal = levelGoal;
+    }
+
+    private Road findMainRoad(){
+        Road firstRoad = null;
+        for (WorldObject worldObject: worldObjects){
+            if (worldObject instanceof Road){
+                if (firstRoad==null) firstRoad = (Road) worldObject;
+                if (worldObject.isPermanent()) return (Road)worldObject;
+            }
+        }
+        return firstRoad;
+    }
+
+    public Road getMainRoad() {
+        return mainRoad;
     }
 }

@@ -11,4 +11,5 @@ public abstract class LevelGoal {
         this.level = level;
     }
     public abstract boolean isDone();
+    public abstract byte[] getBytes();
 }
