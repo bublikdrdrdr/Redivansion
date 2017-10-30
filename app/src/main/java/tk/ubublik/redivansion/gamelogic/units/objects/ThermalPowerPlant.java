@@ -11,6 +11,26 @@ import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 
 public class ThermalPowerPlant extends PowerPlant {
 
+    @Override
+    public void recalculateParams() {
+
+    }
+
+    @Override
+    public int getLevelsCount() {
+        return 0;
+    }
+
+    @Override
+    public void setLevelNumber(int level) {
+
+    }
+
+    @Override
+    public int getLevelNumber() {
+        return 0;
+    }
+
     public ThermalPowerPlant(){
         this(new Point());
     }

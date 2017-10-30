@@ -13,6 +13,26 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 
 public class Office extends Building {
 
+    @Override
+    public void recalculateParams() {
+
+    }
+
+    @Override
+    public int getLevelsCount() {
+        return 0;
+    }
+
+    @Override
+    public void setLevelNumber(int level) {
+
+    }
+
+    @Override
+    public int getLevelNumber() {
+        return 0;
+    }
+
     public Office(){
         this(new Point(0,0));
     }

@@ -24,6 +24,26 @@ public class Road extends WorldObject {
     private static final String MANAGER_NAME = "roadGeometryManager:";
     private RoadState roadState;
 
+    @Override
+    public void recalculateParams() {
+
+    }
+
+    @Override
+    public int getLevelsCount() {
+        return 0;
+    }
+
+    @Override
+    public void setLevelNumber(int level) {
+
+    }
+
+    @Override
+    public int getLevelNumber() {
+        return 0;
+    }
+
     public Road(Point position){
         this(position, new RoadState(false, false, false, false));
     }

@@ -66,14 +66,14 @@ public class PowerChecker extends Checker implements Runnable{
                 powerPlants.add(new Producer(worldObject));
             }
         }
-        //find consuments
+        //find consumers
         for (WorldObject worldObject: temporaryClone.getWorldObjects()){
             if (!(worldObject instanceof PowerPlant)) {
                 // TODO: 26-Oct-17 calculate how much energy object needs
                 //right here
                 for (Producer producer : powerPlants) {
                     float distance = temporaryClone.getDistanceSqr(producer.producer, worldObject);
-                    if (distance <= ((PowerPlant) producer.producer).getRadiusSqr()) {
+                    if (distance <= ((PowerPlant) producer.producer).radiusSqr) {
                         producer.add(worldObject, distance);
                     }
                 }

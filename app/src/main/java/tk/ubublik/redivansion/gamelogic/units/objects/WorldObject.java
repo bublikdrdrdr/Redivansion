@@ -33,12 +33,28 @@ public abstract class WorldObject extends Node{
     private Point position;
     private int buildCost;
     private int size;
+    @Deprecated
     private WorldObjectLevel level;
     private boolean permanent;
 
     //state variables
-    public boolean roadConnected = false; //mb volatile?
+    public boolean roadConnected = false;
     private boolean needsRoad = false;
+
+    public int monthCost;
+    public int power;
+    public int fire;
+    public int water;
+    public int pollution;
+    public int money;
+    public int criminal;
+    public int health;
+    public float radiusSqr;
+
+    public abstract void recalculateParams();
+    public abstract int getLevelsCount();
+    public abstract void setLevelNumber(int level);
+    public abstract int getLevelNumber();
 
     public WorldObject(){
         this(0,0);
@@ -99,7 +115,7 @@ public abstract class WorldObject extends Node{
         }
     }
 
-    private void addIconBox(ColorRGBA color){
+    private void addIconBox(ColorRGBA color) {
         float boxSize = 0.2f;
         Box box = new Box(boxSize, boxSize, boxSize);
         Material material = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");

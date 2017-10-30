@@ -17,6 +17,26 @@ public class Tree extends WorldObject {
         this(new Point(x,y));
     }
 
+    @Override
+    public void recalculateParams() {
+
+    }
+
+    @Override
+    public int getLevelsCount() {
+        return 0;
+    }
+
+    @Override
+    public void setLevelNumber(int level) {
+
+    }
+
+    @Override
+    public int getLevelNumber() {
+        return 0;
+    }
+
     public Tree(){
         this(0,0);
     }

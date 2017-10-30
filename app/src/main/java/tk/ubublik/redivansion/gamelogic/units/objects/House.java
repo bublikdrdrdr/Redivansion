@@ -10,6 +10,26 @@ public class House extends Building {
 
     private int population;
 
+    @Override
+    public void recalculateParams() {
+
+    }
+
+    @Override
+    public int getLevelsCount() {
+        return 0;
+    }
+
+    @Override
+    public void setLevelNumber(int level) {
+
+    }
+
+    @Override
+    public int getLevelNumber() {
+        return 0;
+    }
+
     public House() {
     }
 

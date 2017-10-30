@@ -7,14 +7,4 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
  */
 
 public abstract class PowerPlant extends WorldObject {
-
-    private float radiusSqr;
-
-    public float getRadiusSqr(){
-        return radiusSqr;
-    }
-
-    protected void setRadiusSqr(float radiusSqr){
-        this.radiusSqr = radiusSqr;
-    }
 }
