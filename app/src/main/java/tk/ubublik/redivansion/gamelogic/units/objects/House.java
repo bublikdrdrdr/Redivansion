@@ -30,6 +30,11 @@ public class House extends Building {
         return 0;
     }
 
+    @Override
+    public int getMoneyDelta() {
+        return 0;
+    }
+
     public House() {
     }
 

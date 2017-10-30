@@ -14,6 +14,7 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
  * Created by Bublik on 20-Sep-17.
  */
 
+@Deprecated
 public class Terrain extends WorldObject {
 
     private GeometryAnimationManager customGeometryManager;
@@ -56,6 +57,11 @@ public class Terrain extends WorldObject {
 
     @Override
     public int getLevelNumber() {
+        return 0;
+    }
+
+    @Override
+    public int getMoneyDelta() {
         return 0;
     }
 

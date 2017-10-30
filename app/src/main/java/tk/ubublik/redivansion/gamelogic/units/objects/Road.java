@@ -44,6 +44,11 @@ public class Road extends WorldObject {
         return 0;
     }
 
+    @Override
+    public int getMoneyDelta() {
+        return 0;
+    }
+
     public Road(Point position){
         this(position, new RoadState(false, false, false, false));
     }

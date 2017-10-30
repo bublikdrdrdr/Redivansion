@@ -4,6 +4,7 @@ package tk.ubublik.redivansion.gamelogic.utils.logic;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadFactory;
@@ -109,7 +110,70 @@ public class ResourcesChecker extends Checker implements Runnable{
     }
 
     private void v2(){
+        HashMap<WorldObjectTypeKey, List<WorldObject>> hashMap = separate(temporaryClone.getWorldObjects());
+        for (WorldObject worldObject: temporaryClone.getWorldObjects()){
 
+        }
+    }
+
+    private HashMap<WorldObjectTypeKey, List<WorldObject>> separate(List<WorldObject> list){
+        HashMap<WorldObjectTypeKey, List<WorldObject>> hashMap = new HashMap<>();
+        WorldObject.ResourceType[] resourceTypes = WorldObject.ResourceType.values();
+        for (WorldObject.ResourceType resourceType:resourceTypes){
+            hashMap.put(new WorldObjectTypeKey(resourceType, false), new LinkedList<WorldObject>());
+            hashMap.put(new WorldObjectTypeKey(resourceType, true), new LinkedList<WorldObject>());
+        }
+        for (WorldObject worldObject: list){
+            worldObject.recalculateParams();
+
+            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.POWER, true)).add(worldObject);
+            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.POWER, false)).add(worldObject);
+
+            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.FIRE, true)).add(worldObject);
+            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.FIRE, false)).add(worldObject);
+
+            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.WATER, true)).add(worldObject);
+            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.WATER, false)).add(worldObject);
+
+            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.POLLUTION, true)).add(worldObject);
+            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.POLLUTION, false)).add(worldObject);
+
+            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.CRIMINAL, true)).add(worldObject);
+            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.CRIMINAL, false)).add(worldObject);
+
+            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.HEALTH, true)).add(worldObject);
+            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.HEALTH, false)).add(worldObject);
+
+            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.WORK, true)).add(worldObject);
+            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.WORK, false)).add(worldObject);
+
+            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.HAPPINESS, true)).add(worldObject);
+            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.HAPPINESS, false)).add(worldObject);
+        }
+        return hashMap;
+    }
+
+    private class WorldObjectTypeKey{
+        public WorldObject.ResourceType resourceType;
+        public boolean producer;
+
+        public WorldObjectTypeKey(WorldObject.ResourceType resourceType, boolean producer) {
+            this.resourceType = resourceType;
+            this.producer = producer;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof WorldObjectTypeKey)) return false;
+            WorldObjectTypeKey key = (WorldObjectTypeKey) o;
+            return resourceType.equals(key.resourceType) && producer==key.producer;
+        }
+
+        @Override
+        public int hashCode() {
+            return resourceType.ordinal()*(producer?-1:1);
+        }
     }
 
     private void checkInterrupted() throws InterruptedException {

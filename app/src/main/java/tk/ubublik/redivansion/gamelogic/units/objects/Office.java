@@ -33,6 +33,11 @@ public class Office extends Building {
         return 0;
     }
 
+    @Override
+    public int getMoneyDelta() {
+        return 0;
+    }
+
     public Office(){
         this(new Point(0,0));
     }

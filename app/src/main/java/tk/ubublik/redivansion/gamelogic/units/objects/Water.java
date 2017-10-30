@@ -29,6 +29,11 @@ public class Water extends WorldObject{
     }
 
     @Override
+    public int getMoneyDelta() {
+        return 0;
+    }
+
+    @Override
     public byte[] toBytes() {
         return new byte[0];
     }
