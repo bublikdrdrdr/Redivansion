@@ -15,7 +15,7 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
  * Created by Bublik on 18-Oct-17.
  */
 
-public class PowerChecker extends Checker implements Runnable{
+public class ResourcesChecker extends Checker implements Runnable{
 
     private Thread thread;
     private volatile boolean done = false;
@@ -23,7 +23,7 @@ public class PowerChecker extends Checker implements Runnable{
 
     enum LogicProperty{POWER, WATER, FIRE, POLLUTION, HAPPINESS, EDUCATION, CRIMINAL, HEALTH}
 
-    public PowerChecker(WorldMap worldMap) {
+    public ResourcesChecker(WorldMap worldMap) {
         super(worldMap);
     }
 

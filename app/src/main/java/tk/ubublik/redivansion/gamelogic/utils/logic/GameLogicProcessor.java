@@ -5,7 +5,6 @@ import java.util.*;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
-import tk.ubublik.redivansion.gamelogic.units.objects.PowerPlant;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
@@ -26,7 +25,7 @@ public class GameLogicProcessor implements Observer {
     private Thread logicThread;
 
     private RoadConnectionChecker roadConnectionChecker;
-    private PowerChecker powerChecker;
+    private ResourcesChecker resourcesChecker;
     private SingleObjectChecker singleObjectChecker;
     private FinalChecker finalChecker;
 
@@ -35,7 +34,7 @@ public class GameLogicProcessor implements Observer {
         this.level = level;
         timer = new Timer();
         roadConnectionChecker = new RoadConnectionChecker(worldMap, level.getMainRoad());
-        powerChecker = new PowerChecker(worldMap);
+        resourcesChecker = new ResourcesChecker(worldMap);
         singleObjectChecker = new SingleObjectChecker(worldMap);
         finalChecker = new FinalChecker(worldMap);
     }
@@ -43,7 +42,7 @@ public class GameLogicProcessor implements Observer {
     public void onUpdate() {
         if (timer.isPaused()) return;
         if (roadConnectionChecker.isDone()){
-            if (!(powerChecker.isWorking()||singleObjectChecker.isWorking()||finalChecker.isWorking())){
+            if (!(resourcesChecker.isWorking()||singleObjectChecker.isWorking()||finalChecker.isWorking())){
                 synchronizeRoadResults(true);
             }
         }
@@ -54,8 +53,8 @@ public class GameLogicProcessor implements Observer {
                 @Override
                 public void run() {
                     try {
-                        powerChecker.refresh();
-                        powerChecker.join();
+                        resourcesChecker.refresh();
+                        resourcesChecker.join();
                         finalChecker.refresh();
                         finalChecker.join();
                     } catch (InterruptedException ignored) {
