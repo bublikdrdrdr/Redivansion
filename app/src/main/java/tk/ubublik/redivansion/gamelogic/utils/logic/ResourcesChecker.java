@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ThreadFactory;
 
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.PowerPlant;
@@ -58,11 +59,21 @@ public class ResourcesChecker extends Checker implements Runnable{
 
     @Override
     public void run() {
+        try {
+            v1();
+            done = true;
+        } catch (InterruptedException ie){
+            done = false;
+        }
+    }
+
+    private void v1() throws InterruptedException {
         //power
         //find power plants
         List<Producer> powerPlants = new LinkedList<>();
         for (WorldObject worldObject: temporaryClone.getWorldObjects()){
             if (worldObject instanceof PowerPlant){
+                checkInterrupted();
                 powerPlants.add(new Producer(worldObject));
             }
         }
@@ -95,6 +106,14 @@ public class ResourcesChecker extends Checker implements Runnable{
                 }
             });
         }
+    }
+
+    private void v2(){
+
+    }
+
+    private void checkInterrupted() throws InterruptedException {
+        if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
     }
 
     private class Producer{

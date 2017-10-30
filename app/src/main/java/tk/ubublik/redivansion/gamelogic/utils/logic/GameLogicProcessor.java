@@ -14,7 +14,7 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
  */
 public class GameLogicProcessor implements Observer {
 
-    static final Object threadLock = new Object();
+    private static final Object threadLock = new Object();
 
     enum LogicStage{NONE, WAIT_FOR_ROAD, ROAD, RESOURCES, RESULTS, DONE}
 
