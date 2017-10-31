@@ -4,6 +4,7 @@ package tk.ubublik.redivansion.gamelogic.utils.logic;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -178,8 +179,33 @@ public class ResourcesChecker extends Checker implements Runnable{
 
     private void processResourceType(ResourceType resourceType, List<WorldObject> producers, List<WorldObject> consumers) throws InterruptedException {
         List<Producer> list = getSortedProducerList(producers, consumers);
-        for (Producer producer: list){
+        for (Producer producer : list) {
             //logic based on resourceType
+            int producerResourceValue = producer.producer.getResourceValue(resourceType);
+            while (producerResourceValue > 0) {
+                boolean stillNeeded = false;
+                int part = Math.max(producerResourceValue / producer.consumers.size(), 1);
+                Iterator<Consumer> consumerIterator = producer.consumers.iterator();
+                while (consumerIterator.hasNext()){
+                    Consumer consumer = consumerIterator.next();
+                    int consumerValue = consumer.consumer.getResourceValue(resourceType);
+                    if (consumerValue + part >= 0) {
+                        producerResourceValue+=consumerValue; //because consumer value is negative
+                        consumer.consumer.setResourceValue(resourceType, 0);
+                        consumerIterator.remove();
+                    } else {
+                        producerResourceValue-=part;
+                        consumer.consumer.setResourceValue(resourceType, consumerValue+part);
+                        stillNeeded = true;
+                    }
+                    if (producerResourceValue<=0) {
+                        stillNeeded = false;
+                        break;
+                    }
+                }
+                if (!stillNeeded) break;
+            }
+            producer.producer.setResourceValue(resourceType, producerResourceValue);
         }
     }
 
