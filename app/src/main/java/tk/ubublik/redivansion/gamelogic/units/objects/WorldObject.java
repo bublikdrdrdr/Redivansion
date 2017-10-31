@@ -21,7 +21,7 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 public abstract class WorldObject extends Node{
 
     public enum IconState {NONE, WARNING, ERROR}
-    public enum ResourceType{POWER, FIRE, WATER, POLLUTION, CRIMINAL, HEALTH, WORK, HAPPINESS}
+    public enum ResourceType{POWER, FIRE, WATER, POLLUTION, CRIMINAL, HEALTH, WORK, HAPPINESS, EDUCATION}
 
     //only 3D model
     private GeometryManager geometryManager;
@@ -51,6 +51,7 @@ public abstract class WorldObject extends Node{
     public int health;
     public int work;
     public int happiness;
+    public int education;
     public float radiusSqr;
 
     public abstract void recalculateParams();

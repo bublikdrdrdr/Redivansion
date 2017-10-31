@@ -1,17 +1,16 @@
 package tk.ubublik.redivansion.gamelogic.utils.logic;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ThreadFactory;
 
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.PowerPlant;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject.*;
 
 /**
  * Created by Bublik on 18-Oct-17.
@@ -22,8 +21,6 @@ public class ResourcesChecker extends Checker implements Runnable{
     private Thread thread;
     private volatile boolean done = false;
     private WorldMap temporaryClone;
-
-    enum LogicProperty{POWER, WATER, FIRE, POLLUTION, HAPPINESS, EDUCATION, CRIMINAL, HEALTH}
 
     public ResourcesChecker(WorldMap worldMap) {
         super(worldMap);
@@ -109,55 +106,116 @@ public class ResourcesChecker extends Checker implements Runnable{
         }
     }
 
-    private void v2(){
-        HashMap<WorldObjectTypeKey, List<WorldObject>> hashMap = separate(temporaryClone.getWorldObjects());
-        for (WorldObject worldObject: temporaryClone.getWorldObjects()){
-
+    private void v2() throws InterruptedException {
+        HashMap<WorldObjectTypeKey, List<WorldObject>> hashMap = recalculateAndSeparateByType(temporaryClone.getWorldObjects());
+        ResourceType[] resourceTypes = ResourceType.values();
+        for (ResourceType resourceType: resourceTypes){
+            checkInterrupted();
+            List<WorldObject> producers = hashMap.get(new WorldObjectTypeKey(resourceType, true));
+            List<WorldObject> consumers = hashMap.get(new WorldObjectTypeKey(resourceType, false));
+            processResourceType(resourceType, producers, consumers);
         }
     }
 
-    private HashMap<WorldObjectTypeKey, List<WorldObject>> separate(List<WorldObject> list){
+    private HashMap<WorldObjectTypeKey, List<WorldObject>> recalculateAndSeparateByType(List<WorldObject> list) throws InterruptedException {
         HashMap<WorldObjectTypeKey, List<WorldObject>> hashMap = new HashMap<>();
-        WorldObject.ResourceType[] resourceTypes = WorldObject.ResourceType.values();
-        for (WorldObject.ResourceType resourceType:resourceTypes){
+        ResourceType[] resourceTypes = ResourceType.values();
+        for (ResourceType resourceType:resourceTypes){
             hashMap.put(new WorldObjectTypeKey(resourceType, false), new LinkedList<WorldObject>());
             hashMap.put(new WorldObjectTypeKey(resourceType, true), new LinkedList<WorldObject>());
         }
-        for (WorldObject worldObject: list){
+        for (WorldObject worldObject: list) {
+            checkInterrupted();
             worldObject.recalculateParams();
 
-            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.POWER, true)).add(worldObject);
-            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.POWER, false)).add(worldObject);
+            if (worldObject.power > 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.POWER, true)).add(worldObject);
+            else if (worldObject.power < 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.POWER, false)).add(worldObject);
 
-            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.FIRE, true)).add(worldObject);
-            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.FIRE, false)).add(worldObject);
+            if (worldObject.fire > 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.FIRE, true)).add(worldObject);
+            else if (worldObject.fire < 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.FIRE, false)).add(worldObject);
 
-            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.WATER, true)).add(worldObject);
-            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.WATER, false)).add(worldObject);
+            if (worldObject.water > 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.WATER, true)).add(worldObject);
+            else if (worldObject.water < 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.WATER, false)).add(worldObject);
 
-            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.POLLUTION, true)).add(worldObject);
-            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.POLLUTION, false)).add(worldObject);
+            if (worldObject.pollution > 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.POLLUTION, true)).add(worldObject);
+            else if (worldObject.pollution < 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.POLLUTION, false)).add(worldObject);
 
-            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.CRIMINAL, true)).add(worldObject);
-            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.CRIMINAL, false)).add(worldObject);
+            if (worldObject.criminal > 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.CRIMINAL, true)).add(worldObject);
+            else if (worldObject.criminal < 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.CRIMINAL, false)).add(worldObject);
 
-            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.HEALTH, true)).add(worldObject);
-            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.HEALTH, false)).add(worldObject);
+            if (worldObject.health > 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.HEALTH, true)).add(worldObject);
+            else if (worldObject.health < 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.HEALTH, false)).add(worldObject);
 
-            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.WORK, true)).add(worldObject);
-            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.WORK, false)).add(worldObject);
+            if (worldObject.work > 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.WORK, true)).add(worldObject);
+            else if (worldObject.work < 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.WORK, false)).add(worldObject);
 
-            if (worldObject.power>0) hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.HAPPINESS, true)).add(worldObject);
-            else hashMap.get(new WorldObjectTypeKey(WorldObject.ResourceType.HAPPINESS, false)).add(worldObject);
+            if (worldObject.happiness > 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.HAPPINESS, true)).add(worldObject);
+            else if (worldObject.happiness < 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.HAPPINESS, false)).add(worldObject);
+
+            if (worldObject.education > 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.EDUCATION, true)).add(worldObject);
+            else if (worldObject.education < 0)
+                hashMap.get(new WorldObjectTypeKey(ResourceType.EDUCATION, false)).add(worldObject);
         }
         return hashMap;
     }
 
+    private void processResourceType(ResourceType resourceType, List<WorldObject> producers, List<WorldObject> consumers) throws InterruptedException {
+        List<Producer> list = getSortedProducerList(producers, consumers);
+        for (Producer producer: list){
+            //logic based on resourceType
+        }
+    }
+
+    private List<Producer> getSortedProducerList(List<WorldObject> producers, List<WorldObject> consumers) throws InterruptedException {
+        List<Producer> list = new LinkedList<>();
+        for (WorldObject producerObject: producers){
+            checkInterrupted();
+            Producer currentProducer = new Producer(producerObject);
+            for (WorldObject consumerObject: consumers){
+                float distance = temporaryClone.getDistanceSqr(producerObject, consumerObject);
+                if (distance <= ((PowerPlant) producerObject).radiusSqr) {
+                    currentProducer.add(consumerObject, distance);
+                }
+            }
+            Collections.sort(currentProducer.consumers, new Comparator<Consumer>() {
+                @Override
+                public int compare(Consumer o1, Consumer o2) {
+                    return Float.compare(o1.distance, o2.distance);
+                }
+            });
+            list.add(currentProducer);
+        }
+        Collections.sort(list, new Comparator<Producer>() {
+            @Override
+            public int compare(Producer o1, Producer o2) {
+                return Integer.compare(o1.consumers.size(), o2.consumers.size());
+            }
+        });
+        return list;
+    }
+
     private class WorldObjectTypeKey{
-        public WorldObject.ResourceType resourceType;
+        public ResourceType resourceType;
         public boolean producer;
 
-        public WorldObjectTypeKey(WorldObject.ResourceType resourceType, boolean producer) {
+        public WorldObjectTypeKey(ResourceType resourceType, boolean producer) {
             this.resourceType = resourceType;
             this.producer = producer;
         }
@@ -201,10 +259,6 @@ public class ResourcesChecker extends Checker implements Runnable{
             this.consumer = consumer;
             this.distance = distance;
         }
-    }
-
-    private void process(LogicProperty logicProperty, List<WorldObject> producers, List<WorldObject> consumers){
-
     }
 
 }
