@@ -182,4 +182,52 @@ public abstract class WorldObject extends Node{
     public void setNeedsRoad(boolean needsRoad) {
         this.needsRoad = needsRoad;
     }
+
+    public int getResourceValue(ResourceType resourceType) {
+        switch (resourceType) {
+            case POWER:
+                return power;
+            case FIRE:
+                return fire;
+            case WATER:
+                return water;
+            case POLLUTION:
+                return pollution;
+            case CRIMINAL:
+                return criminal;
+            case HEALTH:
+                return health;
+            case WORK:
+                return work;
+            case HAPPINESS:
+                return happiness;
+            case EDUCATION:
+                return education;
+            default:
+                throw new IllegalArgumentException("Unknown ResourceType: " + resourceType);
+        }
+    }
+
+    public void setResourceValue(ResourceType resourceType, int value){
+        switch (resourceType){
+            case POWER: power = value;
+                break;
+            case FIRE: fire = value;
+                break;
+            case WATER: water = value;
+                break;
+            case POLLUTION: pollution = value;
+                break;
+            case CRIMINAL: criminal = value;
+                break;
+            case HEALTH: health = value;
+                break;
+            case WORK: work = value;
+                break;
+            case HAPPINESS: happiness = value;
+                break;
+            case EDUCATION: education = value;
+                break;
+        }
+    }
 }
