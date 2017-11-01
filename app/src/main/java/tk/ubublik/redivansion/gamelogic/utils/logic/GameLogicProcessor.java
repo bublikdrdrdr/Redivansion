@@ -47,7 +47,10 @@ public class GameLogicProcessor implements Observer {
             }
         }
         if (timer.calculateReady()) {
-            if (logicThread!=null && logicThread.isAlive()) logicThread.interrupt();
+            if (logicThread!=null && logicThread.isAlive()) {
+                logicThread.interrupt();
+                System.out.println("ACHTUNG! can't process logic in one game loop");
+            }
             //full calculation
             logicThread = new Thread(new Runnable() {
                 @Override

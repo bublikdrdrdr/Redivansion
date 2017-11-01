@@ -18,10 +18,7 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 public class RoadConnectionChecker extends Checker implements Runnable {
 
     private final Road mainRoad;
-    private volatile boolean done = true;
     private List<WorldObjectRoadConnectionStatus> result;
-
-    private Thread thread;
 
     public RoadConnectionChecker(WorldMap worldMap, Road mainRoad) {
         super(worldMap);
@@ -36,7 +33,7 @@ public class RoadConnectionChecker extends Checker implements Runnable {
                     checkNeighbors(status);
                     break;
                 }
-                if (thread.isInterrupted()) throw new InterruptedException();
+                checkInterrupted();
             }
             done = true;
         } catch (InterruptedException ignored){
@@ -45,7 +42,7 @@ public class RoadConnectionChecker extends Checker implements Runnable {
     }
 
     private void checkNeighbors(WorldObjectRoadConnectionStatus status) throws InterruptedException{ //list mode
-        if (thread.isInterrupted()) throw new InterruptedException();
+        checkInterrupted();
         if (status==null || status.connected) return;
         status.connected = true;
         if (!(status.worldObject instanceof Road)) return;
@@ -57,7 +54,7 @@ public class RoadConnectionChecker extends Checker implements Runnable {
 
     private WorldObjectRoadConnectionStatus getByPosition(Point position) throws InterruptedException {
         for (WorldObjectRoadConnectionStatus status: result){
-            if (thread.isInterrupted()) throw new InterruptedException();
+            checkInterrupted();
             if (worldMap.objectInPoint(status.worldObject, position)){
                 return status;
             }
@@ -81,16 +78,6 @@ public class RoadConnectionChecker extends Checker implements Runnable {
     @Override
     public boolean isDone() {
         return done;
-    }
-
-    @Override
-    public boolean isWorking() {
-        return (thread!=null && thread.isAlive());
-    }
-
-    @Override
-    public void join() throws InterruptedException{
-        if (thread!=null && thread.isAlive()) thread.join();
     }
 
     private List<WorldObjectRoadConnectionStatus> cloneMap(WorldMap worldMap){
