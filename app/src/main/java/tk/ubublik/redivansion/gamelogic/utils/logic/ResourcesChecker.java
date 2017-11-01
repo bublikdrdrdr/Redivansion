@@ -19,8 +19,6 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject.*;
 
 public class ResourcesChecker extends Checker implements Runnable{
 
-    private Thread thread;
-    private volatile boolean done = false;
     private WorldMap temporaryClone;
 
     public ResourcesChecker(WorldMap worldMap) {
@@ -38,31 +36,18 @@ public class ResourcesChecker extends Checker implements Runnable{
         thread.start();
     }
 
-    @Override
-    public boolean isDone() {
-        if (done){
-            done = false;
-            return true;
-        } else return false;
-    }
-
-    @Override
-    public boolean isWorking() {
-        return false;
-    }
-
-    @Override
-    public void join() throws InterruptedException {
-
+    public WorldMap getResult(){
+        return temporaryClone;
     }
 
     @Override
     public void run() {
         try {
-            v1();
+            v2();
             done = true;
         } catch (InterruptedException ie){
             done = false;
+            temporaryClone = null;
         }
     }
 
@@ -128,7 +113,7 @@ public class ResourcesChecker extends Checker implements Runnable{
         for (WorldObject worldObject: list) {
             checkInterrupted();
             worldObject.recalculateParams();
-
+            if (!worldObject.roadConnected) continue;// TODO: or remove from list (check speed difference)
             if (worldObject.power > 0)
                 hashMap.get(new WorldObjectTypeKey(ResourceType.POWER, true)).add(worldObject);
             else if (worldObject.power < 0)
@@ -258,10 +243,6 @@ public class ResourcesChecker extends Checker implements Runnable{
         public int hashCode() {
             return resourceType.ordinal()*(producer?-1:1);
         }
-    }
-
-    private void checkInterrupted() throws InterruptedException {
-        if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
     }
 
     private class Producer{
