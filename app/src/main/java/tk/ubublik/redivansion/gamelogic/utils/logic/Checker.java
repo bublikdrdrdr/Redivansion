@@ -9,13 +9,31 @@ import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 public abstract class Checker {
 
     protected final WorldMap worldMap;
+    protected volatile boolean done = true;
+    protected Thread thread;
 
-    public Checker(WorldMap worldMap) {
+    public Checker(WorldMap worldMap){
         this.worldMap = worldMap;
     }
 
     public abstract void refresh();
-    public abstract boolean isDone();
-    public abstract boolean isWorking();
-    public abstract void join() throws InterruptedException;
+
+    public boolean isDone() {
+        if (done) {
+            done = false;
+            return true;
+        } else return false;
+    }
+
+    public boolean isWorking() {
+        return (thread != null && thread.isAlive());
+    }
+
+    public void join() throws InterruptedException {
+        if (thread != null && thread.isAlive()) thread.join();
+    }
+
+    protected void checkInterrupted() throws InterruptedException {
+        if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
+    }
 }
