@@ -31,6 +31,8 @@ public class FinalChecker extends Checker implements Runnable{
     @Override
     public void run() {
         try{
+            double populationDelta = 0;
+            double moneyDelta = 0;
             for(WorldObject worldObject: temporaryClone.getWorldObjects()){
                 checkInterrupted();
 

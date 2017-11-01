@@ -21,4 +21,15 @@ public class GameParams {
     public static final int OFFICE_DEFAULT_CRIMINAL = 100;
     public static final int OFFICE_DEFAULT_HEALTH = 100;
 
+    public static final float POPULATION_INCREASE = 1f;
+    public static final float POWER_PP = 0.1f;
+    public static final float FIRE_PP = 0.1f;
+    public static final float WATER_PP = 0.1f;
+    public static final float POLLUTION_PP = 0.1f;
+    public static final float CRIMINAL_PP = 0.1f;
+    public static final float HEALTH_PP = 0.1f;
+    public static final float HAPPINESS_PP = 0.1f;
+    public static final float WORK_PP = 0.1f;
+    public static final float EDUCATION_PP = 0.1f;
+
 }
