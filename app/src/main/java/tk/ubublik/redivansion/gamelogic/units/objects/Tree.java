@@ -17,36 +17,6 @@ public class Tree extends WorldObject {
         this(new Point(x,y));
     }
 
-    @Override
-    public void recalculateParams() {
-
-    }
-
-    @Override
-    public int getLevelsCount() {
-        return 0;
-    }
-
-    @Override
-    public void setLevelNumber(int level) {
-
-    }
-
-    @Override
-    public int getLevelNumber() {
-        return 0;
-    }
-
-    @Override
-    public int getMoneyDelta() {
-        return 0;
-    }
-
-    @Override
-    public int getUpgradeCost() {
-        return 0;
-    }
-
     public Tree(){
         this(0,0);
     }
@@ -56,7 +26,7 @@ public class Tree extends WorldObject {
         setSize(1);
         setPosition(position);
         setNeedsRoad(false);
-        setBuildCost(GameParams.TREE_BUILD_COST);
+        setBuildCost(GameParams.TREE_LEVELS_BUILD_COST[0]);
         buildAnimation();
     }
 
@@ -81,5 +51,48 @@ public class Tree extends WorldObject {
                 ((GeometryLoopAnimationManager)getGeometryManager()).beginLoopAnimation(new String[]{"stage1", "stage2"});
             }
         };
+    }
+
+    /*
+    logic block
+     */
+
+    @Override
+    public void recalculateParams() {
+        setParams(GameParams.TREE_LEVELS_MONTH_COST[0],
+                GameParams.TREE_LEVELS_POWER[0],
+                GameParams.TREE_LEVELS_FIRE[0],
+                GameParams.TREE_LEVELS_WATER[0],
+                GameParams.TREE_LEVELS_POLLUTION[0],
+                GameParams.TREE_LEVELS_CRIMINAL[0],
+                GameParams.TREE_LEVELS_HEALTH[0],
+                GameParams.TREE_LEVELS_WORK[0],
+                GameParams.TREE_LEVELS_HAPPINESS[0],
+                GameParams.TREE_LEVELS_EDUCATION[0],
+                GameParams.TREE_LEVELS_RADIUS[0]);
+    }
+
+    @Override
+    public int getLevelsCount() {
+        return 0;
+    }
+
+    @Override
+    public void setLevelNumber(int level) {
+    }
+
+    @Override
+    public int getLevelNumber() {
+        return 0;
+    }
+
+    @Override
+    public int getMoneyDelta() {
+        return 0;
+    }
+
+    @Override
+    public int getUpgradeCost() {
+        return 0;
     }
 }
