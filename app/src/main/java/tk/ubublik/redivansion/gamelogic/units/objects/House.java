@@ -35,6 +35,11 @@ public class House extends Building {
         return 0;
     }
 
+    @Override
+    public int getUpgradeCost() {
+        return 0;
+    }
+
     public House() {
     }
 
@@ -54,6 +59,14 @@ public class House extends Building {
 
     public void setPopulation(int population) {
         this.population = population;
-        population = Math.max(population, getLevel().getParams().getPollution());
+        population = Math.max(population, getMaxPopulation());
+    }
+
+    public int getMaxPopulation(){
+        return 0;// TODO: 01-Nov-17 from level
+    }
+
+    public void checkPopulation(){
+        // TODO: 01-Nov-17
     }
 }

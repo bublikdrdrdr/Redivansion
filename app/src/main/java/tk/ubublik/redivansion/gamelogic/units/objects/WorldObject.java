@@ -33,9 +33,8 @@ public abstract class WorldObject extends Node{
     //game logic properties
     private Point position;
     private int buildCost;
+    protected int level = 0;
     private int size;
-    @Deprecated
-    private WorldObjectLevel level;
     private boolean permanent;
 
     //state variables
@@ -59,6 +58,7 @@ public abstract class WorldObject extends Node{
     public abstract void setLevelNumber(int level);
     public abstract int getLevelNumber();
     public abstract int getMoneyDelta();
+    public abstract int getUpgradeCost();
 
     public WorldObject(){
         this(0,0);
@@ -159,14 +159,6 @@ public abstract class WorldObject extends Node{
         this.size = size;
     }
 
-    public WorldObjectLevel getLevel() {
-        return level;
-    }
-
-    protected void setLevel(WorldObjectLevel level) {
-        this.level = level;
-    }
-
     public boolean isPermanent() {
         return permanent;
     }
@@ -229,5 +221,19 @@ public abstract class WorldObject extends Node{
             case EDUCATION: education = value;
                 break;
         }
+    }
+
+    protected void setParams(int monthCost, int power, int fire, int water, int pollution, int criminal, int health, int work, int happiness, int education, float radiusSqr){
+        this.monthCost = monthCost;
+        this.power = power;
+        this.fire = fire;
+        this.water = water;
+        this.pollution = pollution;
+        this.criminal = criminal;
+        this.health = health;
+        this.work = work;
+        this.happiness = happiness;
+        this.education = education;
+        this.radiusSqr = radiusSqr;
     }
 }

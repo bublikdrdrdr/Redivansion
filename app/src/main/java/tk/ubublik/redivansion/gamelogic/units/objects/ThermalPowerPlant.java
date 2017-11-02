@@ -36,6 +36,11 @@ public class ThermalPowerPlant extends PowerPlant {
         return 0;
     }
 
+    @Override
+    public int getUpgradeCost() {
+        return 0;
+    }
+
     public ThermalPowerPlant(){
         this(new Point());
     }

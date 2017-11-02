@@ -42,6 +42,11 @@ public class Tree extends WorldObject {
         return 0;
     }
 
+    @Override
+    public int getUpgradeCost() {
+        return 0;
+    }
+
     public Tree(){
         this(0,0);
     }

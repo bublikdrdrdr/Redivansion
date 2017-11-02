@@ -66,6 +66,11 @@ public class Terrain extends WorldObject {
     }
 
     @Override
+    public int getUpgradeCost() {
+        return 0;
+    }
+
+    @Override
     public void setGeometryManager(GeometryManager geometryManager) {
         customGeometryManager = (GeometryAnimationManager)geometryManager;
     }
