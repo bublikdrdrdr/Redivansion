@@ -3,7 +3,7 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 /**
  * Created by Bublik on 31-Aug-17.
  */
-
+@Deprecated
 public class WorldObjectLevel {
     private final int upgradeCost;
     private final int number;

@@ -15,6 +15,7 @@ import static tk.ubublik.redivansion.gamelogic.utils.GameParams.*;
  *
  * Contains information and returns levels with params for all world object types
  */
+@Deprecated
 public final class WorldObjectLevelFactory {
 
     private static ArrayList<CachedWorldObjectLevel> cachedWorldObjectLevels = new ArrayList<>();
