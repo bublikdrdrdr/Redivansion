@@ -84,6 +84,7 @@ public class RoadConnectionChecker extends Checker implements Runnable {
         List<WorldObjectRoadConnectionStatus> list = new LinkedList<>();//worldMap.getWorldObjects().size()
         for (WorldObject worldObject: worldMap.getWorldObjects()){
             list.add(new WorldObjectRoadConnectionStatus(worldObject, false));
+            //todo: find main road here and put it first
         }
         return list;
     }

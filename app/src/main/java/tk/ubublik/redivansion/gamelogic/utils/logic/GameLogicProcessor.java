@@ -46,6 +46,10 @@ public class GameLogicProcessor implements Observer {
                 synchronizeRoadResults(true);
             }
         }
+        if (finalChecker.isDone()){
+            FinalChecker.Result result = finalChecker.getResult();
+            synchronizeGameLoopResults(result.population, result.moneyDelta);
+        }
         if (timer.calculateReady()) {
             if (logicThread!=null && logicThread.isAlive()) {
                 logicThread.interrupt();
@@ -121,6 +125,10 @@ public class GameLogicProcessor implements Observer {
                 }
             }
         }
+    }
+
+    private void synchronizeGameLoopResults(int newPopulation, double deltaMoney){
+        // TODO: 01-Nov-17
     }
 
     //when some house population is more than N% of max population - show alert icon
