@@ -169,6 +169,7 @@ public class ResourcesChecker extends Checker implements Runnable{
             int producerResourceValue = producer.producer.getResourceValue(resourceType);
             while (producerResourceValue > 0) {
                 boolean stillNeeded = false;
+                if (producer.consumers.size()==0) break;
                 int part = Math.max(producerResourceValue / producer.consumers.size(), 1);
                 Iterator<Consumer> consumerIterator = producer.consumers.iterator();
                 while (consumerIterator.hasNext()){
@@ -201,7 +202,7 @@ public class ResourcesChecker extends Checker implements Runnable{
             Producer currentProducer = new Producer(producerObject);
             for (WorldObject consumerObject: consumers){
                 float distance = temporaryClone.getDistanceSqr(producerObject, consumerObject);
-                if (distance <= ((PowerPlant) producerObject).radiusSqr) {
+                if (distance <= producerObject.radiusSqr) {
                     currentProducer.add(consumerObject, distance);
                 }
             }

@@ -1,5 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.units.objects;
 
+import android.graphics.Point;
+
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 
 /**
@@ -7,6 +9,12 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
  */
 
 public class Water extends WorldObject{
+
+    public Water(Point position) {
+        super(position);
+        setSize(1);
+        setPermanent(true);
+    }
 
     @Override
     public void recalculateParams() {

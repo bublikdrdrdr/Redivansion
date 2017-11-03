@@ -9,7 +9,7 @@ import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 public abstract class Checker {
 
     protected final WorldMap worldMap;
-    protected volatile boolean done = true;
+    protected volatile boolean done = false;
     protected Thread thread;
 
     public Checker(WorldMap worldMap){
