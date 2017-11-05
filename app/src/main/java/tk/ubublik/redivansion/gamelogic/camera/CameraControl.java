@@ -106,6 +106,10 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
         inputManager.removeListener(this);
     }
 
+    public Camera getCamera(){
+        return cam;
+    }
+
     protected void moveCamera(float value, boolean sideways) {
         Vector3f vel = new Vector3f();
         Vector3f pos = cam.getLocation().clone();
