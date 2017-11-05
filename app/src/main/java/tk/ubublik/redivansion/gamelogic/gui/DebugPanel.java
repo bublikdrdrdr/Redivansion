@@ -32,6 +32,6 @@ public class DebugPanel {
     }
 
     public Label addLabel(String text){
-        return new Label(text);
+        return container.addChild(new Label(text));
     }
 }

@@ -62,4 +62,7 @@ public class Timer {
         } else return false;
     }
 
+    public int getGameSpeed() {
+        return gameSpeed;
+    }
 }

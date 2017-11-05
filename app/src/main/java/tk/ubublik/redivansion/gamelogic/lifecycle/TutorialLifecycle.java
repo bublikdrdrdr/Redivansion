@@ -103,7 +103,7 @@ public class TutorialLifecycle extends Lifecycle {
     }
 
     private void prepareLevel(){
-        gameLogicProcessor = new GameLogicProcessor(worldMap, currentLevel);
+        gameLogicProcessor = new GameLogicProcessor(worldMap, currentLevel, null);
         worldMap = new WorldMap();
         gameLogicProcessor.start();
     }

@@ -23,16 +23,18 @@ public class GameLogicProcessor implements Observer {
     private final WorldMap worldMap;
     private boolean stateChanged = true;
     private Thread logicThread;
+    private LogicResultListener logicResultListener;
 
     private RoadConnectionChecker roadConnectionChecker;
     private ResourcesChecker resourcesChecker;
     private SingleObjectChecker singleObjectChecker;
     private FinalChecker finalChecker;
 
-    public GameLogicProcessor(WorldMap worldMap, Level level) {
+    public GameLogicProcessor(WorldMap worldMap, Level level, LogicResultListener logicResultListener) {
         this.worldMap = worldMap;
         this.level = level;
         timer = new Timer();
+        this.logicResultListener = logicResultListener;
         roadConnectionChecker = new RoadConnectionChecker(worldMap, level.getMainRoad());
         resourcesChecker = new ResourcesChecker(worldMap);
         singleObjectChecker = new SingleObjectChecker(worldMap);
@@ -102,6 +104,11 @@ public class GameLogicProcessor implements Observer {
         }
     }
 
+    @Deprecated//test
+    public Timer getTimer(){
+        return timer;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof WorldMapAction){
@@ -129,8 +136,13 @@ public class GameLogicProcessor implements Observer {
 
     private void synchronizeGameLoopResults(int newPopulation, double deltaMoney){
         // TODO: 01-Nov-17
+        logicResultListener.setTestData(newPopulation, deltaMoney);
     }
 
     //when some house population is more than N% of max population - show alert icon
     public final static float HOUSE_POPULATION_ALERT_PERCENT = 0.9f;
+
+    public interface LogicResultListener{
+        void setTestData(int newPopulation, double deltaMoney);
+    }
 }
