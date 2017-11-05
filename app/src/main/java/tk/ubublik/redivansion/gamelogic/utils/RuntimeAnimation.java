@@ -13,12 +13,12 @@ public class RuntimeAnimation implements Runnable {
     private static final String GEOMETRY_CLONE_NAME = "clonedGeometry";
 
     private GeometryManager geometryManager; //for cloning
-    private String animationId;
+    private int hash;
     private Thread thread = new Thread(this);
 
-    public RuntimeAnimation(GeometryManager geometryManager, String animationId) {
+    public RuntimeAnimation(GeometryManager geometryManager, int hash) {
         this.geometryManager = geometryManager;
-        this.animationId = animationId;
+        this.hash = hash;
     }
 
     public WorldObject cloneInto(WorldObject worldObject){
@@ -34,6 +34,15 @@ public class RuntimeAnimation implements Runnable {
 
     @Override
     public void run() {
+        // TODO: 05-Nov-17 check thread conflict
         geometryManager.onUpdate();
+    }
+
+    public int getAnimationId() {
+        return hashCode();
+    }
+
+    public GeometryManager getGeometryManager() {
+        return geometryManager;
     }
 }
