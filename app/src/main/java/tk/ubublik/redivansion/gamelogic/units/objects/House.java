@@ -2,6 +2,8 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 
 import android.graphics.Point;
 
+import com.jme3.math.Vector3f;
+
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
@@ -18,17 +20,17 @@ public class House extends Building {
     private int lastPopulationDelta = 0;
 
     public House(Point position) {
-        //setGeometryManager(new GeometryAnimationManager("office", (Model) NodesCache.getInstance().get("officeModel")));
+        setGeometryManager(new GeometryAnimationManager("house", (Model) NodesCache.getInstance().get("houseModel")));
         //local model scale and move
         getGeometryManager().setLocalScale(1.8f, 0.5f, 1.8f);
-        getGeometryManager().setLocalTranslation(0,0, 0);
+        getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
         //params
         setSize(2);
         setPosition(position);
         setNeedsRoad(true);
         setBuildCost(GameParams.HOUSE_LEVELS_BUILD_COST[0]);
         //
-        //beginAnimation("build_lvl_1");
+        beginAnimation("build");
     }
 
     @Override
@@ -85,7 +87,8 @@ public class House extends Building {
     @Override
     public void setLevelNumber(int level) {
         if (level<0 || level>=getLevelsCount()) throw new IllegalArgumentException("Wrong level number: "+level);
-        beginAnimation("fastDestroy"+Integer.toString(getLevelNumber()), "fastBuild"+Integer.toString(level));
+        //beginAnimation("destroy", "build");
+        //beginAnimation("destroy"+Integer.toString(getLevelNumber()), "build"+Integer.toString(level));
         this.level = level;
         setPopulation(getPopulation());//if population is more than max it will cut it
     }

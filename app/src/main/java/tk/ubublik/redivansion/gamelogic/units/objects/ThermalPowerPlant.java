@@ -4,7 +4,9 @@ import android.graphics.Point;
 
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
+import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.utils.GameParams;
+import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 
 /**
  * Created by Bublik on 31-Aug-17.
@@ -17,10 +19,18 @@ public class ThermalPowerPlant extends PowerPlant {
     }
 
     public ThermalPowerPlant(Point position){
+
+        setGeometryManager(new GeometryAnimationManager("powerPlant", (Model) NodesCache.getInstance().get("powerPlantModel")));
+        //local model scale and move
+        getGeometryManager().setLocalScale(2.7f, 0.5f, 2.7f);
+        getGeometryManager().setLocalTranslation(-1.3f,0,-1.3f);
+        //params
         setPosition(position);
         setSize(3);
         setNeedsRoad(true);
         setBuildCost(GameParams.THERMAL_POWER_PLANT_LEVELS_BUILD_COST[0]);
+        //
+        beginAnimation("build");
     }
 
     @Override
@@ -38,6 +48,7 @@ public class ThermalPowerPlant extends PowerPlant {
     }
 
     private void beginAnimation(String animationName, final String nextAnimation){
+        //// FIXME: 04-Nov-17
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName, new GeometryManager.OnAnimationEndListener() {
             @Override
             public void animationEnd() {
@@ -63,7 +74,8 @@ public class ThermalPowerPlant extends PowerPlant {
     @Override
     public void setLevelNumber(int level) {
         if (level<0 || level>=getLevelsCount()) throw new IllegalArgumentException("Wrong level number: "+level);
-        beginAnimation("fastDestroy"+Integer.toString(getLevelNumber()), "fastBuild"+Integer.toString(level));
+        //beginAnimation("destroy", "build");
+        //beginAnimation("destroy"+Integer.toString(getLevelNumber()), "build"+Integer.toString(level));
         this.level = level;
         setLevelParams();
     }
