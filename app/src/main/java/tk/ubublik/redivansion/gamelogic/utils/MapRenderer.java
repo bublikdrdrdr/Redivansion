@@ -14,10 +14,13 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
+import tk.ubublik.redivansion.gamelogic.graphics.TerrainDrawer;
+import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
 import tk.ubublik.redivansion.gamelogic.units.objects.Terrain;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
@@ -32,12 +35,9 @@ public class MapRenderer implements Observer{
     private final float scale;
     private final Node node;
     private final Camera camera;
+    private LinkedList<WorldObject> worldObjectList = new LinkedList<>();
 
-    private Spatial selectNode = getSelectNode();
-    private int selectModeSize = 1;
-    private boolean selectMode = false;
-
-    private Terrain terrain;
+    private TerrainDrawer terrainDrawer;
 
     public MapRenderer(Node node) {
         this(node, null);
@@ -51,6 +51,7 @@ public class MapRenderer implements Observer{
         this.node = node;
         this.scale = scale;
         this.camera = camera;
+        terrainDrawer = new TerrainDrawer(node, 6);
     }
 
     public Point worldPointToMap(Vector3f vector3f){
@@ -73,6 +74,7 @@ public class MapRenderer implements Observer{
     public void putObject(WorldObject worldObject){
         Vector3f position = mapPointToWorld(worldObject.getPosition(), worldObject.getSize());
         worldObject.setLocalTranslation(position);
+        worldObjectList.add(worldObject);
         node.attachChild(worldObject);
     }
 
@@ -101,17 +103,17 @@ public class MapRenderer implements Observer{
 
     public void removeObject(int index){
         node.detachChildAt(index);
+        worldObjectList.remove(index);
     }
 
     public void onUpdate(){
         // TODO: 26-Oct-17 OPTIMIZE
-        for (Spatial spatial: node.getChildren()){
-            if ((spatial instanceof WorldObject) && ((camera.contains(spatial.getWorldBound())!= Camera.FrustumIntersect.Outside))){
-                ((WorldObject)spatial).onUpdate();
+        for (WorldObject worldObject: worldObjectList){
+            if ((camera.contains(worldObject.getWorldBound())!= Camera.FrustumIntersect.Outside)){
+                worldObject.onUpdate();
             }
         }
-        if (selectMode) updateSelectNode(selectNode, CameraControl.getCameraCenterPoint(camera), selectModeSize);
-        if (terrain!=null) terrain.onUpdate();
+        terrainDrawer.onUpdate(CameraControl.getCameraCenterPoint(camera));
     }
 
     @Override
@@ -124,62 +126,6 @@ public class MapRenderer implements Observer{
                 default: worldMapAction.getWorldObject().onUpdate();
             }
         }
-    }
-
-    private void updateSelectNode(Spatial selectNode, Vector3f center, int size){
-        Point centerPoint = worldPointToMap(center, size);
-        selectNode.setLocalTranslation(mapPointToWorld(centerPoint, size).add(0,0.5f,0));
-    }
-
-    private Geometry getSelectNode(){
-        Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
-        mat.setColor("Diffuse", new ColorRGBA(1, 1, 1, 0.5f));
-        mat.setBoolean("UseMaterialColors", true);
-        mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
-        float boxSize = 0.4f;
-        Box box = new Box(boxSize, boxSize, boxSize);
-        Geometry geometry = new Geometry("select box", box);
-        geometry.setMaterial(mat);
-        return geometry;
-    }
-
-    public boolean isSelectMode() {
-        return selectMode;
-    }
-
-    public int getSelectModeSize() {
-        return selectModeSize;
-    }
-
-    public void setSelectMode(boolean isActive){
-        setSelectMode(isActive, 1);
-    }
-
-    public void setSelectMode(boolean isActive, int size){
-        if (this.selectMode!=isActive || this.selectModeSize!=size){
-            if (isActive){
-                selectNode.setLocalScale(size, 1f, size);
-                node.attachChild(selectNode);
-            } else {
-                node.detachChild(selectNode);
-            }
-            selectMode = isActive;
-            selectModeSize = size;
-        }
-    }
-
-    public void addTerrain(Terrain terrain){
-        this.terrain = terrain;
-        node.attachChild(terrain);
-    }
-
-    public Terrain getTerrain() {
-        return terrain;
-    }
-
-    public void removeTerrain(){
-        node.detachChild(terrain);
-        terrain = null;
     }
 
     public float getScale() {
