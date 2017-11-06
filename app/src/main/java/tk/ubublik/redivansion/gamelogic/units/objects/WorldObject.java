@@ -5,9 +5,12 @@ import android.graphics.Point;
 
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.font.Rectangle;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
@@ -82,6 +85,16 @@ public abstract class WorldObject extends Node{
         this.size = size;
         icon.setLocalTranslation(0,1,0);
         attachChild(icon);
+        //test
+        BitmapFont fnt = StaticAssetManager.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
+        BitmapText txt = new BitmapText(fnt, false);
+        txt.setBox(new Rectangle(0, 0, 6, 3));
+        txt.setQueueBucket(RenderQueue.Bucket.Transparent);
+        txt.setSize( 0.3f );
+        txt.setText(this.getClass().getSimpleName());
+        txt.setLocalTranslation(-0.5f,1,0);
+        txt.rotate(-0.1f* FastMath.PI,0.25f* FastMath.PI, 0);
+        this.attachChild(txt);
     }
 
     public GeometryManager getGeometryManager() {
