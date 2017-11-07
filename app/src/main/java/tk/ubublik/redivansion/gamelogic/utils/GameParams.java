@@ -24,7 +24,7 @@ public class GameParams {
     public static final int[] OFFICE_LEVELS_EDUCATION = new int[]{0, 0, 0, 0, 0}; //1,2,3,4,5...
 
     public static final float OFFICE_POWER_PRODUCTIVITY = 1.2f;//more energy office has, more work places it gives
-    public static final float OFFICE_RADIUS = 36f;
+    public static final float OFFICE_RADIUS = 36f; //for work
 
     //house
     public static final int[] HOUSE_LEVELS_BUILD_COST = new int[]{1000, 1000, 1000, 1000, 1000}; //build, upgrade, upgrade...
@@ -179,17 +179,4 @@ public class GameParams {
     public static final int[] WATER_PLANT_LEVELS_HAPPINESS = new int[]{0, 0, 0};
     public static final int[] WATER_PLANT_LEVELS_EDUCATION = new int[]{0, 0, 0};
     public static final float[] WATER_PLANT_LEVELS_RADIUS = new float[]{49, 64, 91};
-
-
-    // TODO: 02-Nov-17 for all objects
-
-    @Deprecated //(all)
-    public static final int OFFICE_DEFAULT_MONTH_COST = 100;
-    public static final int OFFICE_DEFAULT_POWER = 100;
-    public static final int OFFICE_DEFAULT_FIRE = 100;
-    public static final int OFFICE_DEFAULT_WATER = 100;
-    public static final int OFFICE_DEFAULT_POLLUTION = 100;
-    public static final int OFFICE_DEFAULT_MONEY = 100;
-    public static final int OFFICE_DEFAULT_CRIMINAL = 100;
-    public static final int OFFICE_DEFAULT_HEALTH = 100;
 }
