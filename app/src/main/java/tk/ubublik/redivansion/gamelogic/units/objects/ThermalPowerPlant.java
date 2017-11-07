@@ -43,10 +43,6 @@ public class ThermalPowerPlant extends PowerPlant {
 
     }
 
-    private void beginAnimation(String animationName){
-        ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName);
-    }
-
     private void beginAnimation(String animationName, final String nextAnimation){
         //// FIXME: 04-Nov-17
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName, new GeometryManager.OnAnimationEndListener() {
@@ -68,7 +64,7 @@ public class ThermalPowerPlant extends PowerPlant {
 
     @Override
     public int getLevelsCount() {
-        return GameParams.THERMAL_POWER_PLANT_LEVELS_BUILD_COST.length;
+        return -GameParams.THERMAL_POWER_PLANT_LEVELS_BUILD_COST.length;
     }
 
     @Override

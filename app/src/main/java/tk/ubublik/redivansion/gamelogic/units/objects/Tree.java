@@ -27,7 +27,7 @@ public class Tree extends WorldObject {
         setPosition(position);
         setNeedsRoad(false);
         setBuildCost(GameParams.TREE_LEVELS_BUILD_COST[0]);
-        buildAnimation();
+        beginAnimation("build");
     }
 
     @Override
@@ -40,8 +40,9 @@ public class Tree extends WorldObject {
 
     }
 
-    private void buildAnimation(){
-        ((GeometryLoopAnimationManager)getGeometryManager()).beginAnimation(getLoopAnimation(), "build");
+    @Override
+    protected void beginAnimation(String animationName) {
+        ((GeometryLoopAnimationManager)getGeometryManager()).beginAnimation(getLoopAnimation(), animationName);
     }
 
     private GeometryLoopAnimationManager.OnAnimationEndListener getLoopAnimation(){

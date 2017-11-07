@@ -15,6 +15,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 
+import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
@@ -106,6 +107,10 @@ public abstract class WorldObject extends Node{
         if (geometryManager!=null){
             this.attachChild(geometryManager);
         }
+    }
+
+    protected void beginAnimation(String animationName){
+        ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName);
     }
 
     public void onUpdate(){
