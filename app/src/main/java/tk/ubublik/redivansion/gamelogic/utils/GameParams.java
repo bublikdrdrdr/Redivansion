@@ -11,34 +11,34 @@ public class GameParams {
     public static final int ROAD_BUILD_COST = 1000;
 
     //office
-    public static final int[] OFFICE_LEVELS_BUILD_COST = new int[]{1000,1000,1000,1000,1000}; //build, upgrade, upgrade...
-    public static final int[] OFFICE_LEVELS_MONTH_COST = new int[]{100,100,100,100,100}; //1,2,3,4,5...
-    public static final int[] OFFICE_LEVELS_POWER = new int[]{-5,-10,-15,-20,-25}; //1,2,3,4,5...
-    public static final int[] OFFICE_LEVELS_FIRE = new int[]{-5,-10,-15,-20,-25}; //1,2,3,4,5...
-    public static final int[] OFFICE_LEVELS_WATER = new int[]{-5,-10,-15,-20,-25}; //1,2,3,4,5...
+    public static final int[] OFFICE_LEVELS_BUILD_COST = new int[]{1000, 1000, 1000, 1000, 1000}; //build, upgrade, upgrade...
+    public static final int[] OFFICE_LEVELS_MONTH_COST = new int[]{100, 100, 100, 100, 100}; //1,2,3,4,5...
+    public static final int[] OFFICE_LEVELS_POWER = new int[]{-5, -10, -15, -20, -25}; //1,2,3,4,5...
+    public static final int[] OFFICE_LEVELS_FIRE = new int[]{-5, -10, -15, -20, -25}; //1,2,3,4,5...
+    public static final int[] OFFICE_LEVELS_WATER = new int[]{-5, -10, -15, -20, -25}; //1,2,3,4,5...
     public static final int[] OFFICE_LEVELS_POLLUTION = new int[]{-2, -4, -6, -8, -10}; //1,2,3,4,5...
-    public static final int[] OFFICE_LEVELS_CRIMINAL = new int[]{0,0,0,0,0}; //1,2,3,4,5...
-    public static final int[] OFFICE_LEVELS_HEALTH = new int[]{0,0,0,0,0}; //1,2,3,4,5...
-    public static final int[] OFFICE_LEVELS_MAX_WORK = new int[]{20,30,40,50,60}; //1,2,3,4,5...
-    public static final int[] OFFICE_LEVELS_HAPPINESS = new int[]{0,0,0,0,0}; //1,2,3,4,5...
-    public static final int[] OFFICE_LEVELS_EDUCATION = new int[]{0,0,0,0,0}; //1,2,3,4,5...
+    public static final int[] OFFICE_LEVELS_CRIMINAL = new int[]{0, 0, 0, 0, 0}; //1,2,3,4,5...
+    public static final int[] OFFICE_LEVELS_HEALTH = new int[]{0, 0, 0, 0, 0}; //1,2,3,4,5...
+    public static final int[] OFFICE_LEVELS_MAX_WORK = new int[]{20, 30, 40, 50, 60}; //1,2,3,4,5...
+    public static final int[] OFFICE_LEVELS_HAPPINESS = new int[]{0, 0, 0, 0, 0}; //1,2,3,4,5...
+    public static final int[] OFFICE_LEVELS_EDUCATION = new int[]{0, 0, 0, 0, 0}; //1,2,3,4,5...
 
     public static final float OFFICE_POWER_PRODUCTIVITY = 1.2f;//more energy office has, more work places it gives
     public static final float OFFICE_RADIUS = 36f;
 
     //house
-    public static final int[] HOUSE_LEVELS_BUILD_COST = new int[]{1000,1000,1000,1000,1000}; //build, upgrade, upgrade...
-    public static final int[] HOUSE_LEVELS_MONTH_COST = new int[]{100,100,100,100,100}; // this + per person
-    public static final int[] HOUSE_LEVELS_MAX_POPULATION = new int[]{50,200,500,1500,3000};
-    public static final int[] HOUSE_LEVELS_POWER = new int[]{-5,-10,-15,-20,-25}; // this + per person
-    public static final int[] HOUSE_LEVELS_FIRE = new int[]{-5,-10,-15,-20,-25}; // this + per person
-    public static final int[] HOUSE_LEVELS_WATER = new int[]{-5,-10,-15,-20,-25}; // this + per person
-    public static final int[] HOUSE_LEVELS_POLLUTION = new int[]{-5,-10,-15,-20,-25}; // this + per person
-    public static final int[] HOUSE_LEVELS_CRIMINAL = new int[]{0,0,0,0,0};
-    public static final int[] HOUSE_LEVELS_HEALTH = new int[]{0,0,0,0,0};
-    public static final int[] HOUSE_LEVELS_WORK = new int[]{0,0,0,0,0};
-    public static final int[] HOUSE_LEVELS_HAPPINESS = new int[]{0,-5,-10,-15,-20}; // this + per person
-    public static final int[] HOUSE_LEVELS_EDUCATION = new int[]{0,0,0,0,0}; // this + per person
+    public static final int[] HOUSE_LEVELS_BUILD_COST = new int[]{1000, 1000, 1000, 1000, 1000}; //build, upgrade, upgrade...
+    public static final int[] HOUSE_LEVELS_MONTH_COST = new int[]{100, 100, 100, 100, 100}; // this + per person
+    public static final int[] HOUSE_LEVELS_MAX_POPULATION = new int[]{50, 200, 500, 1500, 3000};
+    public static final int[] HOUSE_LEVELS_POWER = new int[]{-5, -10, -15, -20, -25}; // this + per person
+    public static final int[] HOUSE_LEVELS_FIRE = new int[]{-5, -10, -15, -20, -25}; // this + per person
+    public static final int[] HOUSE_LEVELS_WATER = new int[]{-5, -10, -15, -20, -25}; // this + per person
+    public static final int[] HOUSE_LEVELS_POLLUTION = new int[]{-5, -10, -15, -20, -25}; // this + per person
+    public static final int[] HOUSE_LEVELS_CRIMINAL = new int[]{0, 0, 0, 0, 0};
+    public static final int[] HOUSE_LEVELS_HEALTH = new int[]{0, 0, 0, 0, 0};
+    public static final int[] HOUSE_LEVELS_WORK = new int[]{0, 0, 0, 0, 0};
+    public static final int[] HOUSE_LEVELS_HAPPINESS = new int[]{0, -5, -10, -15, -20}; // this + per person
+    public static final int[] HOUSE_LEVELS_EDUCATION = new int[]{0, 0, 0, 0, 0}; // this + per person
     public static final float POPULATION_GROW_MAIN_RESOURCES_PERCENT = 0.5f; //for power - % of energy needed to population grow, in other case - decrease
     public static final float POPULATION_GROW_MINOR_RESOURCES_PERCENT = 0.7f; //for non main resources (happiness, education, pollution)
     public static final float POPULATION_GROW_DELTA = 2f; // TODO: full random, check in game (x in documentation algorithm)
@@ -54,17 +54,17 @@ public class GameParams {
     public static final float MONEY_PP = 0.5f;
 
     //thermal power plant
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_BUILD_COST = new int[]{1000,1000,1000}; //build, upgrade, upgrade...
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_MONTH_COST = new int[]{100,100,100};
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_POWER = new int[]{-5,-10,-15};
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_FIRE = new int[]{-5,-10,-15};
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_WATER = new int[]{-1,-2,-3};
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_POLLUTION = new int[]{-10,-20,-30};
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_CRIMINAL = new int[]{0,0,0};
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_HEALTH = new int[]{-5,-10,-15}; //vot tut hz, daje zabrudnennya, znachyt zabyraje zdorowja
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_WORK = new int[]{5,10,15};
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_HAPPINESS = new int[]{0,0,0};
-    public static final int[] THERMAL_POWER_PLANT_LEVELS_EDUCATION = new int[]{0,0,0};
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_BUILD_COST = new int[]{1000, 1000, 1000}; //build, upgrade, upgrade...
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_MONTH_COST = new int[]{100, 100, 100};
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_POWER = new int[]{-5, -10, -15};
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_FIRE = new int[]{-5, -10, -15};
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_WATER = new int[]{-1, -2, -3};
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_POLLUTION = new int[]{-10, -20, -30};
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_CRIMINAL = new int[]{0, 0, 0};
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_HEALTH = new int[]{-5, -10, -15}; //vot tut hz, daje zabrudnennya, znachyt zabyraje zdorowja
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_WORK = new int[]{5, 10, 15};
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_HAPPINESS = new int[]{0, 0, 0};
+    public static final int[] THERMAL_POWER_PLANT_LEVELS_EDUCATION = new int[]{0, 0, 0};
     public static final float[] THERMAL_POWER_PLANT_LEVELS_RADIUS = new float[]{25, 49, 100};
 
     //tree
@@ -81,6 +81,104 @@ public class GameParams {
     public static final int[] TREE_LEVELS_EDUCATION = new int[]{0};
     public static final float[] TREE_LEVELS_RADIUS = new float[]{10};
     //let levels (now 1) be here (maybe in the future will be possible to upgrade christmas tree to special one)
+
+    //fire station
+    public static final int[] FIRE_STATION_LEVELS_BUILD_COST = new int[]{1000, 1000, 1000};
+    public static final int[] FIRE_STATION_LEVELS_MONTH_COST = new int[]{100, 100, 100};
+    public static final int[] FIRE_STATION_LEVELS_POWER = new int[]{-5, -10, -15};
+    public static final int[] FIRE_STATION_LEVELS_FIRE = new int[]{10, 20, 30};
+    public static final int[] FIRE_STATION_LEVELS_WATER = new int[]{-10, -20, -40};
+    public static final int[] FIRE_STATION_LEVELS_POLLUTION = new int[]{0,0,0};
+    public static final int[] FIRE_STATION_LEVELS_CRIMINAL = new int[]{0, 0, 0};
+    public static final int[] FIRE_STATION_LEVELS_HEALTH = new int[]{0,0,0};
+    public static final int[] FIRE_STATION_LEVELS_WORK = new int[]{5, 10, 15};
+    public static final int[] FIRE_STATION_LEVELS_HAPPINESS = new int[]{0, 0, 0};
+    public static final int[] FIRE_STATION_LEVELS_EDUCATION = new int[]{0, 0, 0};
+    public static final float[] FIRE_STATION_LEVELS_RADIUS = new float[]{25, 49, 100};
+
+    //hospital
+    public static final int[] HOSPITAL_LEVELS_BUILD_COST = new int[]{1000, 1000, 1000};
+    public static final int[] HOSPITAL_LEVELS_MONTH_COST = new int[]{200, 200, 200};
+    public static final int[] HOSPITAL_LEVELS_POWER = new int[]{-5, -10, -15};
+    public static final int[] HOSPITAL_LEVELS_FIRE = new int[]{-5,-10,-15};
+    public static final int[] HOSPITAL_LEVELS_WATER = new int[]{-5,-10,-15};
+    public static final int[] HOSPITAL_LEVELS_POLLUTION = new int[]{0,0,0};
+    public static final int[] HOSPITAL_LEVELS_CRIMINAL = new int[]{0, 0, 0};
+    public static final int[] HOSPITAL_LEVELS_HEALTH = new int[]{15,25,35};
+    public static final int[] HOSPITAL_LEVELS_WORK = new int[]{5, 10, 15};
+    public static final int[] HOSPITAL_LEVELS_HAPPINESS = new int[]{1,2,3};
+    public static final int[] HOSPITAL_LEVELS_EDUCATION = new int[]{0, 0, 0};
+    public static final float[] HOSPITAL_LEVELS_RADIUS = new float[]{100, 225, 400};
+
+    //park
+    public static final int[] PARK_LEVELS_BUILD_COST = new int[]{1000, 1000, 1000};
+    public static final int[] PARK_LEVELS_MONTH_COST = new int[]{50,50,50};
+    public static final int[] PARK_LEVELS_POWER = new int[]{-2,-4,-6};
+    public static final int[] PARK_LEVELS_FIRE = new int[]{-5,-6,-7};
+    public static final int[] PARK_LEVELS_WATER = new int[]{-5,-10,-15};
+    public static final int[] PARK_LEVELS_POLLUTION = new int[]{10,20,25};
+    public static final int[] PARK_LEVELS_CRIMINAL = new int[]{5,7,9};
+    public static final int[] PARK_LEVELS_HEALTH = new int[]{2,4,6};//fresh air from trees?
+    public static final int[] PARK_LEVELS_WORK = new int[]{1,2,3};
+    public static final int[] PARK_LEVELS_HAPPINESS = new int[]{10,25,45};
+    public static final int[] PARK_LEVELS_EDUCATION = new int[]{0, 0, 0};
+    public static final float[] PARK_LEVELS_RADIUS = new float[]{100, 225, 400};
+
+    //police station
+    public static final int[] POLICE_STATION_LEVELS_BUILD_COST = new int[]{1000, 1000, 1000};
+    public static final int[] POLICE_STATION_LEVELS_MONTH_COST = new int[]{700,700,700};
+    public static final int[] POLICE_STATION_LEVELS_POWER = new int[]{-5, -10, -15};
+    public static final int[] POLICE_STATION_LEVELS_FIRE = new int[]{-5,-7,-8};
+    public static final int[] POLICE_STATION_LEVELS_WATER = new int[]{-10, -20, -40};
+    public static final int[] POLICE_STATION_LEVELS_POLLUTION = new int[]{0,0,0};
+    public static final int[] POLICE_STATION_LEVELS_CRIMINAL = new int[]{20,30,40};
+    public static final int[] POLICE_STATION_LEVELS_HEALTH = new int[]{0,0,0};
+    public static final int[] POLICE_STATION_LEVELS_WORK = new int[]{5,8,11};
+    public static final int[] POLICE_STATION_LEVELS_HAPPINESS = new int[]{0, 0, 0};
+    public static final int[] POLICE_STATION_LEVELS_EDUCATION = new int[]{0, 0, 0};
+    public static final float[] POLICE_STATION_LEVELS_RADIUS = new float[]{25, 49, 100};
+
+    //school
+    public static final int[] SCHOOL_LEVELS_BUILD_COST = new int[]{1000, 1000, 1000};
+    public static final int[] SCHOOL_LEVELS_MONTH_COST = new int[]{100, 100, 100};
+    public static final int[] SCHOOL_LEVELS_POWER = new int[]{-4,-6,-8};
+    public static final int[] SCHOOL_LEVELS_FIRE = new int[]{-5,-7,-8};
+    public static final int[] SCHOOL_LEVELS_WATER = new int[]{-3,-4,-5};
+    public static final int[] SCHOOL_LEVELS_POLLUTION = new int[]{0,0,0};
+    public static final int[] SCHOOL_LEVELS_CRIMINAL = new int[]{0, 0, 0};
+    public static final int[] SCHOOL_LEVELS_HEALTH = new int[]{0,0,0};
+    public static final int[] SCHOOL_LEVELS_WORK = new int[]{1,2,3};
+    public static final int[] SCHOOL_LEVELS_HAPPINESS = new int[]{1,2,3};
+    public static final int[] SCHOOL_LEVELS_EDUCATION = new int[]{10,15,20};
+    public static final float[] SCHOOL_LEVELS_RADIUS = new float[]{25, 49, 100};
+
+    //shopping mall
+    public static final int[] SHOPPING_MALL_LEVELS_BUILD_COST = new int[]{4000,4000,4000};
+    public static final int[] SHOPPING_MALL_LEVELS_MONTH_COST = new int[]{0,0,0};
+    public static final int[] SHOPPING_MALL_LEVELS_POWER = new int[]{-10,-20,-30};
+    public static final int[] SHOPPING_MALL_LEVELS_FIRE = new int[]{-5,-10,-12};
+    public static final int[] SHOPPING_MALL_LEVELS_WATER = new int[]{-3,-6,-9};
+    public static final int[] SHOPPING_MALL_LEVELS_POLLUTION = new int[]{1,2,3};
+    public static final int[] SHOPPING_MALL_LEVELS_CRIMINAL = new int[]{2,4,6};//tyryat' 3,14 door ы
+    public static final int[] SHOPPING_MALL_LEVELS_HEALTH = new int[]{0,0,0};
+    public static final int[] SHOPPING_MALL_LEVELS_WORK = new int[]{5, 10, 15};
+    public static final int[] SHOPPING_MALL_LEVELS_HAPPINESS = new int[]{10,20,35};
+    public static final int[] SHOPPING_MALL_LEVELS_EDUCATION = new int[]{0, 0, 0};
+    public static final float[] SHOPPING_MALL_LEVELS_RADIUS = new float[]{25, 49, 100};
+
+    //water plant
+    public static final int[] WATER_PLANT_LEVELS_BUILD_COST = new int[]{2000,2000,2000};
+    public static final int[] WATER_PLANT_LEVELS_MONTH_COST = new int[]{100, 100, 100};
+    public static final int[] WATER_PLANT_LEVELS_POWER = new int[]{-2,-4,-6};
+    public static final int[] WATER_PLANT_LEVELS_FIRE = new int[]{2,4,6};
+    public static final int[] WATER_PLANT_LEVELS_WATER = new int[]{30,50,70};
+    public static final int[] WATER_PLANT_LEVELS_POLLUTION = new int[]{0,0,0};
+    public static final int[] WATER_PLANT_LEVELS_CRIMINAL = new int[]{0, 0, 0};
+    public static final int[] WATER_PLANT_LEVELS_HEALTH = new int[]{0,0,0};
+    public static final int[] WATER_PLANT_LEVELS_WORK = new int[]{2,4,5};
+    public static final int[] WATER_PLANT_LEVELS_HAPPINESS = new int[]{0, 0, 0};
+    public static final int[] WATER_PLANT_LEVELS_EDUCATION = new int[]{0, 0, 0};
+    public static final float[] WATER_PLANT_LEVELS_RADIUS = new float[]{49, 64, 91};
 
 
     // TODO: 02-Nov-17 for all objects
