@@ -31,37 +31,40 @@ public class Element {
     public Picture p;
     public BitmapText txt;
 
-    public  Element(){};
+    public Element() {
+    }
 
-    public Element(String name, String text, float x, float y, float w, float h, boolean square, String path){
+    ;
+
+    public Element(String name, String text, float x, float y, float w, float h, boolean square, String path, boolean transparent) {
         new Element();
         this.name = name;
         this.text = text;
         this.x = x * dX;
         this.y = y * dY;
         this.h = h * dY;
-        if(square)
+        if (square)
             this.w = w * dY;
         else
             this.w = w * dX;
         this.picPath = path;
-        setPicture();
+        setPicture(transparent);
         z += 0.1;
-        if(text != null)
+        if (text != null)
             setText();
         z += 0.1;
     }
 
-    private void setPicture(){
+    private void setPicture(boolean transparent) {
         p = new Picture(name);
         p.move(0, 0, z);
         p.setPosition(x, y);
         p.setWidth(w);
         p.setHeight(h);
-        p.setImage(StaticAssetManager.getAssetManager(), picPath, false);
+        p.setImage(StaticAssetManager.getAssetManager(), picPath, transparent);
     }
 
-    private void setText(){
+    private void setText() {
         BitmapFont fnt = StaticAssetManager.loadFont("Interface/Fonts/Default.fnt");
         txt = new BitmapText(fnt, false);
         txt.setBox(new Rectangle(x, y, w, h));
@@ -70,42 +73,12 @@ public class Element {
         txt.setVerticalAlignment(BitmapFont.VAlign.Center);
         txt.setText(text);
         txt.setLocalTranslation(0, txt.getHeight(), z);
-        setPicture();
     }
 
-    public boolean touchCheck(float tX, float tY){
-        if((tX >= x) && (tX <= (x+w)) && (tY >= y) && (tY <= (y+h))) {
+    public boolean touchCheck(float tX, float tY) {
+        if ((tX >= x) && (tX <= (x + w)) && (tY >= y) && (tY <= (y + h))) {
             return true;
-        }
-        else return false;
-    }
-
-
-//======================================================================================================
-//======================================================================================================
-//======================================================================================================
-//======================================================================================================
-
-
-    public void setTransparent(String name, String text, float x, float y, float w, float h, boolean square, String path){
-        this.name = name;
-        this.text = text;
-        this.x = x * dX;
-        this.y = y * dY;
-        this.h = h * dY;
-        if(square)
-            this.w = w * dY;
-        else
-            this.w = w * dX;
-        this.picPath = path;
-        p = new Picture(name);
-        p.setImage(StaticAssetManager.getAssetManager(), name, true);
-        p.move(0, 0, -1);
-        p.setPosition(x, y);
-        p.setWidth(w);
-        p.setHeight(h);
-        p.setImage(StaticAssetManager.getAssetManager(), picPath, false);
-        if(text != null)
-            setText();
+        } else return false;
     }
 }
+

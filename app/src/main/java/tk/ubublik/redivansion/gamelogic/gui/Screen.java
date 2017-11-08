@@ -46,11 +46,12 @@ public class Screen {
             }
 
             activeFrame.remove(activeFrame.size()-1);
-            showFrame(activeFrame.get(activeFrame.size()-1));
+            if(!activeFrame.isEmpty())
+                showFrame(activeFrame.get(activeFrame.size()-1));
         }
     }
 
-    public String getCurrentFrame(){
+    public String getCurrentFrameName(){
         return activeFrame.get(activeFrame.size()-1).frameName;
     }
 
