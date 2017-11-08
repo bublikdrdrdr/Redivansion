@@ -55,6 +55,41 @@ public class Tree extends WorldObject {
         ((GeometryLoopAnimationManager)getGeometryManager()).beginAnimation(getLoopAnimation(), animationName);
     }
 
+    /*
+         ;,
+       :@@@
+     ;@@# `@;
+   @@@'     `@'
+    . ++       #+
+        +#       +#
+          ;#`      ;#`
+            ;@`      ;@`
+              ,@.      ,@.
+                ,@,      ,@,
+                  .@:      .@:
+                    `@;      `@:
+                      `#+      `#'
+                         ++       #`
+                           '#     `:
+                             '@@#',#,
+                                   +@@:
+                                     +@@+:
+                                       #@@@;
+                                         #@@@'
+                                           +@@@'
+                                             '+`
+
+             ':           '++;           ;##+  +########: `+`     `+.       ':       ,+
+              +;    @:  `;@';;;'@;    `;@';.        `@     .@`     `@.      #'++      ,#
+              +;  .#`   .@       +@,  .@            .@`    .@`     `@.      #.:+`     ,#
+              '@@@@`    .@`        +; .@`           .@`    .@`     `@.      #, ,#     ,#
+              +';@;     .@`        +; .@`           .@`    .@      `@.    `@:` ,#     ,#
+              +; `'@:`  .@`       .#; .@`           .@`    .@++@'. `@.    ,@.  .+@`   ,@+@:`
+              +;    #,  .@`     `#@,  .#@.          .@`    .@`  ;+ `@.   .@`    .@`   ,#  #,
+              ``    `.`  .@#####@.      .#@###+`    .@`    .@##@'` `@.  .#@`     .@.  ,@#@,
+                                                                        .:
+     */
+
     private GeometryLoopAnimationManager.OnAnimationEndListener getLoopAnimation(){
         return new GeometryLoopAnimationManager.OnAnimationEndListener() {
             @Override
