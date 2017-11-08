@@ -54,7 +54,7 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
-        //gui = new GUI(simpleApplication.getGuiNode(), this);
+        gui = new GUI(simpleApplication.getGuiNode(), this);
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
         cameraControl.setTouchInputHook(gui);
@@ -62,7 +62,7 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
         worldMap.addObserver(gameLogicProcessor);
         worldMap.addObserver(selectToolManager);
         worldMap.put(level.getWorldObjects());
-        addDebugPanel();
+        //addDebugPanel();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
         mapRenderer.onUpdate();fpsMeter.logCustom("MAP RENDERER");
         worldLight.onUpdate();fpsMeter.logCustom("LIGHT");
         worldMap.onUpdate();fpsMeter.logCustom("MAP");
-        //gui.onUpdate();fpsMeter.logCustom("GUI");
+        gui.onUpdate();fpsMeter.logCustom("GUI");
         gameLogicProcessor.onUpdate();fpsMeter.logCustom("LOGIC");
         cameraControl.onUpdate();fpsMeter.logCustom("CAMERA");
         selectToolManager.onUpdate();fpsMeter.logCustom("SELECT");
@@ -213,7 +213,7 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
     GameLogicProcessor.LogicResultListener logicResultListener = new GameLogicProcessor.LogicResultListener() {
         @Override
         public void setTestData(int newPopulation, double deltaMoney) {
-            statusLabel.setText(newPopulation+"p, "+deltaMoney+"$, "+gameLogicProcessor.getTimer().elapsed()/1000);
+            //statusLabel.setText(newPopulation+"p, "+deltaMoney+"$, "+gameLogicProcessor.getTimer().elapsed()/1000);
         }
     };
 }
