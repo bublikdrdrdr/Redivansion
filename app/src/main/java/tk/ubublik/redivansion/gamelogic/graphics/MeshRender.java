@@ -32,6 +32,28 @@ public class MeshRender {
         this.polygonStateBuffer = new boolean[polyAnimation.polygonCount()];
     }
 
+    public MeshRender(PolyAnimation polyAnimation, Mesh mesh){
+        this.polyAnimation = polyAnimation;
+        this.polygonStateBuffer = new boolean[polyAnimation.polygonCount()];
+        setMesh(mesh);
+    }
+
+    public void setMesh(Mesh mesh) {
+        this.mesh = mesh;
+        mesh.setDynamic();
+        setMeshBuffer();
+        positionVertexBuffer = mesh.getBuffer(VertexBuffer.Type.Position);
+        positionDataBuffer = (FloatBuffer) positionVertexBuffer.getData();
+        indexVertexBuffer = mesh.getBuffer(VertexBuffer.Type.Index);
+        indexDataBuffer = (ShortBuffer) indexVertexBuffer.getData();
+        normalVertexBuffer = mesh.getBuffer(VertexBuffer.Type.Normal);
+        normalDataBuffer = (FloatBuffer) normalVertexBuffer.getData();
+        colorVertexBuffer = mesh.getBuffer(VertexBuffer.Type.Color);
+        colorDataBuffer = (FloatBuffer) colorVertexBuffer.getData();
+
+        fillIndexBuffer();
+    }
+
     public Mesh getMesh() {
         mesh = new Mesh();
         mesh.setDynamic();

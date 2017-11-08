@@ -19,8 +19,6 @@ import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.House;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
-import tk.ubublik.redivansion.gamelogic.units.objects.Road;
-import tk.ubublik.redivansion.gamelogic.units.objects.RoadState;
 import tk.ubublik.redivansion.gamelogic.units.objects.ThermalPowerPlant;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
@@ -45,7 +43,6 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
     private GUI gui;
     private WorldLight worldLight;
     private SelectToolManager selectToolManager;
-
     private FpsMeter fpsMeter = FpsMeter.getInstance();
     private Label statusLabel;
 
@@ -88,6 +85,7 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
         gameLogicProcessor.onUpdate();fpsMeter.logCustom("LOGIC");
         cameraControl.onUpdate();fpsMeter.logCustom("CAMERA");
         selectToolManager.onUpdate();fpsMeter.logCustom("SELECT");
+        NodesCache.getInstance().updateModels();
     }
 
     private void loadModels(){

@@ -34,6 +34,14 @@ public class GeometryLoopAnimationManager extends GeometryManager {
         setBase();
     }
 
+    private GeometryLoopAnimationManager(String name, Material material, Model model, Mesh mesh){
+        super(name);
+        setMaterial(material);
+        this.model = model;
+        this.mesh = mesh;
+    }
+
+
     private void setBase(){
         this.setMesh(new Mesh());
         Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
@@ -52,6 +60,11 @@ public class GeometryLoopAnimationManager extends GeometryManager {
         meshRender.beginAnimation();
     }
 
+    private void prepareLoopAnimation(PolyAnimation polyAnimation){
+        meshRender = new MeshRender(polyAnimation, mesh);
+        meshRender.beginAnimation();
+    }
+
     private void prepareAnimation(PolyAnimation polyAnimation, OnAnimationEndListener onAnimationEndListener){
         prepareAnimation(polyAnimation);
         this.meshRender.setListener(onAnimationEndListener);
@@ -66,7 +79,7 @@ public class GeometryLoopAnimationManager extends GeometryManager {
                     meshRender.getListener().animationEnd();
                 }
                 if (loopAnimations!=null){
-                    prepareAnimation(loopAnimations[loopAnimationIndex]);
+                    prepareLoopAnimation(loopAnimations[loopAnimationIndex]);
                     meshRender.onUpdate();
                     loopAnimationIndex++;
                     if (loopAnimationIndex>=loopAnimations.length){
@@ -75,7 +88,7 @@ public class GeometryLoopAnimationManager extends GeometryManager {
                 } else {
                     meshRender = null;
                     if (nextAnimation != null) {
-                        prepareAnimation(nextAnimation);
+                        prepareLoopAnimation(nextAnimation);
                         nextAnimation = null;
                     }
                 }
@@ -119,10 +132,14 @@ public class GeometryLoopAnimationManager extends GeometryManager {
             }
         }
         loopAnimationIndex = 0;
+        if (meshRender==null) prepareAnimation(loopAnimations[loopAnimationIndex]);
     }
 
     @Override
     public GeometryManager clone() {
-        return new GeometryAnimationManager(model.clone());
+        GeometryLoopAnimationManager clone = new GeometryLoopAnimationManager(name, getMaterial(), model, mesh);
+        clone.setLocalScale(getLocalScale());
+        clone.setLocalTranslation(getLocalTranslation());
+        return clone;
     }
 }

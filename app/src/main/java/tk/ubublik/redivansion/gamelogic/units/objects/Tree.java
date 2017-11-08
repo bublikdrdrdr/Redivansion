@@ -2,6 +2,8 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 
 import android.graphics.Point;
 
+import com.jme3.scene.Geometry;
+
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryLoopAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.utils.GameParams;
@@ -12,6 +14,8 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
  */
 
 public class Tree extends WorldObject {
+
+    private static final String treeLoopAnimationKey = "treeLoopAnimation";
 
     public Tree(int x, int y){
         this(new Point(x,y));
@@ -28,6 +32,12 @@ public class Tree extends WorldObject {
         setNeedsRoad(false);
         setBuildCost(GameParams.TREE_LEVELS_BUILD_COST[0]);
         beginAnimation("build");
+    }
+
+    boolean loopStage = false;
+    @Override
+    public void onUpdate() {
+        if (!loopStage) getGeometryManager().onUpdate(); else this.getGeometryManager().updateGeometricState();
     }
 
     @Override
@@ -49,7 +59,15 @@ public class Tree extends WorldObject {
         return new GeometryLoopAnimationManager.OnAnimationEndListener() {
             @Override
             public void animationEnd() {
-                ((GeometryLoopAnimationManager)getGeometryManager()).beginLoopAnimation(new String[]{"stage1", "stage2"});
+                loopStage = true;
+                GeometryLoopAnimationManager geometryLoopAnimationManager = NodesCache.getInstance().getModel(treeLoopAnimationKey);
+                if (geometryLoopAnimationManager==null){
+                    geometryLoopAnimationManager = new GeometryLoopAnimationManager("tree", (Model) NodesCache.getInstance().get("treeModel"));
+                    NodesCache.getInstance().addModel(treeLoopAnimationKey, geometryLoopAnimationManager);
+                    geometryLoopAnimationManager.beginLoopAnimation(new String[]{"stage2", "stage1"});
+                    geometryLoopAnimationManager.onUpdate();
+                }
+                Tree.this.setGeometryManager(geometryLoopAnimationManager.clone());
             }
         };
     }
