@@ -8,36 +8,43 @@ import tk.ubublik.redivansion.gamelogic.utils.TouchInputHook;
 
 /*************************
  *
- TODO: Add counters, fix fonts, ignore non-tap input on elements
+ TODO: Add counters, fix fonts
  *
  * ***********************/
 
-public class GUI implements TouchInputHook{
+public class GUI implements TouchInputHook {
 
     private Node guiNode;
     public static final int CLICK_OFFSET = 5;
     public GUIListener guiListener;
-    public String screen;
-    public GUIScreens guiScreen;
-    public static Frames frames = new Frames();
+    public Screen guiScreen;
+    public static AllFrames frames = new AllFrames();
+    public static float startX;
+    public static float startY;
+    private boolean touchedGUI = false;
 
-    public GUI(Node guiNode, GUIListener guiListener){
+    public GUI(Node guiNode, GUIListener guiListener) {
         this.guiNode = guiNode;
         this.guiListener = guiListener;
-        guiScreen = new GUIScreens("main", guiNode, frames.main);
+        guiScreen = new Screen("main", guiNode, frames.main);
     }
 
-    public void onUpdate(){
+    public void onUpdate() {
 
     }
 
     @Override
     public boolean touchCaptured(TouchEvent touchEvent, float tfp) {
-        if(touchEvent.getType() == TouchEvent.Type.TAP){
-            float x = touchEvent.getX();
-            float y = touchEvent.getY();
-            return guiScreen.touchEvent(x, y, guiListener);
+        if(touchEvent.getType() == TouchEvent.Type.DOWN){
+            this.startX = touchEvent.getX();
+            this.startY = touchEvent.getY();
+            touchedGUI = guiScreen.touchEvent(startX, startY, guiListener, touchEvent);
         }
-        else return false;
+        if(touchEvent.getType() == TouchEvent.Type.UP && touchedGUI){
+            guiScreen.activeFrame.get(guiScreen.activeFrame.size()-1).touchedElem = false;
+            guiScreen.touchEvent(touchEvent.getX(), touchEvent.getY(), guiListener, touchEvent);
+            touchedGUI = false;
+        }
+        return touchedGUI;
     }
 }
