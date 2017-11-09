@@ -34,7 +34,7 @@ import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
  * Created by Bublik on 22-Sep-17.
  */
 
-public class TestLifecycle extends Lifecycle implements GUIListener {
+public class TestLifecycle extends Lifecycle {
 
     private CameraControl cameraControl;
     private GameLogicProcessor gameLogicProcessor;
@@ -44,7 +44,6 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
     private WorldLight worldLight;
     private SelectToolManager selectToolManager;
     private FpsMeter fpsMeter = FpsMeter.getInstance();
-    private Label statusLabel;
 
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
@@ -54,7 +53,7 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
-        gui = new GUI(simpleApplication.getGuiNode(), this);
+        gui = new GUI(simpleApplication.getGuiNode(), guiListener);
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
         cameraControl.setTouchInputHook(gui);
@@ -118,8 +117,6 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
         debugPanel.addButton("Add house", commands);
         debugPanel.addButton("Add power", commands);
         debugPanel.addButton("Upgrade", commands);
-        statusLabel = debugPanel.addLabel("status");
-        statusLabel.setColor(ColorRGBA.Red);
         debugPanel.addButton("Game speed", commands);
     }
 
@@ -128,15 +125,15 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
         public void execute(Button source) {
             switch (source.getText()){
                 case "Console log": System.out.println("Console log"); break;
-                case "Add building": addBuilding(); break;
-                case "Add tree": addTree(); break;
-                case "Add road": addRoad(); break;
+                case "Add building": guiListener.addBuilding(); break;
+                case "Add tree": guiListener.addTree(); break;
+                case "Add road": guiListener.addRoad(); break;
                 case "Set road points": selectToolManager.setRoadSelect(); break;
                 case "Select tree": selectToolManager.setSelectSinglePoint(Tree.class); break;
                 case "Select office": selectToolManager.setSelectSinglePoint(Office.class); break;
                 case "Select power": selectToolManager.setSelectSinglePoint(ThermalPowerPlant.class); break;
                 case "Clear select": selectToolManager.cancel(); break;
-                case "Remove": remove(); break;
+                case "Remove": guiListener.remove(); break;
                 case "Set icon": testSetIcon(); break;
                 case "Add house": worldMap.put(new House(getCenterPoint(2))); break;
                 case "Add power": worldMap.put(new ThermalPowerPlant(getCenterPoint(3))); break;
@@ -145,11 +142,6 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
             }
         }
     };
-
-    @Override
-    public void remove() {
-        worldMap.fastRemove(getCenterPoint(1));
-    }
 
     private void testSetIcon() {
         WorldObject worldObject = worldMap.get(getCenterPoint(1));
@@ -164,56 +156,68 @@ public class TestLifecycle extends Lifecycle implements GUIListener {
             }
         }
     }
-
-    @Override
-    public void addBuilding() {
-        Point position = getCenterPoint(2);
-        Office office = new Office(position);
-        if (worldMap.put(office))
-            System.out.println("Object created at " + office.getPosition());
-    }
-
-    @Override
-    public void addTree(){
-        Tree tree = new Tree(getCenterPoint(1));
-        worldMap.put(tree);
-    }
-
-    @Override
-    public void addRoad(){
-        if (selectToolManager.buildRoad()){
-            selectToolManager.cancel();
-        }
+    
+    private void saveGame(){
+        // TODO: 09-Nov-17
     }
 
     private Point getCenterPoint(int size){
         return mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint(), size);
     }
 
-    @Override
-    public void setRoadPoints() {
-        selectToolManager.setRoadSelect();
-    }
-
-    @Override
-    public void selectTree() {
-        selectToolManager.setSelectSinglePoint(Tree.class);
-    }
-
-    @Override
-    public void selectOffice() {
-        selectToolManager.setSelectSinglePoint(Office.class);
-    }
-
-    @Override
-    public void selectClear() {
-        selectToolManager.cancel();
-    }
-
     GameLogicProcessor.LogicResultListener logicResultListener = new GameLogicProcessor.LogicResultListener() {
         @Override
         public void setTestData(int newPopulation, double deltaMoney) {
-            //statusLabel.setText(newPopulation+"p, "+deltaMoney+"$, "+gameLogicProcessor.getTimer().elapsed()/1000);
+            // TODO: 09-Nov-17
+            //gui.setGameData(newPopulation, gameLogicProcessor.getMoney(), deltaMoney);
+        }
+    };
+
+    GUIListener guiListener = new GUIListener() {
+        @Override
+        public void remove() {
+            worldMap.fastRemove(getCenterPoint(1));
+        }
+
+        @Override
+        public void addBuilding() {
+            Point position = getCenterPoint(2);
+            Office office = new Office(position);
+            if (worldMap.put(office))
+                System.out.println("Object created at " + office.getPosition());
+        }
+
+        @Override
+        public void addTree(){
+            Tree tree = new Tree(getCenterPoint(1));
+            worldMap.put(tree);
+        }
+
+        @Override
+        public void addRoad(){
+            if (selectToolManager.buildRoad()){
+                selectToolManager.cancel();
+            }
+        }
+
+        @Override
+        public void setRoadPoints() {
+            selectToolManager.setRoadSelect();
+        }
+
+        @Override
+        public void selectTree() {
+            selectToolManager.setSelectSinglePoint(Tree.class);
+        }
+
+        @Override
+        public void selectOffice() {
+            selectToolManager.setSelectSinglePoint(Office.class);
+        }
+
+        @Override
+        public void selectClear() {
+            selectToolManager.cancel();
         }
     };
 }
