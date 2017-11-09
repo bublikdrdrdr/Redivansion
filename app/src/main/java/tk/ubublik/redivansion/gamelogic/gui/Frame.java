@@ -20,8 +20,8 @@ public class Frame {
         this.frameName = name;
     }
 
-    public void addElement(String name, String text, float x, float y, float w, float h, boolean square, String path){
-        Element elem = new Element(name, text, x, y, w, h, square, path);
+    public void addElement(String name, String text, float x, float y, float w, float h, boolean square, String path, boolean transparent){
+        Element elem = new Element(name, text, x, y, w, h, square, path, transparent);
         elements.add(elem);
     }
 
@@ -47,19 +47,6 @@ public class Frame {
             }
         }
         return touchedElem;
-    }
-
-
-    //===============================================================
-    //===============================================================
-    //===============================================================
-
-
-
-    public void addTransparent(String name, String text, float x, float y, float w, float h, boolean square, String path){
-        Element elem = new Element();
-        elem.setTransparent(name, text, x, y, w, h, square, path);
-        elements.add(elem);
     }
 
 }
