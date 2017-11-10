@@ -10,10 +10,17 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 public class SavedLevel {
 
-    List<WorldObject> worldObjects;
-    long time;
-    int money;
-    int level;
+    public List<WorldObject> worldObjects;
+    public long time;
+    public int money;
+    public int level;
+
+    public SavedLevel(List<WorldObject> worldObjects, long time, int money, int level) {
+        this.worldObjects = worldObjects;
+        this.time = time;
+        this.money = money;
+        this.level = level;
+    }
 
     public SavedLevel(byte[] bytes){
 

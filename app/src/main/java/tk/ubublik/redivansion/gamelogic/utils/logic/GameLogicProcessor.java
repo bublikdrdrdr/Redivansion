@@ -3,6 +3,7 @@ package tk.ubublik.redivansion.gamelogic.utils.logic;
 import java.util.*;
 
 import tk.ubublik.redivansion.gamelogic.units.Level;
+import tk.ubublik.redivansion.gamelogic.units.SavedLevel;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
@@ -144,5 +145,9 @@ public class GameLogicProcessor implements Observer {
 
     public interface LogicResultListener{
         void setTestData(int newPopulation, double deltaMoney);
+    }
+
+    public SavedLevel getSavedLevel() {
+        return new SavedLevel(worldMap.getWorldObjects(), level.getTime()-timer.elapsed(), level.getMoney(), level.getId());
     }
 }

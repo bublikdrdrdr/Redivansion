@@ -17,7 +17,10 @@ import com.jme3.scene.shape.Box;
 
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
+import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.*;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
+
+import static tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter.*;
 
 /**
  * Created by Bublik on 20-Aug-17.
@@ -117,9 +120,114 @@ public abstract class WorldObject extends Node{
         this.geometryManager.onUpdate();
     }
 
-    public abstract byte[] toBytes();
+    private static final int BYTE_SIZE = 1;
+    private static final int INT_SIZE = 4;
+    private static final int FLOAT_SIZE = 4;
+    private static final int POINT_SIZE = INT_SIZE*2;
+    public byte[] toBytes() {
+        int index = 0;
+        byte[] bytes = new byte[INT_SIZE + POINT_SIZE + INT_SIZE * 14 + FLOAT_SIZE];
+        insertArray(bytes, getArray(this.getClass().hashCode()), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(position.x), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(position.y), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(level), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(size), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(permanent), index);
+        index += BYTE_SIZE;
+        insertArray(bytes, getArray(monthCost), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(power), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(fire), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(water), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(pollution), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(criminal), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(health), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(work), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(happiness), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(education), index);
+        index += INT_SIZE;
+        insertArray(bytes, getArray(radiusSqr), index);
+        //index += FLOAT_SIZE;
+        return bytes;
+    }
 
-    public abstract void parseBytes();
+    private static final Class[] supportedObjects = new Class[]{
+            FireStation.class,
+            Hospital.class,
+            House.class,
+            Office.class,
+            Park.class,
+            PoliceStation.class,
+            Road.class,
+            School.class,
+            ShoppingMall.class,
+            ThermalPowerPlant.class,
+            Tree.class,
+            Water.class,
+            WaterPlant.class
+    };
+
+    public static WorldObject parseFromBytes(byte[] bytes, int index) throws InstantiationException, IllegalAccessException, UnsupportedOperationException {
+        int hash = getInt(bytes, index);
+        index +=INT_SIZE;
+        for (Class clazz: supportedObjects){
+            if (clazz.hashCode()==hash){
+                return fromTypedBytes((Class<? extends WorldObject>) clazz, bytes, index);
+            }
+        }
+        throw new UnsupportedOperationException("Unknown class to parse with hash: "+hash);
+    }
+
+    private static WorldObject fromTypedBytes(Class<? extends WorldObject> clazz, byte[] bytes, int index) throws IllegalAccessException, InstantiationException {
+        WorldObject worldObject = clazz.newInstance();
+        worldObject.parseBytes(bytes, index);
+        return worldObject;
+    }
+
+    public void parseBytes(byte[] bytes, int index) {
+        position = new Point(getInt(bytes, index), ByteConverter.getInt(bytes, index + INT_SIZE));
+        index += INT_SIZE * 2;
+        level = getInt(bytes, index);
+        index += INT_SIZE;
+        size = getInt(bytes, index);
+        index += INT_SIZE;
+        permanent = getBoolean(bytes, index);
+        index += BYTE_SIZE;
+        monthCost = getInt(bytes, index);
+        index += INT_SIZE;
+        power = getInt(bytes, index);
+        index += INT_SIZE;
+        fire = getInt(bytes, index);
+        index += INT_SIZE;
+        water = getInt(bytes, index);
+        index += INT_SIZE;
+        pollution = getInt(bytes, index);
+        index += INT_SIZE;
+        criminal = getInt(bytes, index);
+        index += INT_SIZE;
+        health = getInt(bytes, index);
+        index += INT_SIZE;
+        work = getInt(bytes, index);
+        index += INT_SIZE;
+        happiness = getInt(bytes, index);
+        index += INT_SIZE;
+        education = getInt(bytes, index);
+        index += INT_SIZE;
+        radiusSqr = getInt(bytes, index); //index+=INT_SIZE;
+    }
 
     public static int getDefaultSize(){return 1;}
 

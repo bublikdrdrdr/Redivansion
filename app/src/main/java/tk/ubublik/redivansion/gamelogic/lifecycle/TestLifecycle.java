@@ -16,6 +16,8 @@ import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
 import tk.ubublik.redivansion.gamelogic.units.Level;
+import tk.ubublik.redivansion.gamelogic.units.SavedLevel;
+import tk.ubublik.redivansion.gamelogic.units.Settings;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.House;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
@@ -43,13 +45,17 @@ public class TestLifecycle extends Lifecycle {
     private GUI gui;
     private WorldLight worldLight;
     private SelectToolManager selectToolManager;
+    private Settings settings;
     private FpsMeter fpsMeter = FpsMeter.getInstance();
 
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
         loadModels();
+        settings = Settings.getInstance();
+        settings.open();
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
         Level level = LevelFactory.getLevel(0);
+        if (settings.getSavedLevel()!=null) loadLevel(level);
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
@@ -62,6 +68,25 @@ public class TestLifecycle extends Lifecycle {
         worldMap.addObserver(selectToolManager);
         worldMap.put(level.getWorldObjects());
         //addDebugPanel();
+    }
+
+    private void loadLevel(Level level){
+        SavedLevel savedLevel = settings.getSavedLevel();
+        if (level.getId()==savedLevel.level){
+            level.setWorldObjects(savedLevel.worldObjects);
+            level.setTime(savedLevel.time);
+            level.setMoney(savedLevel.money);
+        }
+    }
+
+    private void saveLevel(){
+        settings.setSavedLevel(gameLogicProcessor.getSavedLevel());
+        settings.save();
+    }
+
+    private void removeLevel(){
+        settings.setSavedLevel(null);
+        settings.save();
     }
 
     @Override
