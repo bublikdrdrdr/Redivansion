@@ -7,6 +7,7 @@ import com.jme3.math.Vector3f;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
+import tk.ubublik.redivansion.gamelogic.utils.ByteSettings;
 import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 
@@ -33,14 +34,21 @@ public class House extends Building {
         beginAnimation("build");
     }
 
+    private static final int INT_SIZE = 4;
     @Override
     public byte[] toBytes() {
-        return new byte[0];
+        byte[] superBytes = super.toBytes();
+        byte[] bytes = new byte[superBytes.length+INT_SIZE];
+        ByteSettings.ByteConverter.insertArray(bytes, superBytes, 0);
+        ByteSettings.ByteConverter.insertArray(bytes, ByteSettings.ByteConverter.getArray(pollution), superBytes.length);
+        return bytes;
     }
 
     @Override
-    public void parseBytes() {
-
+    public void parseBytes(byte[] bytes, int index) {
+        super.parseBytes(bytes, index);
+        index+= bytes.length-INT_SIZE;
+        population = ByteSettings.ByteConverter.getInt(bytes, index);
     }
 
     private void beginAnimation(String animationName, final String nextAnimation){

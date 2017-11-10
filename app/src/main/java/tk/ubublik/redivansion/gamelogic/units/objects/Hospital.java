@@ -73,14 +73,4 @@ public class Hospital extends WorldObject {
         if (level==GameParams.HOSPITAL_LEVELS_BUILD_COST.length-1) return 0;
         return GameParams.HOSPITAL_LEVELS_BUILD_COST[level+1];
     }
-
-    @Override
-    public byte[] toBytes() {
-        return new byte[0];
-    }
-
-    @Override
-    public void parseBytes() {
-
-    }
 }

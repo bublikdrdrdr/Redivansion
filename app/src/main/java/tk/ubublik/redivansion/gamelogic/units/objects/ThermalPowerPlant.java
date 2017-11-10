@@ -33,16 +33,6 @@ public class ThermalPowerPlant extends PowerPlant {
         beginAnimation("build");
     }
 
-    @Override
-    public byte[] toBytes() {
-        return new byte[0];
-    }
-
-    @Override
-    public void parseBytes() {
-
-    }
-
     private void beginAnimation(String animationName, final String nextAnimation){
         //// FIXME: 04-Nov-17
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName, new GeometryManager.OnAnimationEndListener() {

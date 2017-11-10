@@ -36,16 +36,6 @@ public class Office extends Building {
         beginAnimation("build_lvl_1");
     }
 
-    @Override
-    public byte[] toBytes() {
-        return new byte[0];
-    }
-
-    @Override
-    public void parseBytes() {
-
-    }
-
     private void beginAnimation(String animationName, final String nextAnimation){
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName, new GeometryManager.OnAnimationEndListener() {
             @Override

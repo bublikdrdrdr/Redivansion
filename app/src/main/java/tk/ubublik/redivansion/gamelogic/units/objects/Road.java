@@ -67,16 +67,6 @@ public class Road extends WorldObject {
     }
 
     @Override
-    public byte[] toBytes() {
-        return new byte[0];
-    }
-
-    @Override
-    public void parseBytes() {
-
-    }
-
-    @Override
     public void onUpdate() {
         super.onUpdate();
     }

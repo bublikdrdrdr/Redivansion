@@ -41,16 +41,6 @@ public class Tree extends WorldObject {
     }
 
     @Override
-    public byte[] toBytes() {
-        return new byte[0];
-    }
-
-    @Override
-    public void parseBytes() {
-
-    }
-
-    @Override
     protected void beginAnimation(String animationName) {
         ((GeometryLoopAnimationManager)getGeometryManager()).beginAnimation(getLoopAnimation(), animationName);
     }

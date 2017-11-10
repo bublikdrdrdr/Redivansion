@@ -74,14 +74,4 @@ public class WaterPlant extends WorldObject {
         if (level==GameParams.WATER_PLANT_LEVELS_BUILD_COST.length-1) return 0;
         return GameParams.WATER_PLANT_LEVELS_BUILD_COST[level+1];
     }
-
-    @Override
-    public byte[] toBytes() {
-        return new byte[0];
-    }
-
-    @Override
-    public void parseBytes() {
-
-    }
 }

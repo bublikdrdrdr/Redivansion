@@ -45,14 +45,4 @@ public class Water extends WorldObject{
     public int getUpgradeCost() {
         return 0;
     }
-
-    @Override
-    public byte[] toBytes() {
-        return new byte[0];
-    }
-
-    @Override
-    public void parseBytes() {
-
-    }
 }
