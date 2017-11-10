@@ -17,20 +17,23 @@ public class Settings extends SQLiteOpenHelper {
 
     private static Settings instance;
 
-    public Settings(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    private Settings(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
     public static Settings getInstance() {
-        if (instance==null){
-            instance = new Settings(MainActivity.context, DB_NAME, null, DB_VERSION);
-        }
+        return instance;
+    }
+
+    public static Settings createInstance(Context context){
+        instance = new Settings(context, DB_NAME, null, DB_VERSION);
         return instance;
     }
 
     private SavedLevel savedLevel;
     private boolean music;
     private boolean fx;
+    private int progress;
 
     private boolean firstLaunch = false;
 
@@ -42,6 +45,7 @@ public class Settings extends SQLiteOpenHelper {
         static final String COLUMN_NAME_LEVEL = "saved_level";
         static final String COLUMN_NAME_MUSIC = "music";
         static final String COLUMN_NAME_FX = "fx";
+        static final String COLUMN_NAME_PROGRESS = "progress";//last done level
     }
 
     private static final String SQL_CREATE_ENTRIES =
@@ -49,17 +53,20 @@ public class Settings extends SQLiteOpenHelper {
                     FeedEntry._ID + " INTEGER PRIMARY KEY," +
                     FeedEntry.COLUMN_NAME_LEVEL + " BLOB," +
                     FeedEntry.COLUMN_NAME_MUSIC + " NUMERIC NOT NULL," +
-                    FeedEntry.COLUMN_NAME_FX + " NUMERIC NOT NULL)";
+                    FeedEntry.COLUMN_NAME_FX + " NUMERIC NOT NULL, " +
+                    FeedEntry.COLUMN_NAME_PROGRESS + " NUMERIC NOT NULL)";
 
     private static final String SQL_INSERT_DEFAULT_VALUE =
             "INSERT INTO "+FeedEntry.TABLE_NAME+" (" +
                     FeedEntry.COLUMN_NAME_LEVEL + ", "+
                     FeedEntry.COLUMN_NAME_MUSIC + ", "+
-                    FeedEntry.COLUMN_NAME_FX + ")"+
+                    FeedEntry.COLUMN_NAME_FX + ", "+
+                    FeedEntry.COLUMN_NAME_PROGRESS + ")"+
                     "VALUES (" +
                     "NULL, "+
                     "1, "+
                     "1"+
+                    "0"+
                     ");";
 
     private static final String SQL_DELETE_ENTRIES =
@@ -70,6 +77,7 @@ public class Settings extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(FeedEntry.COLUMN_NAME_FX, fx);
         cv.put(FeedEntry.COLUMN_NAME_MUSIC, music);
+        cv.put(FeedEntry.COLUMN_NAME_PROGRESS, music);
         cv.put(FeedEntry.COLUMN_NAME_LEVEL, savedLevel.getBytes());
         db.update(FeedEntry.TABLE_NAME, cv, "1", null);
         db.close();
@@ -80,7 +88,8 @@ public class Settings extends SQLiteOpenHelper {
         String[] projection = {
                 FeedEntry.COLUMN_NAME_LEVEL,
                 FeedEntry.COLUMN_NAME_MUSIC,
-                FeedEntry.COLUMN_NAME_FX
+                FeedEntry.COLUMN_NAME_FX,
+                FeedEntry.COLUMN_NAME_PROGRESS
         };
         Cursor cursor = db.query(
                 FeedEntry.TABLE_NAME,                     // The table to query
@@ -96,6 +105,7 @@ public class Settings extends SQLiteOpenHelper {
         this.savedLevel = new SavedLevel(cursor.getBlob(0));
         this.music = cursor.getInt(1)==1;
         this.fx = cursor.getInt(2)==1;
+        this.progress = cursor.getInt(3);
         db.close();
     }
 
@@ -144,5 +154,11 @@ public class Settings extends SQLiteOpenHelper {
         this.fx = fx;
     }
 
+    public int getProgress() {
+        return progress;
+    }
 
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
 }
