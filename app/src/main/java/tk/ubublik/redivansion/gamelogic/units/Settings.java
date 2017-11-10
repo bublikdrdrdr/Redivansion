@@ -78,7 +78,11 @@ public class Settings extends SQLiteOpenHelper {
         cv.put(FeedEntry.COLUMN_NAME_FX, fx);
         cv.put(FeedEntry.COLUMN_NAME_MUSIC, music);
         cv.put(FeedEntry.COLUMN_NAME_PROGRESS, music);
-        cv.put(FeedEntry.COLUMN_NAME_LEVEL, savedLevel.getBytes());
+        byte[] levelBytes = null;
+        try{
+            levelBytes = savedLevel.getBytes();
+        } catch (Exception ignored){}
+        cv.put(FeedEntry.COLUMN_NAME_LEVEL, levelBytes);
         db.update(FeedEntry.TABLE_NAME, cv, "1", null);
         db.close();
     }
