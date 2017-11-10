@@ -15,6 +15,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.*;
@@ -127,7 +130,7 @@ public abstract class WorldObject extends Node{
     public byte[] toBytes() {
         int index = 0;
         byte[] bytes = new byte[INT_SIZE + POINT_SIZE + INT_SIZE * 14 + FLOAT_SIZE];
-        insertArray(bytes, getArray(this.getClass().hashCode()), index);
+        insertArray(bytes, getArray(this.getClass().getName().hashCode()), index);
         index += INT_SIZE;
         insertArray(bytes, getArray(position.x), index);
         index += INT_SIZE;
@@ -180,19 +183,20 @@ public abstract class WorldObject extends Node{
             WaterPlant.class
     };
 
-    public static WorldObject parseFromBytes(byte[] bytes, int index) throws InstantiationException, IllegalAccessException, UnsupportedOperationException {
+    public static WorldObject parseFromBytes(byte[] bytes, int index) throws InstantiationException, IllegalAccessException, UnsupportedOperationException, NoSuchMethodException, InvocationTargetException {
         int hash = getInt(bytes, index);
         index +=INT_SIZE;
         for (Class clazz: supportedObjects){
-            if (clazz.hashCode()==hash){
+            if (clazz.getName().hashCode()==hash){
                 return fromTypedBytes((Class<? extends WorldObject>) clazz, bytes, index);
             }
         }
         throw new UnsupportedOperationException("Unknown class to parse with hash: "+hash);
     }
 
-    private static WorldObject fromTypedBytes(Class<? extends WorldObject> clazz, byte[] bytes, int index) throws IllegalAccessException, InstantiationException {
-        WorldObject worldObject = clazz.newInstance();
+    private static WorldObject fromTypedBytes(Class<? extends WorldObject> clazz, byte[] bytes, int index) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        Constructor constructor = clazz.getDeclaredConstructor(new Class[]{Point.class});
+        WorldObject worldObject = (WorldObject) constructor.newInstance(new Point(0,0));
         worldObject.parseBytes(bytes, index);
         return worldObject;
     }

@@ -1,5 +1,6 @@
 package tk.ubublik.redivansion.gamelogic.units;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class SavedLevel {
 
     public SavedLevel(byte[] bytes) throws ParseLevelException {
         try {
+            worldObjects = new LinkedList<>();
             int index = 0;
             int count = getInt(bytes, index);
             index += INT_SIZE;
@@ -43,7 +45,7 @@ public class SavedLevel {
             money = getInt(bytes, index);
             index += INT_SIZE;
             level = getInt(bytes, index);
-        } catch (InstantiationException | IllegalAccessException | UnsupportedOperationException e) {
+        } catch (InstantiationException | IllegalAccessException | UnsupportedOperationException|NoSuchMethodException|InvocationTargetException e) {
             throw new ParseLevelException("Can't parse level", e);
         }
     }

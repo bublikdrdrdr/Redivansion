@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import tk.ubublik.redivansion.MainActivity;
+import tk.ubublik.redivansion.gamelogic.exceptions.LoadSettingsException;
 
 /**
  * Created by Bublik on 31-Aug-17.
@@ -37,7 +38,7 @@ public class Settings extends SQLiteOpenHelper {
 
     private boolean firstLaunch = false;
 
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 4;
     private static final String DB_NAME = "Settings.db";
 
     private static class FeedEntry implements BaseColumns {
@@ -65,9 +66,8 @@ public class Settings extends SQLiteOpenHelper {
                     "VALUES (" +
                     "NULL, "+
                     "1, "+
-                    "1"+
-                    "0"+
-                    ");";
+                    "1,"+
+                    "0);";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
@@ -83,30 +83,36 @@ public class Settings extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void open(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] projection = {
-                FeedEntry.COLUMN_NAME_LEVEL,
-                FeedEntry.COLUMN_NAME_MUSIC,
-                FeedEntry.COLUMN_NAME_FX,
-                FeedEntry.COLUMN_NAME_PROGRESS
-        };
-        Cursor cursor = db.query(
-                FeedEntry.TABLE_NAME,                     // The table to query
-                projection,                               // The columns to return
-                null,                                // The columns for the WHERE clause
-                null,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null                                 // The sort order
-        );
-        if (cursor.getCount()!=1) throw new RuntimeException("Can't read settings from DB");
-        cursor.moveToFirst();
-        this.savedLevel = new SavedLevel(cursor.getBlob(0));
-        this.music = cursor.getInt(1)==1;
-        this.fx = cursor.getInt(2)==1;
-        this.progress = cursor.getInt(3);
-        db.close();
+    public void open() throws LoadSettingsException{
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            String[] projection = {
+                    FeedEntry.COLUMN_NAME_LEVEL,
+                    FeedEntry.COLUMN_NAME_MUSIC,
+                    FeedEntry.COLUMN_NAME_FX,
+                    FeedEntry.COLUMN_NAME_PROGRESS
+            };
+            Cursor cursor = db.query(
+                    FeedEntry.TABLE_NAME,                     // The table to query
+                    projection,                               // The columns to return
+                    null,                                // The columns for the WHERE clause
+                    null,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    null                                 // The sort order
+            );
+            if (cursor.getCount() != 1) throw new RuntimeException("Can't read settings from DB");
+            cursor.moveToFirst();
+            byte[] levelBytes = cursor.getBlob(0);
+            if (levelBytes==null) this.savedLevel = null;
+            else this.savedLevel = new SavedLevel(levelBytes);
+            this.music = cursor.getInt(1) == 1;
+            this.fx = cursor.getInt(2) == 1;
+            this.progress = cursor.getInt(3);
+            db.close();
+        } catch (Exception e){
+            throw new LoadSettingsException("Can't load settings from DB", e);
+        }
     }
 
     @Override

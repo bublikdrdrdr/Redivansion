@@ -55,24 +55,24 @@ public class TestLifecycle extends Lifecycle {
         settings.open();
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
         Level level = LevelFactory.getLevel(0);
-        if (settings.getSavedLevel()!=null) loadLevel(level);
+        loadLevel(level);
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
-        gui = new GUI(simpleApplication.getGuiNode(), guiListener);
+        //gui = new GUI(simpleApplication.getGuiNode(), guiListener);
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
-        cameraControl.setTouchInputHook(gui);
+        //cameraControl.setTouchInputHook(gui);
         worldMap.addObserver(mapRenderer);
         worldMap.addObserver(gameLogicProcessor);
         worldMap.addObserver(selectToolManager);
         worldMap.put(level.getWorldObjects());
-        //addDebugPanel();
+        addDebugPanel();
     }
 
-    private void loadLevel(Level level){
+    private void loadLevel(Level level) {
         SavedLevel savedLevel = settings.getSavedLevel();
-        if (level.getId()==savedLevel.level){
+        if (savedLevel != null && level.getId() == savedLevel.level) {
             level.setWorldObjects(savedLevel.worldObjects);
             level.setTime(savedLevel.time);
             level.setMoney(savedLevel.money);
@@ -105,7 +105,7 @@ public class TestLifecycle extends Lifecycle {
         mapRenderer.onUpdate();fpsMeter.logCustom("MAP RENDERER");
         worldLight.onUpdate();fpsMeter.logCustom("LIGHT");
         worldMap.onUpdate();fpsMeter.logCustom("MAP");
-        gui.onUpdate();fpsMeter.logCustom("GUI");
+        //gui.onUpdate();fpsMeter.logCustom("GUI");
         gameLogicProcessor.onUpdate();fpsMeter.logCustom("LOGIC");
         cameraControl.onUpdate();fpsMeter.logCustom("CAMERA");
         selectToolManager.onUpdate();fpsMeter.logCustom("SELECT");
@@ -139,10 +139,12 @@ public class TestLifecycle extends Lifecycle {
         debugPanel.addButton("Clear select", commands);
         debugPanel.addButton("Remove", commands);
         //debugPanel.addButton("Set icon", commands);
-        debugPanel.addButton("Add house", commands);
-        debugPanel.addButton("Add power", commands);
-        debugPanel.addButton("Upgrade", commands);
-        debugPanel.addButton("Game speed", commands);
+        //debugPanel.addButton("Add house", commands);
+        //debugPanel.addButton("Add power", commands);
+        //debugPanel.addButton("Upgrade", commands);
+        //debugPanel.addButton("Game speed", commands);
+        debugPanel.addButton("Save game", commands);
+        debugPanel.addButton("Remove game", commands);
     }
 
     Command<Button> commands = new Command<Button>() {
@@ -164,6 +166,8 @@ public class TestLifecycle extends Lifecycle {
                 case "Add power": worldMap.put(new ThermalPowerPlant(getCenterPoint(3))); break;
                 case "Upgrade": upgrade(); break;
                 case "Game speed": gameLogicProcessor.getTimer().setGameSpeed(gameLogicProcessor.getTimer().getGameSpeed()>1?1:4); break;
+                case "Save game": saveLevel(); break;
+                case "Remove game": removeLevel(); break;
             }
         }
     };
@@ -180,10 +184,6 @@ public class TestLifecycle extends Lifecycle {
                 worldObject.setLevelNumber(worldObject.getLevelNumber()+1);
             }
         }
-    }
-    
-    private void saveGame(){
-        // TODO: 09-Nov-17
     }
 
     private Point getCenterPoint(int size){
