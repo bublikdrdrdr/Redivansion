@@ -95,14 +95,12 @@ public class GameLogicProcessor implements Observer {
         return timer.elapsed();
     }
 
-    public void setGameSpeed(int speed){
-        timer.setGameSpeed(speed);
+    public long timeLeft(){
+        return level.getTime()-elapsed();
     }
 
-    private void onLogicLoopEnd(){
-        synchronized (threadLock){
-
-        }
+    public void setGameSpeed(int speed){
+        timer.setGameSpeed(speed);
     }
 
     @Deprecated//test
@@ -135,16 +133,16 @@ public class GameLogicProcessor implements Observer {
         }
     }
 
-    private void synchronizeGameLoopResults(int newPopulation, double deltaMoney){
-        // TODO: 01-Nov-17
-        logicResultListener.setTestData(newPopulation, deltaMoney);
+    private void synchronizeGameLoopResults(int newPopulation, int deltaMoney){
+        level.setMoney(level.getMoney()+deltaMoney);
+        logicResultListener.setStatusChanged(newPopulation, level.getMoney(), deltaMoney>0);
     }
 
     //when some house population is more than N% of max population - show alert icon
     public final static float HOUSE_POPULATION_ALERT_PERCENT = 0.9f;
 
     public interface LogicResultListener{
-        void setTestData(int newPopulation, double deltaMoney);
+        void setStatusChanged(int population, int money, boolean grow);
     }
 
     public SavedLevel getSavedLevel() {

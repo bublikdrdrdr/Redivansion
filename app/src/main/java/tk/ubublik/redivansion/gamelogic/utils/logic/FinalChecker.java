@@ -39,7 +39,7 @@ public class FinalChecker extends Checker implements Runnable{
     public void run() {
         try{
             int population = 0;
-            double moneyDelta = 0;
+            int moneyDelta = 0;
             for(WorldObject worldObject: temporaryClone.getWorldObjects()){
                 checkInterrupted();
                 if (worldObject instanceof House){
@@ -65,9 +65,9 @@ public class FinalChecker extends Checker implements Runnable{
 
     public class Result{
         public int population;
-        public double moneyDelta;
+        public int moneyDelta;
 
-        public Result(int population, double moneyDelta) {
+        public Result(int population, int moneyDelta) {
             this.population = population;
             this.moneyDelta = moneyDelta;
         }

@@ -192,9 +192,8 @@ public class TestLifecycle extends Lifecycle {
 
     GameLogicProcessor.LogicResultListener logicResultListener = new GameLogicProcessor.LogicResultListener() {
         @Override
-        public void setTestData(int newPopulation, double deltaMoney) {
-            // TODO: 09-Nov-17
-            //gui.setGameData(newPopulation, gameLogicProcessor.getMoney(), deltaMoney);
+        public void setStatusChanged(int population, int money, boolean grow) {
+            // TODO: 11-Nov-17 update gui
         }
     };
 
