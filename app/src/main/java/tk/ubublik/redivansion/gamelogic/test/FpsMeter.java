@@ -7,6 +7,7 @@ package tk.ubublik.redivansion.gamelogic.test;
 public final class FpsMeter {
 
     private static final FpsMeter instance = new FpsMeter();
+    private static final boolean debug = false;
 
     private FpsMeter(){
 
@@ -19,6 +20,7 @@ public final class FpsMeter {
     long nano = System.nanoTime();
     long fpsCounter = 0;
     public void logFps(){
+        if (!debug) return;
         if (System.nanoTime()-nano >= 500000000L){
             System.out.println("RENDER FPS: "+fpsCounter*2);
             fpsCounter = 0;
@@ -29,6 +31,7 @@ public final class FpsMeter {
 
     long lastLogicShow = System.currentTimeMillis();
     public void logLogic(long nanos){
+        if (!debug) return;
         if (System.currentTimeMillis()-lastLogicShow>=500) {
             long elapsed = System.nanoTime() - nanos;
             //yes, I got divide by zero exception
@@ -44,6 +47,7 @@ public final class FpsMeter {
     private long beginTime;
     private boolean allowCustom = false;
     public void beginCustom(){
+        if (!debug) return;
         if (System.currentTimeMillis()-lastCustomTime>500){
             allowCustom = true;
             lastCustomTime = System.currentTimeMillis();
@@ -55,6 +59,7 @@ public final class FpsMeter {
     }
 
     public void logCustom(String name){
+        if (!debug) return;
         if (!allowCustom) return;
         long current = System.nanoTime()-beginTime;
         String fps;

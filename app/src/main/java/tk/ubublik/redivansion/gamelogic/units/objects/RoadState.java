@@ -1,5 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.units.objects;
 
+import java.util.BitSet;
+
 /**
  * Created by Bublik on 09-Oct-17.
  */
@@ -10,6 +12,8 @@ public class RoadState{
     private boolean right;//z+
     private boolean left;//z-
 
+    public static final int ROAD_STATE_SIZE = 1;
+
     public RoadState(){
         this(false, false, false, false);
     }
@@ -19,6 +23,24 @@ public class RoadState{
         this.back = back;
         this.right = right;
         this.left = left;
+    }
+
+    public RoadState(byte[] bytes){
+        BitSet bitSet = BitSet.valueOf(bytes);
+        front = bitSet.get(0);
+        back = bitSet.get(1);
+        left = bitSet.get(2);
+        right = bitSet.get(3);
+    }
+
+    public byte[] toBytes(){
+        BitSet bitSet = new BitSet(7);
+        bitSet.set(0, front);
+        bitSet.set(1, back);
+        bitSet.set(2, left);
+        bitSet.set(3, right);
+        bitSet.set(4, true);
+        return bitSet.toByteArray();
     }
 
     public boolean isFront() {
@@ -105,5 +127,17 @@ public class RoadState{
         if (left) res++;
         if (right) res++;
         return res;
+    }
+
+    @Override
+    public String toString() {
+        String s = "[";
+        if (left) s+="left, ";
+        if (right) s+="right, ";
+        if (front) s+="front, ";
+        if (back) s+="back";
+        s+="], ";
+        s+=getModelName();
+        return s;
     }
 }

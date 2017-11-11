@@ -131,7 +131,7 @@ public abstract class WorldObject extends Node{
     private static final int POINT_SIZE = INT_SIZE*2;
     public byte[] toBytes() {
         int index = 0;
-        byte[] bytes = new byte[INT_SIZE + POINT_SIZE + INT_SIZE * 14 + FLOAT_SIZE];
+        byte[] bytes = new byte[INT_SIZE + POINT_SIZE + INT_SIZE * 12 + BYTE_SIZE + FLOAT_SIZE];
         insertArray(bytes, getArray(this.getClass().getName().hashCode()), index);
         index += INT_SIZE;
         insertArray(bytes, getArray(position.x), index);
@@ -203,7 +203,8 @@ public abstract class WorldObject extends Node{
         return worldObject;
     }
 
-    public void parseBytes(byte[] bytes, int index) {
+    public int parseBytes(byte[] bytes, int index) {
+        int originIndex = index;
         position = new Point(getInt(bytes, index), ByteConverter.getInt(bytes, index + INT_SIZE));
         index += INT_SIZE * 2;
         level = getInt(bytes, index);
@@ -232,7 +233,9 @@ public abstract class WorldObject extends Node{
         index += INT_SIZE;
         education = getInt(bytes, index);
         index += INT_SIZE;
-        radiusSqr = getInt(bytes, index); //index+=INT_SIZE;
+        radiusSqr = getFloat(bytes, index);
+        index+=FLOAT_SIZE;
+        return index-originIndex;
     }
 
     public static int getDefaultSize(){return 1;}

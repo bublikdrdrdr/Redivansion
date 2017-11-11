@@ -1,6 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.units;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class SavedLevel {
     }
 
     public SavedLevel(byte[] bytes) throws ParseLevelException {
+        System.out.println("ARRAY: "+ Arrays.toString(bytes));
         try {
             worldObjects = new LinkedList<>();
             int index = 0;
@@ -73,6 +75,7 @@ public class SavedLevel {
             insertArray(bytes, tempBytes, index);
             index+=tempBytes.length;
         }
+        System.out.println("ARRAY: "+ Arrays.toString(bytes));
         return bytes;
     }
 }

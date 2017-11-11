@@ -7,7 +7,6 @@ package tk.ubublik.redivansion.gamelogic.utils;
 
 public class GameParams {
 
-    @Deprecated
     public static final int ROAD_BUILD_COST = 1000;
 
     //office

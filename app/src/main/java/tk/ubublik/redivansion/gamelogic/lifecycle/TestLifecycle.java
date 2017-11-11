@@ -51,11 +51,13 @@ public class TestLifecycle extends Lifecycle {
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
         loadModels();
-        settings = Settings.getInstance();
-        settings.open();
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
         Level level = LevelFactory.getLevel(0);
-        loadLevel(level);
+        try{
+            settings = Settings.getInstance();
+            settings.open();
+            loadLevel(level);
+        } catch (Exception ignored){}
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());

@@ -5,14 +5,18 @@ import android.graphics.Point;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 
+import java.util.Arrays;
 import java.util.List;
 
 import tk.ubublik.redivansion.R;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
+import tk.ubublik.redivansion.gamelogic.utils.ByteSettings;
 import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
+
+import static tk.ubublik.redivansion.gamelogic.units.objects.RoadState.ROAD_STATE_SIZE;
 
 /**
  * Created by Bublik on 31-Aug-17.
@@ -64,6 +68,28 @@ public class Road extends WorldObject {
         setSize(DEFAULT_SIZE);
         setNeedsRoad(true);
         setBuildCost(GameParams.ROAD_BUILD_COST);
+    }
+
+    @Override
+    public byte[] toBytes() {
+        byte[] superBytes = super.toBytes();
+        byte[] bytes = new byte[superBytes.length+ROAD_STATE_SIZE];
+        ByteSettings.ByteConverter.insertArray(bytes, superBytes, 0);
+        byte[] state = roadState.toBytes();
+        ByteSettings.ByteConverter.insertArray(bytes, state, superBytes.length);
+        System.out.println("AAA"+state[0]);
+        return bytes;
+    }
+
+    @Override
+    public int parseBytes(byte[] bytes, int index) {
+        int size = super.parseBytes(bytes, index);
+        index+= size;
+        byte[] state = Arrays.copyOfRange(bytes, index, index+ROAD_STATE_SIZE);
+        roadState = new RoadState(state);
+        setRoadState(roadState);
+        System.out.println("AAA"+state[0]);
+        return size+ROAD_STATE_SIZE;
     }
 
     @Override

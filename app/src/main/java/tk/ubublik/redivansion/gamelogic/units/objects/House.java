@@ -45,15 +45,16 @@ public class House extends Building {
         byte[] superBytes = super.toBytes();
         byte[] bytes = new byte[superBytes.length+INT_SIZE];
         ByteSettings.ByteConverter.insertArray(bytes, superBytes, 0);
-        ByteSettings.ByteConverter.insertArray(bytes, ByteSettings.ByteConverter.getArray(pollution), superBytes.length);
+        ByteSettings.ByteConverter.insertArray(bytes, ByteSettings.ByteConverter.getArray(population), superBytes.length);
         return bytes;
     }
 
     @Override
-    public void parseBytes(byte[] bytes, int index) {
-        super.parseBytes(bytes, index);
-        index+= bytes.length-INT_SIZE;
+    public int parseBytes(byte[] bytes, int index) {
+        int size = super.parseBytes(bytes, index);
+        index+= size;
         population = ByteSettings.ByteConverter.getInt(bytes, index);
+        return size+INT_SIZE;
     }
 
     private void beginAnimation(String animationName, final String nextAnimation){
