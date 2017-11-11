@@ -4,7 +4,9 @@ import android.graphics.Point;
 
 import com.jme3.scene.Geometry;
 
+import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryLoopAnimationManager;
+import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
@@ -37,12 +39,21 @@ public class Tree extends WorldObject {
     boolean loopStage = false;
     @Override
     public void onUpdate() {
-        if (!loopStage) getGeometryManager().onUpdate(); else this.getGeometryManager().updateGeometricState();
+        if (!loopStage) getGeometryManager().onUpdate(); //else this.getGeometryManager().updateGeometricState();
     }
 
     @Override
     protected void beginAnimation(String animationName) {
         ((GeometryLoopAnimationManager)getGeometryManager()).beginAnimation(getLoopAnimation(), animationName);
+    }
+
+    @Override
+    public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
+        try {
+            ((GeometryLoopAnimationManager) getGeometryManager()).beginAnimation(onAnimationEndListener, "destroy");
+        } catch (Exception e){
+            onAnimationEndListener.animationEnd();
+        }
     }
 
     /*

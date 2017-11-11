@@ -36,6 +36,16 @@ public class Office extends Building {
         beginAnimation("build_lvl_1");
     }
 
+    @Override
+    public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
+        // TODO: 11-Nov-17 i don't remember destroy animation name
+        try {
+            ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+        } catch (Exception e){
+            onAnimationEndListener.animationEnd();
+        }
+    }
+
     private void beginAnimation(String animationName, final String nextAnimation){
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName, new GeometryManager.OnAnimationEndListener() {
             @Override

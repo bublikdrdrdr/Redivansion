@@ -3,6 +3,7 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 import android.graphics.Point;
 
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
+import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
@@ -25,6 +26,15 @@ public class PoliceStation extends WorldObject {
         setBuildCost(GameParams.POLICE_STATION_LEVELS_BUILD_COST[0]);
         //
         beginAnimation("build");
+    }
+
+    @Override
+    public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
+        try {
+            ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+        } catch (Exception e){
+            onAnimationEndListener.animationEnd();
+        }
     }
 
     @Override

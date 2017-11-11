@@ -139,7 +139,7 @@ public class TestLifecycle extends Lifecycle {
         debugPanel.addButton("Clear select", commands);
         debugPanel.addButton("Remove", commands);
         //debugPanel.addButton("Set icon", commands);
-        //debugPanel.addButton("Add house", commands);
+        debugPanel.addButton("Add house", commands);
         //debugPanel.addButton("Add power", commands);
         //debugPanel.addButton("Upgrade", commands);
         //debugPanel.addButton("Game speed", commands);

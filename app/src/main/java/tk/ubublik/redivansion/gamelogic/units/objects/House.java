@@ -34,6 +34,11 @@ public class House extends Building {
         beginAnimation("build");
     }
 
+    @Override
+    public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
+        ((GeometryAnimationManager)getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+    }
+
     private static final int INT_SIZE = 4;
     @Override
     public byte[] toBytes() {

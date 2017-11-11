@@ -43,6 +43,11 @@ public class ThermalPowerPlant extends PowerPlant {
         });
     }
 
+    @Override
+    public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
+        ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+    }
+
     /*
     logic block
      */

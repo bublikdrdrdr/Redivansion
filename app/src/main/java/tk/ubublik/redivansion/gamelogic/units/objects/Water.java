@@ -2,6 +2,7 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 
 import android.graphics.Point;
 
+import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 
 /**
@@ -14,6 +15,11 @@ public class Water extends WorldObject{
         super(position);
         setSize(1);
         setPermanent(true);
+    }
+
+    @Override
+    public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
+        ((GeometryAnimationManager)getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
     }
 
     @Override

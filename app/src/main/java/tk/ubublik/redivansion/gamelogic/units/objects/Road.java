@@ -67,8 +67,12 @@ public class Road extends WorldObject {
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
+        try {
+            ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+        } catch (Exception e){
+            onAnimationEndListener.animationEnd();
+        }
     }
 
     private void setCacheInstance(String key, GeometryAnimationManager geometryAnimationManager){

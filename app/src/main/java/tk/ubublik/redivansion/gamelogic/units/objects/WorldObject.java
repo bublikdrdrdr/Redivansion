@@ -115,6 +115,8 @@ public abstract class WorldObject extends Node{
         }
     }
 
+    public abstract void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener);
+
     protected void beginAnimation(String animationName){
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName);
     }

@@ -19,6 +19,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
+import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.TerrainDrawer;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
@@ -90,9 +91,14 @@ public class MapRenderer implements Observer{
         return (node.getChildIndex(spatial)!=-1);
     }
 
-    public void removeObject(WorldObject worldObject){
-        node.detachChild(worldObject);
-        //removeObject(worldObject.getGeometryManager());
+    public void removeObject(final WorldObject worldObject){
+        worldObject.destroy(new GeometryManager.OnAnimationEndListener() {
+            @Override
+            public void animationEnd() {
+                node.detachChild(worldObject);
+                worldObjectList.remove(worldObject);
+            }
+        });
     }
 
     @Deprecated
@@ -101,8 +107,7 @@ public class MapRenderer implements Observer{
     }
 
     public void removeObject(int index){
-        node.detachChildAt(index);
-        worldObjectList.remove(index);
+        removeObject(worldObjectList.get(index));
     }
 
     public void onUpdate(){
