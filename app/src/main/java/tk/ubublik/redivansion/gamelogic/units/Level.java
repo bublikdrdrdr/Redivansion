@@ -13,13 +13,12 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 public class Level {
 
     private int id;
-    private String levelName;
-    private LevelStatus levelStatus;
     private List<WorldObject> worldObjects = new ArrayList<>();
     private long time;
     private int money;
     private LevelGoal levelGoal;
     private Road mainRoad;
+    private int population;
 
     public Level(List<WorldObject> worldObjects){
         setWorldObjects(worldObjects);
@@ -40,14 +39,6 @@ public class Level {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public LevelStatus getLevelStatus() {
-        return levelStatus;
-    }
-
-    public void setLevelStatus(LevelStatus levelStatus) {
-        this.levelStatus = levelStatus;
     }
 
     public List<WorldObject> getWorldObjects() {
@@ -96,5 +87,13 @@ public class Level {
 
     public Road getMainRoad() {
         return mainRoad;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
     }
 }

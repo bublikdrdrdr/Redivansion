@@ -34,7 +34,7 @@ public class TutorialLoadingLifecycle extends LoadingLifecycle {
                     HashMap<String, GeometryManager> models = new HashMap<>();
                     models.put("simple", geometryAnimationManager);
                     //tutorial level
-                    NodesCache.getInstance().put("tutorial_level", LevelFactory.getLevel("tutorial", models));
+                    //NodesCache.getInstance().put("tutorial_level", LevelFactory.getLevel("tutorial", models));
                 } catch (Exception e){
                     System.exit(1);
                 }

@@ -53,11 +53,9 @@ public class TestLifecycle extends Lifecycle {
         loadModels();
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
         Level level = LevelFactory.getLevel(0);
-        try{
-            settings = Settings.getInstance();
-            settings.open();
-            loadLevel(level);
-        } catch (Exception ignored){}
+        settings = Settings.getInstance();
+        settings.open();
+        loadLevel(level);
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
@@ -196,6 +194,11 @@ public class TestLifecycle extends Lifecycle {
         @Override
         public void setStatusChanged(int population, int money, boolean grow) {
             // TODO: 11-Nov-17 update gui
+        }
+
+        @Override
+        public void setGameEnd(boolean win) {
+
         }
     };
 

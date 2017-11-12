@@ -73,6 +73,9 @@ public class GameLogicProcessor implements Observer {
             });
             logicThread.start();
         }
+        if (timer.elapsed()>level.getTime()){
+            logicResultListener.setGameEnd(level.getLevelGoal().isDone());
+        }
     }
 
     public void start(){
@@ -135,6 +138,7 @@ public class GameLogicProcessor implements Observer {
 
     private void synchronizeGameLoopResults(int newPopulation, int deltaMoney){
         level.setMoney(level.getMoney()+deltaMoney);
+        level.setPopulation(newPopulation);
         logicResultListener.setStatusChanged(newPopulation, level.getMoney(), deltaMoney>0);
     }
 
@@ -143,6 +147,7 @@ public class GameLogicProcessor implements Observer {
 
     public interface LogicResultListener{
         void setStatusChanged(int population, int money, boolean grow);
+        void setGameEnd(boolean win);
     }
 
     public SavedLevel getSavedLevel() {
