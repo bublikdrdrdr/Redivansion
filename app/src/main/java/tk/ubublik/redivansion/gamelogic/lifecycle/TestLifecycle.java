@@ -21,6 +21,7 @@ import tk.ubublik.redivansion.gamelogic.units.Settings;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.House;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
+import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.ThermalPowerPlant;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
@@ -205,7 +206,11 @@ public class TestLifecycle extends Lifecycle {
     GUIListener guiListener = new GUIListener() {
         @Override
         public void remove() {
-            worldMap.fastRemove(getCenterPoint(1));
+            WorldObject worldObject = worldMap.fastRemove(getCenterPoint(1));
+            if (worldObject instanceof Road){
+                Road road = (Road)worldObject;
+                Road.updateRoadStates(road.getPosition(), road.getPosition(), worldMap.getNearbyRoads(road.getPosition(), road.getPosition()));
+            }
         }
 
         @Override

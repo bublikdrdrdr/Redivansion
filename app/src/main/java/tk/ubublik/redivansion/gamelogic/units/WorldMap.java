@@ -116,7 +116,7 @@ public class WorldMap extends Observable implements Cloneable{
         } else return false;
     }
 
-    public boolean fastRemove(Point position){
+    public WorldObject fastRemove(Point position){
         // TODO: 04-Oct-17 check speed difference, in "remove" function we search for object in position and then search it again in list
         Iterator<WorldObject> iterator = worldObjects.iterator();
         while (iterator.hasNext()){
@@ -125,10 +125,10 @@ public class WorldMap extends Observable implements Cloneable{
                 iterator.remove();
                 setChanged();
                 notifyObservers(new WorldMapAction(WorldMapAction.Action.REMOVE, worldObject));
-                return true;
+                return worldObject;
             }
         }
-        return false;
+        return null;
     }
 
     public boolean objectInPoint(WorldObject worldObject, Point position){

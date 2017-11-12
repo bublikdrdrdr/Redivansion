@@ -93,9 +93,9 @@ public class Road extends WorldObject {
     }
 
     @Override
-    public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
+    public void destroy(final GeometryManager.OnAnimationEndListener onAnimationEndListener) {
         try {
-            ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+            ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy"+roadState.getModelName(), onAnimationEndListener);
         } catch (Exception e){
             onAnimationEndListener.animationEnd();
         }
@@ -146,6 +146,7 @@ public class Road extends WorldObject {
         Road[][] array = toArray(startPoint, endPoint, nearbyRoads, offset);
         for (int i = 0; i < array.length; i++){
             for (int j = 0; j < array[0].length; j++){
+                if ((i==0 || i == array.length-1)&& (j==0|| j==array[0].length-1)) continue;
                 if (array[i][j]!=null) updateSingleRoadStateFromArray(array, i, j);
             }
         }

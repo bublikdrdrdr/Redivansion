@@ -23,7 +23,6 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 public class LevelFactory {
 
     public static Level getLevel(int id){
-        //todo: get level by name
         List<WorldObject> list = new LinkedList<>();
         Road road = new Road(new Point(2,2));
         road.setPermanent(true);
@@ -43,5 +42,4 @@ public class LevelFactory {
         });
         return level;
     }
-
 }

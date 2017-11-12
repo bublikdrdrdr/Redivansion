@@ -23,6 +23,7 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.TerrainDrawer;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
+import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
@@ -91,14 +92,17 @@ public class MapRenderer implements Observer{
         return (node.getChildIndex(spatial)!=-1);
     }
 
-    public void removeObject(final WorldObject worldObject){
+    public boolean removeObject(final WorldObject worldObject){
+        final boolean[] result = {false};
         worldObject.destroy(new GeometryManager.OnAnimationEndListener() {
             @Override
             public void animationEnd() {
                 node.detachChild(worldObject);
                 worldObjectList.remove(worldObject);
+                result[0] = true;
             }
         });
+        return result[0];
     }
 
     @Deprecated
@@ -110,12 +114,15 @@ public class MapRenderer implements Observer{
         removeObject(worldObjectList.get(index));
     }
 
-    public void onUpdate(){
+    public void onUpdate() {
         // TODO: 26-Oct-17 OPTIMIZE
-        for (WorldObject worldObject: worldObjectList){
-            if ((camera.contains(worldObject.getWorldBound())!= Camera.FrustumIntersect.Outside)){
-                worldObject.onUpdate();
+        try {
+            for (WorldObject worldObject : worldObjectList) {
+                if ((camera.contains(worldObject.getWorldBound()) != Camera.FrustumIntersect.Outside)) {
+                    worldObject.onUpdate();
+                }
             }
+        } catch (Exception ignored) {
         }
         terrainDrawer.onUpdate(CameraControl.getCameraCenterPoint(camera));
     }
