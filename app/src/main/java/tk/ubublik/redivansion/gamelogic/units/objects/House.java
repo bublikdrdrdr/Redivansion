@@ -20,6 +20,10 @@ public class House extends Building {
     private int population = GameParams.HOUSE_LEVELS_MAX_POPULATION[0]/2;
     private int lastPopulationDelta = 0;
 
+    public House(int x, int y){
+        this(new Point(x,y));
+    }
+
     public House(Point position) {
         setGeometryManager(new GeometryAnimationManager("house", (Model) NodesCache.getInstance().get("houseModel")));
         //local model scale and move

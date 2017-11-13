@@ -178,4 +178,8 @@ public class GameParams {
     public static final int[] WATER_PLANT_LEVELS_HAPPINESS = new int[]{0, 0, 0};
     public static final int[] WATER_PLANT_LEVELS_EDUCATION = new int[]{0, 0, 0};
     public static final float[] WATER_PLANT_LEVELS_RADIUS = new float[]{49, 64, 91};
+
+    public static final int[] LEVELS_MONEY = new int[]{500000, 10000, 20000, 25000, 30000, 40000};
+    public static final long[] LEVELS_TIMES = new long[]{5*60*1000, 5*60*1000, 7*60*1000, 10*60*1000, 12*60*1000, 15*60*1000};
+    public static final int[] LEVEL_POPULATION_GOAL = new int[]{0, 3000, 10000, 30000, 100000, 500000};
 }

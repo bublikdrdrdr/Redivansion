@@ -11,10 +11,13 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.lifecycle.Lifecycle;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.LevelGoal;
+import tk.ubublik.redivansion.gamelogic.units.objects.House;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
 import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+
+import static tk.ubublik.redivansion.gamelogic.utils.GameParams.*;
 
 /**
  * Created by Bublik on 01-Sep-17.
@@ -22,24 +25,34 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 public class LevelFactory {
 
-    public static Level getLevel(int id){
-        List<WorldObject> list = new LinkedList<>();
-        Road road = new Road(new Point(2,2));
-        road.setPermanent(true);
-        list.add(road);
-        list.add(new Office(0,-1));
-        list.add(new Office(0,2));
-        list.add(new Tree(2,1));
-        Level level = new Level(list);
-        level.setId(0);
-        level.setMoney(20000);
-        level.setTime(5*60*1000);
+    public static Level getLevel(final int id){
+        if (id<0 || id>=LEVELS_MONEY.length-1) throw new IllegalArgumentException("Unregistered levek with id "+Integer.toString(id));
+        Level level = new Level(getLevelWorldObjects(id));
+        level.setId(id);
+        level.setMoney(LEVELS_MONEY[id]);
+        level.setTime(LEVELS_TIMES[id]);
         level.setLevelGoal(new LevelGoal(level) {
             @Override
             public boolean isDone() {
-                return  (level.getPopulation()>5000 && level.getMoney()>=0);
+                return  (level.getPopulation()>=LEVEL_POPULATION_GOAL[id] && level.getMoney()>=0);
             }
         });
         return level;
     }
+
+    private static List<WorldObject> getLevelWorldObjects(int id){
+        switch (id){
+            case 0: List<WorldObject> list = new LinkedList<>();
+                Road road = new Road(new Point(2,2));
+                road.setPermanent(true);
+                list.add(road);
+                list.add(new House(0,-1));
+                list.add(new Office(0,2));
+                list.add(new Tree(2,1));
+                return list;
+            default: return new LinkedList<>();
+        }
+    }
+
+
 }
