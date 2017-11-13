@@ -31,10 +31,12 @@ public class LevelFactory {
         level.setId(id);
         level.setMoney(LEVELS_MONEY[id]);
         level.setTime(LEVELS_TIMES[id]);
+        level.setLimitTypeRound(LEVELS_MAP_LIMIT_TYPE[id]);
+        level.setMapLimit(LEVELS_AREA_SIZE[id]);
         level.setLevelGoal(new LevelGoal(level) {
             @Override
             public boolean isDone() {
-                return  (level.getPopulation()>=LEVEL_POPULATION_GOAL[id] && level.getMoney()>=0);
+                return  (level.getPopulation()>=LEVELS_POPULATION_GOAL[id] && level.getMoney()>=0);
             }
         });
         return level;

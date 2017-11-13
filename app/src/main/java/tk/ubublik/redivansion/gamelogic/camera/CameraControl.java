@@ -10,6 +10,7 @@ import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.TouchListener;
 import com.jme3.input.controls.TouchTrigger;
 import com.jme3.input.event.TouchEvent;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 
@@ -44,6 +45,8 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
     private InputManager inputManager;
     private final float screenAspect;
     private TouchInputHook touchInputHook;
+    private boolean areaLimitRound = false;
+    private float areaLimit = 20f;
 
     public CameraControl(Camera cam, InputManager inputManager) {
         this.cam = cam;
@@ -124,8 +127,28 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
         }
         vel.multLocal(value * moveSpeed * moveSpeedScale);
         pos.addLocal(vel);
-
+        pos = limitPosition(pos);
         cam.setLocation(pos);
+    }
+
+    private Vector3f limitPosition(Vector3f position){
+        Vector3f center = getCameraCenterPoint();
+        if (areaLimitRound){
+            System.out.println("Center: "+center);
+            System.out.println("Area limit: "+areaLimit);
+            System.out.println("Area limit2: "+areaLimit*areaLimit);
+            System.out.println("Distance: "+center.distanceSquared(Vector3f.ZERO));
+            if (center.distanceSquared(Vector3f.ZERO)>areaLimit*areaLimit){
+                Vector3f difference = position.subtract(center);
+                Vector3f centerClone = center.normalize();
+                centerClone.multLocal(areaLimit);// FIXME: find faster solution
+                position = centerClone.add(difference);
+            }
+        } else {
+            if (FastMath.abs(center.x)>areaLimit) position.x += -center.x +(center.x>0?areaLimit:-areaLimit);
+            if (FastMath.abs(center.z)>areaLimit) position.z += -center.z +(center.z>0?areaLimit:-areaLimit);
+        }
+        return position;
     }
 
     @Override
@@ -183,5 +206,19 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
         cam.setFrustumPerspective(currentFoV, screenAspect, 1f, 50f);
     }
 
+    public boolean isAreaLimitRound() {
+        return areaLimitRound;
+    }
 
+    public void setAreaLimitRound(boolean areaLimitRound) {
+        this.areaLimitRound = areaLimitRound;
+    }
+
+    public float getAreaLimit() {
+        return areaLimit;
+    }
+
+    public void setAreaLimit(float areaLimit) {
+        this.areaLimit = areaLimit;
+    }
 }

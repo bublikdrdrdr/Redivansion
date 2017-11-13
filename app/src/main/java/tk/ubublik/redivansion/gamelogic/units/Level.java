@@ -16,6 +16,8 @@ public class Level {
     private List<WorldObject> worldObjects = new ArrayList<>();
     private long time;
     private int money;
+    private boolean limitTypeRound;
+    private float mapLimit;
     private LevelGoal levelGoal;
     private Road mainRoad;
     private int population;
@@ -95,5 +97,21 @@ public class Level {
 
     public void setPopulation(int population) {
         this.population = population;
+    }
+
+    public boolean isLimitTypeRound() {
+        return limitTypeRound;
+    }
+
+    public void setLimitTypeRound(boolean limitTypeRound) {
+        this.limitTypeRound = limitTypeRound;
+    }
+
+    public float getMapLimit() {
+        return mapLimit;
+    }
+
+    public void setMapLimit(float mapLimit) {
+        this.mapLimit = mapLimit;
     }
 }

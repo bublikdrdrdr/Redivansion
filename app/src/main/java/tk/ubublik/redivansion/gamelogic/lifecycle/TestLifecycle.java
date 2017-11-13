@@ -52,11 +52,13 @@ public class TestLifecycle extends Lifecycle {
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
         loadModels();
-        cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
         Level level = LevelFactory.getLevel(0);
         settings = Settings.getInstance();
         settings.open();
         loadLevel(level);
+        cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
+        cameraControl.setAreaLimitRound(level.isLimitTypeRound());
+        cameraControl.setAreaLimit(level.getMapLimit());
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
