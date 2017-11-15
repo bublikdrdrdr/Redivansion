@@ -1,5 +1,6 @@
 package tk.ubublik.redivansion.gamelogic.gui;
 
+import com.jme3.font.Rectangle;
 import com.jme3.input.event.TouchEvent;
 import com.jme3.scene.Node;
 
@@ -16,6 +17,9 @@ public class Screen {
     private String screenName;
     private Node guiNode;
     public ArrayList<Frame> activeFrame = new ArrayList<>();
+    public boolean scrolled = false;
+    private float prevScrollY = 0;
+    private float[] elemY;
 
     public Screen(String name, Node gui, Frame frame){
         this.screenName = name;
@@ -28,7 +32,7 @@ public class Screen {
         activeFrame.add(frame);
         for(Element element:activeFrame.get(activeFrame.size()-1).elements){
             guiNode.attachChild(element.p);
-            if(element.text != null)
+            if(element.txt.getText() != null)
                 guiNode.attachChild(element.txt);
         }
     }
@@ -39,7 +43,7 @@ public class Screen {
             for (Element element : activeFrame.get(activeFrame.size() - 1).elements) {
                 in = guiNode.getChildIndex(element.p);
                 guiNode.detachChildAt(in);
-                if (element.text != null) {
+                if (element.txt.getText() != null) {
                     in = guiNode.getChildIndex(element.txt);
                     guiNode.detachChildAt(in);
                 }

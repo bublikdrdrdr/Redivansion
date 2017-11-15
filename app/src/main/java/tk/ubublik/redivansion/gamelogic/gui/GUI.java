@@ -33,6 +33,21 @@ public class GUI implements TouchInputHook {
 
     }
 
+    public void setTime(){
+
+    }
+
+    public void setStatusChanged(int population, int money, boolean grow){
+        for(Element element:frames.main.elements){
+            if(element.p.getName().equals("population")){
+                element.txt.setText("Population: " + population);
+            }
+            else if(element.p.getName().equals("money")){
+                element.txt.setText("Money: " + money);
+            }
+        }
+    }
+
     @Override
     public boolean touchCaptured(TouchEvent touchEvent, float tfp) {
         if(touchEvent.getType() == TouchEvent.Type.DOWN){
@@ -40,8 +55,9 @@ public class GUI implements TouchInputHook {
             this.startY = touchEvent.getY();
             touchedGUI = guiScreen.touchEvent(startX, startY, guiListener, touchEvent);
         }
-        if(touchEvent.getType() == TouchEvent.Type.UP && touchedGUI){
+        else if(touchEvent.getType() == TouchEvent.Type.UP && touchedGUI){
             guiScreen.activeFrame.get(guiScreen.activeFrame.size()-1).touchedElem = false;
+            guiScreen.activeFrame.get(guiScreen.activeFrame.size()-1).removeTouch();
             guiScreen.touchEvent(touchEvent.getX(), touchEvent.getY(), guiListener, touchEvent);
             touchedGUI = false;
         }

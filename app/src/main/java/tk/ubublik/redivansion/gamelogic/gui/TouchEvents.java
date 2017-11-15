@@ -27,6 +27,25 @@ public class TouchEvents {
             case "build":
                 build(event);
                 break;
+            case "menu":
+                menu(event);
+                break;
+        }
+    }
+
+    public static void menu(String event){
+        switch (event){
+            case "save":
+                guiListener.save();
+                screen.removeFrame();
+                break;
+            case "removeSave":
+                guiListener.removeSave();
+                screen.removeFrame();
+                break;
+            case "menuClose":
+                screen.removeFrame();
+                break;
         }
     }
 
@@ -34,6 +53,9 @@ public class TouchEvents {
         switch (event){
             case "addSmthing":
                 screen.showFrame(GUI.frames.add);
+                break;
+            case "menu":
+                screen.showFrame(GUI.frames.menu);
                 break;
             case "remove":
                 if(!removeSelect){
@@ -64,6 +86,18 @@ public class TouchEvents {
                 screen.removeFrame();
                 screen.showFrame(GUI.frames.build);
                 break;
+            case "addHouse":
+                object = "house";
+                guiListener.selectOffice();
+                screen.removeFrame();
+                screen.showFrame(GUI.frames.build);
+                break;
+            case "addPower":
+                object = "power";
+                guiListener.selectPower();
+                screen.removeFrame();
+                screen.showFrame(GUI.frames.build);
+                break;
             case "setRoadPoints":
                 object = "road";
                 roadKostyl = 0;
@@ -89,6 +123,16 @@ public class TouchEvents {
                         break;
                     case "tree":
                         guiListener.addTree();
+                        guiListener.selectClear();
+                        screen.removeFrame();
+                        break;
+                    case "house":
+                        guiListener.addHouse();
+                        guiListener.selectClear();
+                        screen.removeFrame();
+                        break;
+                    case "power":
+                        guiListener.addPower();
                         guiListener.selectClear();
                         screen.removeFrame();
                         break;

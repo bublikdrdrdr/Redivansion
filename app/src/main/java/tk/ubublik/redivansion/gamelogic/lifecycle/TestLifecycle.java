@@ -62,15 +62,15 @@ public class TestLifecycle extends Lifecycle {
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
-        //gui = new GUI(simpleApplication.getGuiNode(), guiListener);
+        gui = new GUI(simpleApplication.getGuiNode(), guiListener);
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
-        //cameraControl.setTouchInputHook(gui);
+        cameraControl.setTouchInputHook(gui);
         worldMap.addObserver(mapRenderer);
         worldMap.addObserver(gameLogicProcessor);
         worldMap.addObserver(selectToolManager);
         worldMap.put(level.getWorldObjects());
-        addDebugPanel();
+        //addDebugPanel();
     }
 
     private void loadLevel(Level level) {
@@ -108,7 +108,7 @@ public class TestLifecycle extends Lifecycle {
         mapRenderer.onUpdate();fpsMeter.logCustom("MAP RENDERER");
         worldLight.onUpdate();fpsMeter.logCustom("LIGHT");
         worldMap.onUpdate();fpsMeter.logCustom("MAP");
-        //gui.onUpdate();fpsMeter.logCustom("GUI");
+        gui.onUpdate();fpsMeter.logCustom("GUI");
         gameLogicProcessor.onUpdate();fpsMeter.logCustom("LOGIC");
         cameraControl.onUpdate();fpsMeter.logCustom("CAMERA");
         selectToolManager.onUpdate();fpsMeter.logCustom("SELECT");
@@ -216,6 +216,16 @@ public class TestLifecycle extends Lifecycle {
         }
 
         @Override
+        public void save() {
+            saveLevel();
+        }
+
+        @Override
+        public void removeSave() {
+            removeLevel();
+        }
+
+        @Override
         public void addBuilding() {
             Point position = getCenterPoint(2);
             Office office = new Office(position);
@@ -227,6 +237,16 @@ public class TestLifecycle extends Lifecycle {
         public void addTree(){
             Tree tree = new Tree(getCenterPoint(1));
             worldMap.put(tree);
+        }
+
+        @Override
+        public void addHouse() {
+            worldMap.put(new House(getCenterPoint(2)));
+        }
+
+        @Override
+        public void addPower() {
+            worldMap.put(new ThermalPowerPlant(getCenterPoint(3)));
         }
 
         @Override
@@ -244,6 +264,11 @@ public class TestLifecycle extends Lifecycle {
         @Override
         public void selectTree() {
             selectToolManager.setSelectSinglePoint(Tree.class);
+        }
+
+        @Override
+        public void selectPower() {
+            selectToolManager.setSelectSinglePoint(ThermalPowerPlant.class);
         }
 
         @Override
