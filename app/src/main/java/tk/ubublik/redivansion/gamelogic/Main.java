@@ -3,6 +3,7 @@ package tk.ubublik.redivansion.gamelogic;
 import com.jme3.app.SimpleApplication;
 import com.simsilica.lemur.GuiGlobals;
 
+import tk.ubublik.redivansion.gamelogic.lifecycle.LevelLoadingLifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.Lifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
 import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
@@ -23,7 +24,7 @@ public class Main extends SimpleApplication {
         setupApplication();
         initCameraControl();
         //lifecycle = new MainLifecycle(this);
-        lifecycle = new TestLifecycle(this);
+        lifecycle = new LevelLoadingLifecycle(0, this);
     }
 
     @Override
