@@ -10,6 +10,7 @@ import java.util.List;
 
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.objects.PowerPlant;
+import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject.*;
 
@@ -113,7 +114,7 @@ public class ResourcesChecker extends Checker implements Runnable{
         for (WorldObject worldObject: list) {
             checkInterrupted();
             worldObject.recalculateParams();
-            if (!worldObject.roadConnected) continue;// TODO: or remove from list (check speed difference)
+            if (!worldObject.roadConnected && !(worldObject instanceof Tree)) continue;// TODO: or remove from list (check speed difference)
             if (worldObject.power > 0)
                 hashMap.get(new WorldObjectTypeKey(ResourceType.POWER, true)).add(worldObject);
             else if (worldObject.power < 0)

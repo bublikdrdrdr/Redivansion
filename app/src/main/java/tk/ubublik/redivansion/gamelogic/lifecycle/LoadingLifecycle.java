@@ -57,7 +57,7 @@ public abstract class LoadingLifecycle extends Lifecycle {
         simpleApplication.getGuiNode().attachChild(pic);
 
         spinner = new Picture("spinner");
-        spinner.setImage(StaticAssetManager.getAssetManager(), "Textures/loadingSpinner.png", true);
+        spinner.setImage(StaticAssetManager.getAssetManager(), "Textures/loadingSpinnerCircle.png", true);
         float height = simpleApplication.getCamera().getHeight()/10.f;
         spinnerNode.setLocalTranslation(simpleApplication.getCamera().getWidth()-height, height, 2);
         spinner.setWidth(height);
