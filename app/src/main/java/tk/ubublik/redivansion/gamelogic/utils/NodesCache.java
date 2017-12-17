@@ -42,6 +42,7 @@ public class NodesCache {
 
     public void removeAll(){
         map.clear();
+        animations.clear();
     }
 
     public void addModel(String key, GeometryLoopAnimationManager geometryLoopAnimationManager){

@@ -15,6 +15,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 
 import tk.ubublik.redivansion.MainActivity;
+import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.utils.TouchInputHook;
 
 /**
@@ -26,7 +27,9 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
 
     public static final float minFov = 10f;
     public static final float maxFov = 30f;
-    private float currentFoV = 10f;
+    public float currentFoV = 10f;
+    private float prevFov;
+    private Vector3f prevPos;
 
     public static final String TOUCH_MAPPING = "Mapping touch";
     private static String[] mappings = new String[]{
@@ -37,7 +40,7 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
             TOUCH_MAPPING
     };
 
-    private Camera cam;
+    public Camera cam;
     private static final float moveSpeed = 3f;
     private static final float moveYSpeed = 2f;
     private float moveSpeedScale = (550.f / MainActivity.getScreenDPI());
@@ -46,7 +49,7 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
     private final float screenAspect;
     private TouchInputHook touchInputHook;
     private boolean areaLimitRound = false;
-    private float areaLimit = 20f;
+    private float areaLimit = 2000f;
 
     public CameraControl(Camera cam, InputManager inputManager) {
         this.cam = cam;
@@ -84,6 +87,8 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
 
     public void registerWithInput(InputManager inputManager) {
         this.inputManager = inputManager;
+        inputManager.clearMappings();
+        inputManager.clearRawInputListeners();
         inputManager.addMapping(CameraInput.FLYCAM_STRAFELEFT, new MouseAxisTrigger(MouseInput.AXIS_X, true));
         inputManager.addMapping(CameraInput.FLYCAM_STRAFERIGHT, new MouseAxisTrigger(MouseInput.AXIS_X, false));
         inputManager.addMapping(CameraInput.FLYCAM_FORWARD, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
@@ -126,6 +131,7 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
             vel.multLocal(moveYSpeed);
         }
         vel.multLocal(value * moveSpeed * moveSpeedScale);
+        System.out.println("ALAHU! value: "+value+", vel"+vel);
         pos.addLocal(vel);
         pos = limitPosition(pos);
         cam.setLocation(pos);
@@ -181,6 +187,7 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
 
     @Override
     public void onTouch(String name, TouchEvent event, float tpf) {
+        System.out.println("MoveSpeedScale: " +moveSpeedScale);
         if (touchInputHook!=null && touchInputHook.touchCaptured(event, tpf)){
             this.setEnabled(false);
         } else {
@@ -201,9 +208,28 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
         }
     }
 
-    private void setFov(){
+    public void setFov(){
         moveSpeedScale = (550.f / MainActivity.getScreenDPI()) * (currentFoV / 10);
         cam.setFrustumPerspective(currentFoV, screenAspect, 1f, 50f);
+    }
+
+    public void moveToPosition(Vector3f position){
+        Vector3f currentPos = getCameraCenterPoint();
+        /*case CameraInput.FLYCAM_FORWARD: moveCamera(value, false); break;
+        case CameraInput.FLYCAM_BACKWARD: moveCamera(-value, false); break;
+        case CameraInput.FLYCAM_STRAFELEFT: moveCamera(-value, true); break;
+        case CameraInput.FLYCAM_STRAFERIGHT: moveCamera(value, true); break;*/
+    }
+
+    public void saveCameraPosition(){
+        prevFov = currentFoV;
+        prevPos = new Vector3f(cam.getLocation());
+    }
+
+    public void restoreCameraPosition(){
+        currentFoV = prevFov;
+        setFov();
+        cam.setLocation(prevPos);
     }
 
     public boolean isAreaLimitRound() {

@@ -61,6 +61,13 @@ public class WorldMap extends Observable implements Cloneable{
         return true;
     }
 
+    public WorldObject getObject(Point position){
+        for (WorldObject object: worldObjects){
+            if (objectsIntersect(object, position, 1)) return object;
+        }
+        return null;
+    }
+
     public boolean canPutRectangle(Point p1, Point p2){
         p1 = new Point(p1);
         p2 = new Point(p2);

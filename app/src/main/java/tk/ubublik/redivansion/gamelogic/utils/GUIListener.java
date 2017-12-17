@@ -7,11 +7,16 @@ package tk.ubublik.redivansion.gamelogic.utils;
 public interface GUIListener {
 
     void addTree();
+    void addHouse();
+    void addPower();
     void addBuilding();
     void addRoad();
     void setRoadPoints();
     void selectTree();
+    void selectPower();
     void selectOffice();
     void selectClear();
     void remove();
+    void save();
+    void removeSave();
 }

@@ -12,5 +12,6 @@ public enum LifecycleType {
     LEVEL,
     SETTINGS,
     TUTORIAL,
-    TUTORIAL_LOADING
+    TUTORIAL_LOADING,
+    TEST_LIFECYCLE
 }
