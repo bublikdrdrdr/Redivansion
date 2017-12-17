@@ -1,5 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.gui;
 
+import tk.ubublik.redivansion.gamelogic.lifecycle.MenuLifecycle;
+import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 
 /**
@@ -17,6 +19,19 @@ public class TouchEvents {
     public static void doSmthing(String event, GUIListener gui, Screen scr) {
         guiListener = gui;
         screen = scr;
+        if(event.equals("close")) {
+            if(scr.getActiveFrame().frameName.equals("info")){
+                screen.removeFrame();
+                screen.showFrame(AllFrames.main);
+                screen.gui.cameraControl.restoreCameraPosition();
+            }
+            else if(scr.getActiveFrame().frameName.equals("menu")){
+                TestLifecycle.pauseTime(false);
+                screen.removeFrame();
+            }
+            else screen.removeFrame();
+            return;
+        }
         switch (screen.getCurrentFrameName()) {
             case "main":
                 mainEvents(event);
@@ -29,6 +44,12 @@ public class TouchEvents {
                 break;
             case "menu":
                 menu(event);
+                break;
+            case "mainMenu":
+                mainMenu(event);
+                break;
+            case "levelMenu":
+                levelMenu(event);
                 break;
         }
     }
@@ -43,8 +64,9 @@ public class TouchEvents {
                 guiListener.removeSave();
                 screen.removeFrame();
                 break;
-            case "menuClose":
+            case "returnToMainMenu":
                 screen.removeFrame();
+                TestLifecycle.setDone();
                 break;
         }
     }
@@ -105,9 +127,6 @@ public class TouchEvents {
                 screen.removeFrame();
                 screen.showFrame(GUI.frames.build);
                 break;
-            case "addClose":
-                screen.removeFrame();
-                break;
             default: break;
         }
     }
@@ -156,6 +175,29 @@ public class TouchEvents {
                 screen.removeFrame();
                 break;
         }
+    }
+
+    private static void mainMenu(String event){
+        switch (event){
+            case "levelSelect":
+                AllFrames.initLevelMenu();
+                screen.showFrame(AllFrames.levelMenu);
+                break;
+            case "tutorial":
+                screen.removeFrame();
+                MenuLifecycle.buttonClicked(MenuLifecycle.MenuResult.START_TUTORIAL);
+                break;
+            case "exit":
+                screen.removeFrame();
+                MenuLifecycle.buttonClicked(MenuLifecycle.MenuResult.EXIT);
+                break;
+        }
+    }
+
+    private static void levelMenu(String event){
+        screen.removeFrame();
+        MenuLifecycle.startLevelNumber = Integer.valueOf(event);
+        MenuLifecycle.buttonClicked(MenuLifecycle.MenuResult.START_LEVEL);
     }
 
 

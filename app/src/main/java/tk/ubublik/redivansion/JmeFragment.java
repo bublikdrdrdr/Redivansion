@@ -59,13 +59,4 @@ public class JmeFragment extends AndroidHarnessFragment {
         //     splashPicID = R.drawable.splash;
         splashPicID = 0;
     }
-
-
-    // TODO: 03-Sep-17 find a better place to put next code
-    public static final String BACK_PRESS_EVENT = "BackPressEvent";
-    @Override
-    public void initialize() {
-        super.initialize();
-        super.getJmeApplication().getInputManager().addMapping(BACK_PRESS_EVENT, new TouchTrigger(TouchInput.KEYCODE_BACK));
-    }
 }

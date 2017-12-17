@@ -34,7 +34,7 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 import tk.ubublik.redivansion.gamelogic.utils.WorldObjectFactory;
 
-import static tk.ubublik.redivansion.JmeFragment.BACK_PRESS_EVENT;
+import static tk.ubublik.redivansion.gamelogic.Main.BACK_PRESS_EVENT;
 
 /**
  * Created by Bublik on 02-Sep-17.

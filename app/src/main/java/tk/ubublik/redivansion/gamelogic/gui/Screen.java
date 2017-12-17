@@ -6,6 +6,7 @@ import com.jme3.scene.Node;
 
 import java.util.ArrayList;
 
+import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 
 /**
@@ -16,19 +17,20 @@ public class Screen {
 
     private String screenName;
     private Node guiNode;
-    public ArrayList<Frame> activeFrame = new ArrayList<>();
-    public boolean scrolled = false;
-    private float prevScrollY = 0;
-    private float[] elemY;
+    private ArrayList<Frame> activeFrame = new ArrayList<>();
+    public GUI gui;
 
-    public Screen(String name, Node gui, Frame frame){
+    public Screen(String name, Node guiNode, Frame frame, GUI gui){
         this.screenName = name;
-        this.guiNode = gui;
+        this.guiNode = guiNode;
+        this.gui = gui;
         guiNode.detachAllChildren();
         showFrame(frame);
     }
 
     public void showFrame(Frame frame){
+        if(frame.frameName.equals("info"))
+            removeFrame();
         activeFrame.add(frame);
         for(Element element:activeFrame.get(activeFrame.size()-1).elements){
             guiNode.attachChild(element.p);
@@ -40,19 +42,21 @@ public class Screen {
     public void removeFrame(){
         if(!activeFrame.isEmpty()) {
             int in;
-            for (Element element : activeFrame.get(activeFrame.size() - 1).elements) {
-                in = guiNode.getChildIndex(element.p);
-                guiNode.detachChildAt(in);
-                if (element.txt.getText() != null) {
-                    in = guiNode.getChildIndex(element.txt);
-                    guiNode.detachChildAt(in);
-                }
+            for (Element element : getActiveFrame().elements) {
+                if (element.p!=null) guiNode.detachChild(element.p);
+                if (element.txt!=null) guiNode.detachChild(element.txt);
             }
 
             activeFrame.remove(activeFrame.size()-1);
-            if(!activeFrame.isEmpty())
-                showFrame(activeFrame.get(activeFrame.size()-1));
         }
+    }
+
+    public Frame getActiveFrame(){
+        return activeFrame.get(activeFrame.size()-1);
+    }
+
+    public boolean isEmpty(){
+        return activeFrame.isEmpty();
     }
 
     public String getCurrentFrameName(){

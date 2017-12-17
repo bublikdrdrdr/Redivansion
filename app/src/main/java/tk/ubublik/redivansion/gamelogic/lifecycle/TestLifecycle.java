@@ -9,9 +9,11 @@ import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.Label;
 
+import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.graphics.WorldLight;
+import tk.ubublik.redivansion.gamelogic.gui.AllFrames;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
@@ -39,22 +41,24 @@ import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
 
 public class TestLifecycle extends Lifecycle {
 
-    private CameraControl cameraControl;
-    private GameLogicProcessor gameLogicProcessor;
-    private MapRenderer mapRenderer;
-    private WorldMap worldMap;
+    private static CameraControl cameraControl;
+    private static GameLogicProcessor gameLogicProcessor;
+    public static MapRenderer mapRenderer;
+    public static WorldMap worldMap;
     private GUI gui;
     private WorldLight worldLight;
     private SelectToolManager selectToolManager;
     private Settings settings;
     private FpsMeter fpsMeter = FpsMeter.getInstance();
+    private static boolean done = false;
 
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
+        done = false;
         loadModels();
         Level level = LevelFactory.getLevel(0);
         settings = Settings.getInstance();
-        settings.open();
+        settings.open(true);
         loadLevel(level);
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
         cameraControl.setAreaLimitRound(level.isLimitTypeRound());
@@ -62,7 +66,9 @@ public class TestLifecycle extends Lifecycle {
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
-        gui = new GUI(simpleApplication.getGuiNode(), guiListener);
+        gui = new GUI(simpleApplication.getGuiNode(), guiListener, cameraControl, AllFrames.main);
+        gui.setStatusChanged(0,0,true);
+        Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
         cameraControl.setTouchInputHook(gui);
@@ -92,14 +98,22 @@ public class TestLifecycle extends Lifecycle {
         settings.save();
     }
 
+    public static void pauseTime(boolean pause){
+        gameLogicProcessor.setPaused(pause);
+    }
+
     @Override
     public LifecycleType getType() {
-        return null;
+        return LifecycleType.TEST_LIFECYCLE;
+    }
+
+    public static void setDone(){
+        done = true;
     }
 
     @Override
     public boolean isDone() {
-        return false;
+        return done;
     }
 
     @Override
@@ -197,6 +211,9 @@ public class TestLifecycle extends Lifecycle {
         @Override
         public void setStatusChanged(int population, int money, boolean grow) {
             // TODO: 11-Nov-17 update gui
+            long time = gameLogicProcessor.timeLeft();
+            gui.setTime(time);
+            gui.setStatusChanged(population, money, grow);
         }
 
         @Override

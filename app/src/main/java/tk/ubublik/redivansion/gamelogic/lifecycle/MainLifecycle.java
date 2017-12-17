@@ -45,9 +45,12 @@ public class MainLifecycle extends Lifecycle {
                     currentLifecycle = new MainLoadingLifecycle(simpleApplication);
                     break;
                 case TUTORIAL_LOADING:
-                    currentLifecycle = new TutorialLifecycle(simpleApplication);
+                    currentLifecycle = new TestLifecycle(simpleApplication);
                     break;
                 case TUTORIAL:
+                    currentLifecycle = new MainLoadingLifecycle(simpleApplication);
+                    break;
+                case TEST_LIFECYCLE:
                     currentLifecycle = new MainLoadingLifecycle(simpleApplication);
                     break;
             }
@@ -57,13 +60,17 @@ public class MainLifecycle extends Lifecycle {
     private void processMenu() {
         switch (((MenuLifecycle) currentLifecycle).menuResult) {
             case START_LEVEL:
+                MenuLifecycle.menuResult = MenuLifecycle.MenuResult.IDLE;
                 currentLifecycle = new LevelLoadingLifecycle(((MenuLifecycle) currentLifecycle).startLevelNumber, simpleApplication);
                 break;
             case START_TUTORIAL:
+                MenuLifecycle.menuResult = MenuLifecycle.MenuResult.IDLE;
                 currentLifecycle = new TutorialLoadingLifecycle(simpleApplication);
                 break;
             case EXIT:
                 done = true;
+                break;
+            case IDLE:
                 break;
         }
     }

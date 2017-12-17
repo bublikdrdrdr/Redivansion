@@ -92,7 +92,7 @@ public abstract class WorldObject extends Node{
         this.size = size;
         icon.setLocalTranslation(0,1,0);
         attachChild(icon);
-        //test
+        /*/test
         BitmapFont fnt = StaticAssetManager.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
         BitmapText txt = new BitmapText(fnt, false);
         txt.setBox(new Rectangle(0, 0, 6, 3));
@@ -101,7 +101,7 @@ public abstract class WorldObject extends Node{
         txt.setText(this.getClass().getSimpleName());
         txt.setLocalTranslation(-0.5f,1,0);
         txt.rotate(-0.1f* FastMath.PI,0.25f* FastMath.PI, 0);
-        this.attachChild(txt);
+        this.attachChild(txt);*/
     }
 
     public GeometryManager getGeometryManager() {
@@ -249,13 +249,13 @@ public abstract class WorldObject extends Node{
             this.iconState = iconState;
             icon.detachAllChildren();
             switch (iconState){
-                case WARNING: addIconBox(ColorRGBA.Yellow); break;
-                case ERROR: addIconBox(ColorRGBA.Red); break;
+                //case WARNING: addIconBox(ColorRGBA.Yellow); break;
+                //case ERROR: addIconBox(ColorRGBA.Red); break;
             }
         }
     }
 
-    private void addIconBox(ColorRGBA color) {
+    /*private void addIconBox(ColorRGBA color) {
         float boxSize = 0.2f;
         Box box = new Box(boxSize, boxSize, boxSize);
         Material material = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
@@ -263,7 +263,7 @@ public abstract class WorldObject extends Node{
         Geometry iconBox = new Geometry("icon box", box);
         iconBox.setMaterial(material);
         icon.attachChild(iconBox);
-    }
+    }*/
 
     //////////////////////
 

@@ -22,9 +22,13 @@ public class Frame {
         this.frameName = name;
     }
 
-    public void addElement(String name, String text, int align, float x, float y, float w, float h, boolean square, String path, boolean transparent){
-        Element elem = new Element(name, text, align, x, y, w, h, square, path, transparent);
+    public void addElement(String name, String text, boolean interactive, int align, float x, float y, float w, float h, boolean square, String path, boolean transparent){
+        Element elem = new Element(name, text, interactive, align, x, y, w, h, square, path, transparent);
         elements.add(elem);
+    }
+
+    public void removeAllElements(){
+        elements.removeAll(elements);
     }
 
     public void removeElement(String name){
@@ -36,17 +40,26 @@ public class Frame {
         }
     }
 
+    public void changeElementsYPosition(float deltaY){
+        for(Element element:elements){
+            if(!element.p.getName().equals("bg")){
+                {
+                    element.y += deltaY;
+                    element.p.setPosition(element.x, element.y);
+                    element.setTextPosition();
+                }
+            }
+        }
+    }
+
     public boolean touchResult(float x, float y, GUIListener guiListener, TouchEvent touchEvent, Screen screen){
         for(Element element:elements){
             if (element.touchCheck(x, y)) {
-                if(!element.p.getName().equals("bg") && !element.p.getName().equals("time") && !element.p.getName().equals("money") && !element.p.getName().equals("population")
-                        && touchEvent.getType() == TouchEvent.Type.DOWN) {
+                if(element.interactive && touchEvent.getType() == TouchEvent.Type.DOWN) {
                     touchedElement = element;
                     touchedElement.p.setImage(StaticAssetManager.getAssetManager(), "Textures/btn2.png", false);
                 }
-                if(!element.p.getName().equals("bg") && !element.p.getName().equals("time") && !element.p.getName().equals("money") && !element.p.getName().equals("population")
-                        && element == touchedElement &&
-                        touchEvent.getType() == TouchEvent.Type.UP) {
+                if(element.interactive && element == touchedElement && touchEvent.getType() == TouchEvent.Type.UP) {
                     TouchEvents.doSmthing(element.p.getName(), guiListener, screen);
                     touchedElem = false;
                     return true;
@@ -59,7 +72,7 @@ public class Frame {
 
     public void removeTouch(){
         if(touchedElement != null)
-            touchedElement.p.setImage(StaticAssetManager.getAssetManager(), "Textures/btn1.png", false);
+            touchedElement.p.setImage(StaticAssetManager.getAssetManager(), "Textures/btnLong1.png", false);
     }
 
 }

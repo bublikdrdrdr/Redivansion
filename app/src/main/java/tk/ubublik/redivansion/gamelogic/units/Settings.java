@@ -87,7 +87,11 @@ public class Settings extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void open() throws LoadSettingsException{
+    public void open(){
+        open(false);
+    }
+
+    public void open(boolean loadLevel) throws LoadSettingsException{
         try {
             SQLiteDatabase db = this.getReadableDatabase();
             String[] projection = {
@@ -108,7 +112,7 @@ public class Settings extends SQLiteOpenHelper {
             if (cursor.getCount() != 1) throw new RuntimeException("Can't read settings from DB");
             cursor.moveToFirst();
             byte[] levelBytes = cursor.getBlob(0);
-            if (levelBytes==null) this.savedLevel = null;
+            if (levelBytes==null || !loadLevel) this.savedLevel = null;
             else this.savedLevel = new SavedLevel(levelBytes);
             this.music = cursor.getInt(1) == 1;
             this.fx = cursor.getInt(2) == 1;

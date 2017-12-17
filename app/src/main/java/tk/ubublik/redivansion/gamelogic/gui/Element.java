@@ -19,12 +19,9 @@ public class Element {
     public static final float dY = MainActivity.getScreenHeight() * 0.01f;
     public static float z = -1;
 
-    public float x;
-    public float y;
-    public float zp;
-    public float zt = 0;
-    public float w;
-    public float h;
+    public float x, y, zp, zt = 0, w, h;
+    private int align;
+    public boolean interactive = false;
 
     public Picture p;
     public BitmapText txt;
@@ -32,8 +29,12 @@ public class Element {
     public Element() {
     }
 
-    public Element(String name, String text, int align, float x, float y, float w, float h, boolean square, String path, boolean transparent) {
+    public Element(String name, String text, boolean interactive, int align, float x, float y, float w, float h,
+                   boolean square, String path, boolean transparent) {
         new Element();
+        this.interactive = interactive;
+        this.align = align;
+
         this.x = x * dX;
         this.y = y * dY;
         this.h = h * dY;
@@ -46,7 +47,7 @@ public class Element {
         z += 0.1;
         if (text != null)
             zt = z;
-            setText(text, align);
+            setText(text);
         z += 0.1;
     }
 
@@ -59,27 +60,48 @@ public class Element {
         p.setImage(StaticAssetManager.getAssetManager(), path, transparent);
     }
 
-    private void setText(String text, int align) {
+    private void setText(String text) {
         BitmapFont fnt = StaticAssetManager.loadFont("Interface/Fonts/Default.fnt");
         txt = new BitmapText(fnt, false);
+        setTextPosition();
+        txt.setSize(5f*dY);
+        txt.setText(text);
+        txt.setLocalTranslation(0, txt.getHeight(), z);
+    }
+
+    public void setTextPosition(){
         switch (align){
             case 1:
                 txt.setBox(new Rectangle(x+1*dX, y+(h/2.3f), w, h/2));
                 txt.setAlignment(BitmapFont.Align.Left);
+                txt.setVerticalAlignment(BitmapFont.VAlign.Center);
                 break;
             case 2:
                 txt.setBox(new Rectangle(x, y+(h/2.3f), w-1*dX, h/2));
                 txt.setAlignment(BitmapFont.Align.Right);
+                txt.setVerticalAlignment(BitmapFont.VAlign.Center);
+                break;
+            case 3:
+                txt.setBox(new Rectangle(x+1*dX, y, w, h/1.2f));
+                txt.setAlignment(BitmapFont.Align.Left);
+                txt.setVerticalAlignment(BitmapFont.VAlign.Top);
+                break;
+            case 4:
+                txt.setBox(new Rectangle(x, y, w, h/1.2f));
+                txt.setAlignment(BitmapFont.Align.Right);
+                txt.setVerticalAlignment(BitmapFont.VAlign.Top);
+                break;
+            case 5:
+                txt.setBox(new Rectangle(x, y, w, h/1.2f));
+                txt.setAlignment(BitmapFont.Align.Center);
+                txt.setVerticalAlignment(BitmapFont.VAlign.Top);
                 break;
             default:
                 txt.setBox(new Rectangle(x, y+(h/2.3f), w, h/2));
                 txt.setAlignment(BitmapFont.Align.Center);
+                txt.setVerticalAlignment(BitmapFont.VAlign.Center);
                 break;
         }
-        txt.setSize(5f*dY);
-        txt.setVerticalAlignment(BitmapFont.VAlign.Center);
-        txt.setText(text);
-        txt.setLocalTranslation(0, txt.getHeight(), z);
     }
 
     public boolean touchCheck(float tX, float tY) {
