@@ -10,6 +10,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.simsilica.lemur.GuiGlobals;
 
+import tk.ubublik.redivansion.gamelogic.lifecycle.LevelLoadingLifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.Lifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.MainLifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
@@ -31,7 +32,6 @@ public class Main extends SimpleApplication {
         setupApplication();
         initCameraControl();
         lifecycle = new MainLifecycle(this);
-        //lifecycle = new TestLifecycle(this);
     }
 
     @Override
