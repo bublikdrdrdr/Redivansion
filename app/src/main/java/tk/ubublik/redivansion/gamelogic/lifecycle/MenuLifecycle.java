@@ -63,9 +63,7 @@ public class MenuLifecycle extends Lifecycle implements TouchListener {
 
     }
 
-    Spatial background;
     private void createMenuElements(){
-
         settings = Settings.getInstance();
         settings.open();
         gui = new GUI(simpleApplication.getGuiNode(), null, null, AllFrames.mainMenu);
