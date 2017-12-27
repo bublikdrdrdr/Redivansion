@@ -107,8 +107,8 @@ public class TestLifecycle extends Lifecycle {
         return LifecycleType.TEST_LIFECYCLE;
     }
 
-    public static void setDone(){
-        done = true;
+    public void setDone(boolean value){
+        done = value;
     }
 
     @Override
@@ -240,6 +240,11 @@ public class TestLifecycle extends Lifecycle {
         @Override
         public void removeSave() {
             removeLevel();
+        }
+
+        @Override
+        public void setDone(boolean done) {
+            TestLifecycle.this.setDone(done);
         }
 
         @Override

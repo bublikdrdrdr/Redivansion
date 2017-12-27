@@ -16,7 +16,7 @@ public abstract class Lifecycle {
         simpleApplication.getGuiNode().detachAllChildren();
         simpleApplication.getRootNode().getLocalLightList().clear();
         simpleApplication.getRootNode().getWorldLightList().clear();
-        NodesCache.getInstance().removeAll();
+        //NodesCache.getInstance().removeAll();
     }
     public abstract LifecycleType getType();
     public abstract boolean isDone();

@@ -66,7 +66,7 @@ public class TouchEvents {
                 break;
             case "returnToMainMenu":
                 screen.removeFrame();
-                TestLifecycle.setDone();
+                guiListener.setDone(true);
                 break;
         }
     }

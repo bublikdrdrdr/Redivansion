@@ -19,4 +19,6 @@ public interface GUIListener {
     void remove();
     void save();
     void removeSave();
+
+    void setDone(boolean done);
 }

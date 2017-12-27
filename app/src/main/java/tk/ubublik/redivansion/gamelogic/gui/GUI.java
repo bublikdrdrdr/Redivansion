@@ -72,14 +72,14 @@ public class GUI implements TouchInputHook {
                     switch (event.getType()) {
                         case KEY_UP:
                             if(!guiScreen.getActiveFrame().frameName.equals("main")&&!guiScreen.getActiveFrame().frameName.equals("mainMenu"))
-                                TouchEvents.doSmthing("close", guiListener, guiScreen);
+                                TouchEvents.doSmthing("close", guiListener, guiScreen);// TODO: 27-Dec-17 ШО ЦЕ БЛЯТЬ ТАКЕ
                             else if(guiScreen.getActiveFrame().frameName.equals("main")){
                                 TestLifecycle.pauseTime(true);
                                 guiScreen.showFrame(AllFrames.menu);
                             }
                             else if(guiScreen.getActiveFrame().frameName.equals("mainMenu")){
                                 guiScreen.removeFrame();
-                                MenuLifecycle.buttonClicked(MenuLifecycle.MenuResult.EXIT);
+                                MenuLifecycle.buttonClicked(MenuLifecycle.MenuResult.EXIT);// FIXME: ТИ ШО ДУРАК БЛЯТЬ, НАХУЙ ТОБІ ЛІСТЕНЕРИ??
                             }
                             break;
                     }
