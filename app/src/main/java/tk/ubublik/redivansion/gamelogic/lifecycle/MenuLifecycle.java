@@ -67,6 +67,7 @@ public class MenuLifecycle extends Lifecycle implements TouchListener {
         settings = Settings.getInstance();
         settings.open();
         gui = new GUI(simpleApplication.getGuiNode(), null, null, AllFrames.mainMenu);
+        Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
         done = false;
     }
 

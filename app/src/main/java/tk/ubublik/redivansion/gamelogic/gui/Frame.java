@@ -22,7 +22,7 @@ public class Frame {
         this.frameName = name;
     }
 
-    public void addElement(String name, String text, boolean interactive, int align, float x, float y, float w, float h, boolean square, String path, boolean transparent){
+    public void addElement(String name, String text, boolean interactive, Element.TextPosition align, float x, float y, float w, float h, boolean square, String path, boolean transparent){
         Element elem = new Element(name, text, interactive, align, x, y, w, h, square, path, transparent);
         elements.add(elem);
     }
@@ -40,7 +40,7 @@ public class Frame {
         }
     }
 
-    public void changeElementsYPosition(float deltaY){
+    public void scrollElements(float deltaY){
         for(Element element:elements){
             if(!element.p.getName().equals("bg")){
                 {

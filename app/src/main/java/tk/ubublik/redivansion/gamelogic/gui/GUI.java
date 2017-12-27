@@ -1,8 +1,5 @@
 package tk.ubublik.redivansion.gamelogic.gui;
 
-import android.graphics.Point;
-import android.support.v4.app.FragmentActivity;
-
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.controls.TouchListener;
@@ -15,20 +12,16 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
 
-import java.util.Vector;
-
 import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
+import tk.ubublik.redivansion.gamelogic.lifecycle.MenuLifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
-import tk.ubublik.redivansion.gamelogic.units.objects.House;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
-import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 import tk.ubublik.redivansion.gamelogic.utils.TouchInputHook;
 
 public class GUI implements TouchInputHook {
 
-    private Node guiNode;
     public static final int CLICK_OFFSET = 5;
     public GUIListener guiListener;
     public Screen guiScreen;
@@ -40,10 +33,7 @@ public class GUI implements TouchInputHook {
     private boolean touchedGUI = false;
     public TouchListener touchListener;
 
-    public Vector3f prevCamPos;
-
     public GUI(Node guiNode, GUIListener guiListener, CameraControl cameraControl, Frame frame) {
-        this.guiNode = guiNode;
         this.guiListener = guiListener;
         this.cameraControl = cameraControl;
         guiScreen = new Screen(frame.frameName, guiNode, frame, this);
@@ -57,7 +47,7 @@ public class GUI implements TouchInputHook {
     public void setTime(long time){
         for(Element element:frames.main.elements) {
             if (element.p.getName().equals("time")) {
-                element.txt.setText("Time: " + time);
+                element.txt.setText("Time: " + (time/1000));
                 return;
             }
         }
@@ -81,11 +71,15 @@ public class GUI implements TouchInputHook {
                 if (name.equals(Main.BACK_PRESS_EVENT)) {
                     switch (event.getType()) {
                         case KEY_UP:
-                            if(!guiScreen.getActiveFrame().frameName.equals("main"))
+                            if(!guiScreen.getActiveFrame().frameName.equals("main")&&!guiScreen.getActiveFrame().frameName.equals("mainMenu"))
                                 TouchEvents.doSmthing("close", guiListener, guiScreen);
-                            else {
+                            else if(guiScreen.getActiveFrame().frameName.equals("main")){
                                 TestLifecycle.pauseTime(true);
                                 guiScreen.showFrame(AllFrames.menu);
+                            }
+                            else if(guiScreen.getActiveFrame().frameName.equals("mainMenu")){
+                                guiScreen.removeFrame();
+                                MenuLifecycle.buttonClicked(MenuLifecycle.MenuResult.EXIT);
                             }
                             break;
                     }
@@ -109,17 +103,17 @@ public class GUI implements TouchInputHook {
         else if(touchEvent.getType() == TouchEvent.Type.SCROLL &&
                 (guiScreen.getActiveFrame().frameName.equals("levelMenu"))){
             if(touchEvent.getY() > prevY
-                    && guiScreen.getActiveFrame().elements.get(guiScreen.getActiveFrame().elements.size()-1).y < 3*Element.dY)
-                guiScreen.getActiveFrame().changeElementsYPosition(touchEvent.getDeltaY());
+                    )
+                guiScreen.getActiveFrame().scrollElements(touchEvent.getDeltaY());
             else if(touchEvent.getY() < prevY
-                    && guiScreen.getActiveFrame().elements.get(2).y > 89*Element.dY)
-                guiScreen.getActiveFrame().changeElementsYPosition(touchEvent.getDeltaY());
+                    )
+                guiScreen.getActiveFrame().scrollElements(touchEvent.getDeltaY());
             prevY = touchEvent.getY();
 
             if(guiScreen.getActiveFrame().elements.get(guiScreen.getActiveFrame().elements.size()-1).y > 3*Element.dY)
-                guiScreen.getActiveFrame().changeElementsYPosition(3*Element.dY - guiScreen.getActiveFrame().elements.get(guiScreen.getActiveFrame().elements.size()-1).y);
+                guiScreen.getActiveFrame().scrollElements(3*Element.dY - guiScreen.getActiveFrame().elements.get(guiScreen.getActiveFrame().elements.size()-1).y);
             else if(guiScreen.getActiveFrame().elements.get(2).y < 89*Element.dY)
-                guiScreen.getActiveFrame().changeElementsYPosition(89*Element.dY - guiScreen.getActiveFrame().elements.get(2).y);
+                guiScreen.getActiveFrame().scrollElements(89*Element.dY - guiScreen.getActiveFrame().elements.get(2).y);
         }
 
         else if(touchEvent.getType() == TouchEvent.Type.UP && touchedGUI){
@@ -158,13 +152,7 @@ public class GUI implements TouchInputHook {
                 cameraControl.setFov();
                 cameraControl.cam.setLocation(new Vector3f(x, 0, y).subtract(fullDirection));
 
-            }
-              /*  if(!TestLifecycle.worldMap.canPut(TestLifecycle.mapRenderer.worldPointToMap(closest.getContactPoint(),1), 1)){
-                    guiScreen.showFrame(AllFrames.menu);
-                    TestLifecycle.worldMap.put(new Tree(TestLifecycle.mapRenderer.worldPointToMap(closest.getContactPoint())));
-                }
-                TestLifecycle.worldMap.put(new House(TestLifecycle.mapRenderer.worldPointToMap(closest.getContactPoint(), 2)));
-            */}
+            }}
     }
 
 

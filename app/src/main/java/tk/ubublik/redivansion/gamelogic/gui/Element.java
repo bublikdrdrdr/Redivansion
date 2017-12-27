@@ -20,8 +20,10 @@ public class Element {
     public static float z = -1;
 
     public float x, y, zp, zt = 0, w, h;
-    private int align;
+    private TextPosition align;
     public boolean interactive = false;
+
+    public enum TextPosition{Left_VCenter, Right_VCenter, Center_VCenter, Left_VTop, Right_VTop, Center_VTop}
 
     public Picture p;
     public BitmapText txt;
@@ -29,7 +31,7 @@ public class Element {
     public Element() {
     }
 
-    public Element(String name, String text, boolean interactive, int align, float x, float y, float w, float h,
+    public Element(String name, String text, boolean interactive, TextPosition align, float x, float y, float w, float h,
                    boolean square, String path, boolean transparent) {
         new Element();
         this.interactive = interactive;
@@ -43,7 +45,7 @@ public class Element {
         else
             this.w = w * dX;
         zp = z;
-        setPicture(name, path, transparent);
+        setPicture(name, path);
         z += 0.1;
         if (text != null)
             zt = z;
@@ -51,13 +53,13 @@ public class Element {
         z += 0.1;
     }
 
-    private void setPicture(String name, String path, boolean transparent) {
+    private void setPicture(String name, String path) {
         p = new Picture(name);
         p.move(0, 0, z);
         p.setPosition(x, y);
         p.setWidth(w);
         p.setHeight(h);
-        p.setImage(StaticAssetManager.getAssetManager(), path, transparent);
+        p.setImage(StaticAssetManager.getAssetManager(), path, true);
     }
 
     private void setText(String text) {
@@ -70,28 +72,32 @@ public class Element {
     }
 
     public void setTextPosition(){
-        switch (align){
-            case 1:
+        if(align == null){
+            txt.setBox(new Rectangle(x,y+(h/2.3f),w,h/2));
+            txt.setAlignment(BitmapFont.Align.Center);
+            txt.setVerticalAlignment(BitmapFont.VAlign.Center);
+        }else switch (align){
+            case Left_VCenter:
                 txt.setBox(new Rectangle(x+1*dX, y+(h/2.3f), w, h/2));
                 txt.setAlignment(BitmapFont.Align.Left);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Center);
                 break;
-            case 2:
+            case Right_VCenter:
                 txt.setBox(new Rectangle(x, y+(h/2.3f), w-1*dX, h/2));
                 txt.setAlignment(BitmapFont.Align.Right);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Center);
                 break;
-            case 3:
+            case Left_VTop:
                 txt.setBox(new Rectangle(x+1*dX, y, w, h/1.2f));
                 txt.setAlignment(BitmapFont.Align.Left);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Top);
                 break;
-            case 4:
+            case Right_VTop:
                 txt.setBox(new Rectangle(x, y, w, h/1.2f));
                 txt.setAlignment(BitmapFont.Align.Right);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Top);
                 break;
-            case 5:
+            case Center_VTop:
                 txt.setBox(new Rectangle(x, y, w, h/1.2f));
                 txt.setAlignment(BitmapFont.Align.Center);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Top);
