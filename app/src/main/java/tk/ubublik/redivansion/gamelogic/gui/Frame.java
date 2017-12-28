@@ -5,6 +5,7 @@ import com.jme3.input.event.TouchEvent;
 import java.util.ArrayList;
 
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
+import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
@@ -22,8 +23,8 @@ public class Frame {
         this.frameName = name;
     }
 
-    public void addElement(String name, String text, boolean interactive, Element.TextPosition align, float x, float y, float w, float h, boolean square, String path, boolean transparent){
-        Element elem = new Element(name, text, interactive, align, x, y, w, h, square, path, transparent);
+    public void addElement(String name, String text, boolean interactive, Element.TextPosition align, float x, float y, float w, float h, boolean square, String path){
+        Element elem = new Element(name, text, interactive, align, x, y, w, h, square, path);
         elements.add(elem);
     }
 
@@ -52,7 +53,7 @@ public class Frame {
         }
     }
 
-    public boolean touchResult(float x, float y, GUIListener guiListener, TouchEvent touchEvent, Screen screen){
+    public boolean touchResult(float x, float y, GUIListener guiListener, MenuListener menuListener, TouchEvent touchEvent, Screen screen){
         for(Element element:elements){
             if (element.touchCheck(x, y)) {
                 if(element.interactive && touchEvent.getType() == TouchEvent.Type.DOWN) {
@@ -60,7 +61,9 @@ public class Frame {
                     touchedElement.p.setImage(StaticAssetManager.getAssetManager(), "Textures/btn2.png", false);
                 }
                 if(element.interactive && element == touchedElement && touchEvent.getType() == TouchEvent.Type.UP) {
-                    TouchEvents.doSmthing(element.p.getName(), guiListener, screen);
+                    if(guiListener != null)
+                        TouchEvents.doSmthing(element.p.getName(), guiListener, screen);
+                    else TouchEvents.doSmthing(element.p.getName(), menuListener, screen);
                     touchedElem = false;
                     return true;
                 }

@@ -3,6 +3,7 @@ package tk.ubublik.redivansion.gamelogic.gui;
 import tk.ubublik.redivansion.gamelogic.lifecycle.MenuLifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
+import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 
 /**
  * Created by SomeOne on 28.10.2017.
@@ -12,27 +13,50 @@ public class TouchEvents {
 
     public static String object = null;
     public static GUIListener guiListener;
+    public static MenuListener menuListener;
     public static Screen screen;
     public static int roadKostyl = 0;
     public static boolean removeSelect = false;
 
-    public static void doSmthing(String event, GUIListener gui, Screen scr) {
-        guiListener = gui;
-        screen = scr;
-        if(event.equals("close")) {
+    public static void closeFrame(Screen scr){
             if(scr.getActiveFrame().frameName.equals("info")){
                 screen.removeFrame();
+                guiListener.objectSelected(null);
                 screen.showFrame(AllFrames.main);
                 screen.gui.cameraControl.restoreCameraPosition();
             }
             else if(scr.getActiveFrame().frameName.equals("menu")){
-                TestLifecycle.pauseTime(false);
+                guiListener.pauseTime(false);
                 screen.removeFrame();
+            }
+            else if (scr.getActiveFrame().frameName.equals("levelComplete")){
+                guiListener.setDone(true);
             }
             else screen.removeFrame();
             return;
+    }
+
+    public static void doSmthing(String event, MenuListener menu, Screen scr){
+        menuListener = menu;
+        screen = scr;
+        if(event.equals("close"))
+            closeFrame(scr);
+        else switch (screen.getCurrentFrameName()) {
+            case "mainMenu":
+                mainMenu(event);
+                break;
+            case "levelMenu":
+                levelMenu(event);
+                break;
         }
-        switch (screen.getCurrentFrameName()) {
+    }
+
+    public static void doSmthing(String event, GUIListener gui, Screen scr) {
+        guiListener = gui;
+        screen = scr;
+        if(event.equals("close"))
+            closeFrame(scr);
+        else switch (screen.getCurrentFrameName()) {
             case "main":
                 mainEvents(event);
                 break;
@@ -66,7 +90,7 @@ public class TouchEvents {
                 break;
             case "returnToMainMenu":
                 screen.removeFrame();
-                TestLifecycle.setDone();
+                guiListener.setDone(true);
                 break;
         }
     }
@@ -185,19 +209,22 @@ public class TouchEvents {
                 break;
             case "tutorial":
                 screen.removeFrame();
-                MenuLifecycle.buttonClicked(MenuLifecycle.MenuResult.START_TUTORIAL);
+                menuListener.startTutorial();
+                break;
+            case "freeplay":
+                screen.removeFrame();
+                menuListener.startFreeplay();
                 break;
             case "exit":
                 screen.removeFrame();
-                MenuLifecycle.buttonClicked(MenuLifecycle.MenuResult.EXIT);
+                menuListener.exit();
                 break;
         }
     }
 
     private static void levelMenu(String event){
         screen.removeFrame();
-        MenuLifecycle.startLevelNumber = Integer.valueOf(event);
-        MenuLifecycle.buttonClicked(MenuLifecycle.MenuResult.START_LEVEL);
+        menuListener.startLevel(Integer.valueOf(event));
     }
 
 

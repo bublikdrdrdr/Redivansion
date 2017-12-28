@@ -32,7 +32,7 @@ public class Element {
     }
 
     public Element(String name, String text, boolean interactive, TextPosition align, float x, float y, float w, float h,
-                   boolean square, String path, boolean transparent) {
+                   boolean square, String path) {
         new Element();
         this.interactive = interactive;
         this.align = align;
@@ -66,7 +66,8 @@ public class Element {
         BitmapFont fnt = StaticAssetManager.loadFont("Interface/Fonts/Default.fnt");
         txt = new BitmapText(fnt, false);
         setTextPosition();
-        txt.setSize(5f*dY);
+        float size = 5f*dY;
+        txt.setSize(size);
         txt.setText(text);
         txt.setLocalTranslation(0, txt.getHeight(), z);
     }

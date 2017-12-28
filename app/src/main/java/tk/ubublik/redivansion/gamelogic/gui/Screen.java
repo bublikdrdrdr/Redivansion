@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
+import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 
 /**
  * Created by SomeOne on 18.10.2017.
@@ -62,7 +63,7 @@ public class Screen {
         return activeFrame.get(activeFrame.size()-1).frameName;
     }
 
-    public boolean touchEvent(float x, float y, GUIListener guiListener, TouchEvent touchEvent){
-        return activeFrame.get(activeFrame.size()-1).touchResult(x,y, guiListener, touchEvent, this);
+    public boolean touchEvent(float x, float y, GUIListener guiListener, MenuListener menuListener, TouchEvent touchEvent){
+        return activeFrame.get(activeFrame.size()-1).touchResult(x,y, guiListener, menuListener, touchEvent, this);
     }
 }

@@ -14,16 +14,21 @@ import com.jme3.scene.shape.Quad;
 
 import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
+import tk.ubublik.redivansion.gamelogic.lifecycle.FreeplayLifecycle;
+import tk.ubublik.redivansion.gamelogic.lifecycle.LevelLifecycle;
+import tk.ubublik.redivansion.gamelogic.lifecycle.LifecycleType;
 import tk.ubublik.redivansion.gamelogic.lifecycle.MenuLifecycle;
 import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
+import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 import tk.ubublik.redivansion.gamelogic.utils.TouchInputHook;
 
 public class GUI implements TouchInputHook {
 
     public static final int CLICK_OFFSET = 5;
     public GUIListener guiListener;
+    public MenuListener menuListener;
     public Screen guiScreen;
     public CameraControl cameraControl;
     public static AllFrames frames = new AllFrames();
@@ -35,7 +40,17 @@ public class GUI implements TouchInputHook {
 
     public GUI(Node guiNode, GUIListener guiListener, CameraControl cameraControl, Frame frame) {
         this.guiListener = guiListener;
+        menuListener = null;
         this.cameraControl = cameraControl;
+        guiScreen = new Screen(frame.frameName, guiNode, frame, this);
+        setStatusChanged(0,0, true);
+        setTime(0);
+        initListener();
+    }
+
+    public GUI(Node guiNode, MenuListener menuListener, Frame frame) {
+        this.menuListener = menuListener;
+        guiListener = null;
         guiScreen = new Screen(frame.frameName, guiNode, frame, this);
         initListener();
     }
@@ -47,7 +62,17 @@ public class GUI implements TouchInputHook {
     public void setTime(long time){
         for(Element element:frames.main.elements) {
             if (element.p.getName().equals("time")) {
-                element.txt.setText("Time: " + (time/1000));
+                if(time == -666)
+                    element.txt.setText("Time: UNLIMITED");
+                else{
+                    int sec = (int)time % 10;
+                    if(sec > 2 && sec < 8)
+                        time += 5 - sec;
+                    else if(sec > 7)
+                        time += 10 - sec;
+                    else time -= sec;
+                    element.txt.setText("Time: " + (time));
+                }
                 return;
             }
         }
@@ -71,16 +96,15 @@ public class GUI implements TouchInputHook {
                 if (name.equals(Main.BACK_PRESS_EVENT)) {
                     switch (event.getType()) {
                         case KEY_UP:
-                            if(!guiScreen.getActiveFrame().frameName.equals("main")&&!guiScreen.getActiveFrame().frameName.equals("mainMenu"))
-                                TouchEvents.doSmthing("close", guiListener, guiScreen);
-                            else if(guiScreen.getActiveFrame().frameName.equals("main")){
-                                TestLifecycle.pauseTime(true);
+                            if(guiScreen.getActiveFrame().frameName.equals("main")){
+                                guiListener.pauseTime(true);
                                 guiScreen.showFrame(AllFrames.menu);
                             }
                             else if(guiScreen.getActiveFrame().frameName.equals("mainMenu")){
                                 guiScreen.removeFrame();
-                                MenuLifecycle.buttonClicked(MenuLifecycle.MenuResult.EXIT);
+                                menuListener.exit();
                             }
+                            else TouchEvents.closeFrame(guiScreen);
                             break;
                     }
                 }
@@ -94,7 +118,7 @@ public class GUI implements TouchInputHook {
         if(touchEvent.getType() == TouchEvent.Type.DOWN){
             this.startX = touchEvent.getX();
             this.startY = touchEvent.getY();
-            touchedGUI = guiScreen.touchEvent(startX, startY, guiListener, touchEvent);
+            touchedGUI = guiScreen.touchEvent(startX, startY, guiListener, menuListener, touchEvent);
         }
         else if(!touchedGUI && touchEvent.getType() == TouchEvent.Type.LONGPRESSED){
             showInfo(touchEvent);
@@ -119,7 +143,7 @@ public class GUI implements TouchInputHook {
         else if(touchEvent.getType() == TouchEvent.Type.UP && touchedGUI){
             guiScreen.getActiveFrame().touchedElem = false;
             guiScreen.getActiveFrame().removeTouch();
-            guiScreen.touchEvent(touchEvent.getX(), touchEvent.getY(), guiListener, touchEvent);
+            guiScreen.touchEvent(touchEvent.getX(), touchEvent.getY(), guiListener, menuListener, touchEvent);
             touchedGUI = false;
         }}
         return touchedGUI;
@@ -140,7 +164,8 @@ public class GUI implements TouchInputHook {
         gem.collideWith(ray, results);
         if (results.size() > 0) {
             CollisionResult closest = results.getClosestCollision();
-            WorldObject object = TestLifecycle.worldMap.getObject(TestLifecycle.mapRenderer.worldPointToMap(closest.getContactPoint(),1));
+            WorldObject object = guiListener.getWorldMap().getObject(guiListener.getMapRenderer().worldPointToMap(closest.getContactPoint(),1));
+            guiListener.objectSelected(object);
             if(object!=null){
                 cameraControl.saveCameraPosition();
                 AllFrames.initInfo(object);
