@@ -14,11 +14,6 @@ import com.jme3.scene.shape.Quad;
 
 import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
-import tk.ubublik.redivansion.gamelogic.lifecycle.FreeplayLifecycle;
-import tk.ubublik.redivansion.gamelogic.lifecycle.LevelLifecycle;
-import tk.ubublik.redivansion.gamelogic.lifecycle.LifecycleType;
-import tk.ubublik.redivansion.gamelogic.lifecycle.MenuLifecycle;
-import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
@@ -37,6 +32,7 @@ public class GUI implements TouchInputHook {
     private float prevY= startY;
     private boolean touchedGUI = false;
     public TouchListener touchListener;
+    private WorldObject selectedObject;
 
     public GUI(Node guiNode, GUIListener guiListener, CameraControl cameraControl, Frame frame) {
         this.guiListener = guiListener;
@@ -165,7 +161,7 @@ public class GUI implements TouchInputHook {
         if (results.size() > 0) {
             CollisionResult closest = results.getClosestCollision();
             WorldObject object = guiListener.getWorldMap().getObject(guiListener.getMapRenderer().worldPointToMap(closest.getContactPoint(),1));
-            guiListener.objectSelected(object);
+            selectedObject = object;
             if(object!=null){
                 cameraControl.saveCameraPosition();
                 AllFrames.initInfo(object);
@@ -180,5 +176,15 @@ public class GUI implements TouchInputHook {
             }}
     }
 
+    /******TODO
+     * вставиш як upgrade:
+     *
+
+     if (selectedObject!=null){
+     if (selectedObject.getLevelNumber()<selectedObject.getLevelsCount()-1){
+     selectedObject.setLevelNumber(selectedObject.getLevelNumber()+1);
+     }
+     }
+     */
 
 }

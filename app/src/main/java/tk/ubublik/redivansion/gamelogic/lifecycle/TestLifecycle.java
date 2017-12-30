@@ -141,7 +141,7 @@ public class TestLifecycle extends Lifecycle {
         NodesCache.getInstance().put("powerPlantModel", powerPlantModel);
     }
 
-    private void addDebugPanel(){
+    /*private void addDebugPanel(){
         DebugPanel debugPanel = new DebugPanel(simpleApplication);
         debugPanel.addButton("Add building", commands);
         debugPanel.addButton("Add tree", commands);
@@ -159,9 +159,9 @@ public class TestLifecycle extends Lifecycle {
         //debugPanel.addButton("Game speed", commands);
         debugPanel.addButton("Save game", commands);
         debugPanel.addButton("Remove game", commands);
-    }
+    }*/
 
-    Command<Button> commands = new Command<Button>() {
+    /*Command<Button> commands = new Command<Button>() {
         @Override
         public void execute(Button source) {
             switch (source.getText()){
@@ -184,7 +184,7 @@ public class TestLifecycle extends Lifecycle {
                 case "Remove game": removeLevel(); break;
             }
         }
-    };
+    };*/
 
     private void testSetIcon() {
         WorldObject worldObject = worldMap.get(getCenterPoint(1));
@@ -247,20 +247,6 @@ public class TestLifecycle extends Lifecycle {
         @Override
         public void removeSave() {
             removeLevel();
-        }
-
-        @Override
-        public void upgrade() {
-            if (selectedObject!=null){
-                if (selectedObject.getLevelNumber()<selectedObject.getLevelsCount()-1){
-                    selectedObject.setLevelNumber(selectedObject.getLevelNumber()+1);
-                }
-            }
-        }
-
-        @Override
-        public void objectSelected(WorldObject object) {
-            selectedObject = object;
         }
 
         @Override

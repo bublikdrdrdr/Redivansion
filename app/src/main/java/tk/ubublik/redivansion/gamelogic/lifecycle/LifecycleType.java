@@ -13,7 +13,5 @@ public enum LifecycleType {
     SETTINGS,
     TUTORIAL,
     TUTORIAL_LOADING,
-    TEST_LIFECYCLE,
-    FREEPLAY_LOADING,
-    FREEPLAY
+    TEST_LIFECYCLE
 }

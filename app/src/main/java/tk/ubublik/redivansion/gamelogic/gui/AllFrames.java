@@ -30,8 +30,7 @@ public class AllFrames {
         mainMenu.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/temp_menu.png");
         mainMenu.addElement("levelSelect", "Levels", true, null, 32, 58, 36, 10, false, "Textures/btnLong1.png");
         mainMenu.addElement("tutorial", "Tutorial", true, null, 32, 46, 36, 10, false, "Textures/btnLong1.png");
-        mainMenu.addElement("freeplay", "Free Play", true, null, 32, 34, 36, 10, false, "Textures/btnLong1.png");
-        mainMenu.addElement("exit", "Exit", true, null, 32, 22, 36, 10, false, "Textures/btnLong1.png");
+        mainMenu.addElement("exit", "Exit", true, null, 32, 34, 36, 10, false, "Textures/btnLong1.png");
 
     }
 
@@ -167,7 +166,7 @@ public class AllFrames {
         info.addElement("info", "Short description, maybe something else.", false, null, 62, y-28, 36, 26, false, "Textures/2.png");
     }
 
-    public static void initLevelComplete(boolean victory){
+    public static Frame initLevelComplete(boolean victory){
         Element.z = 100;
         levelComplete = new Frame("levelComplete");
         levelComplete.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/2.png");
@@ -177,5 +176,6 @@ public class AllFrames {
         levelComplete.addElement("close", "X", true, null, 63, 61, 7, 10, false, "Textures/btn1.png");
         win = victory?"You complete the goal of this level! Now you can choose next one from main menu.":"You failed! Try again!";
         levelComplete.addElement("bg", win, false, null, 32, 25, 36, 34, false, "Textures/2.png");
+        return levelComplete;
     }
 }

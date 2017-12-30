@@ -21,7 +21,7 @@ public class TouchEvents {
     public static void closeFrame(Screen scr){
             if(scr.getActiveFrame().frameName.equals("info")){
                 screen.removeFrame();
-                guiListener.objectSelected(null);
+                //guiListener.objectSelected(null); //у вот і нафіг не треба, GUI пропадає разом з об'єктом
                 screen.showFrame(AllFrames.main);
                 screen.gui.cameraControl.restoreCameraPosition();
             }
@@ -210,10 +210,6 @@ public class TouchEvents {
             case "tutorial":
                 screen.removeFrame();
                 menuListener.startTutorial();
-                break;
-            case "freeplay":
-                screen.removeFrame();
-                menuListener.startFreeplay();
                 break;
             case "exit":
                 screen.removeFrame();

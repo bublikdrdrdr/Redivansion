@@ -85,12 +85,6 @@ public class MenuLifecycle extends Lifecycle implements TouchListener {
         }
 
         @Override
-        public void startFreeplay() {
-            menuResult = MenuResult.START_FREEPLAY;
-            done = true;
-        }
-
-        @Override
         public void startLevel(int level) {
             startLevelNumber = level;
             menuResult = MenuResult.START_LEVEL;

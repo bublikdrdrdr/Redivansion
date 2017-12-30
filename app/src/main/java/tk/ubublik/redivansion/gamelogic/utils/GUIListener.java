@@ -22,8 +22,6 @@ public interface GUIListener {
     void remove();
     void save();
     void removeSave();
-    void upgrade();
-    void objectSelected(WorldObject object);
     WorldMap getWorldMap();
     MapRenderer getMapRenderer();
     void pauseTime(boolean value);

@@ -39,22 +39,20 @@ public class LevelLifecycle extends Lifecycle {
 
     private int levelNumber;
     private CameraControl cameraControl;
-    private static GameLogicProcessor gameLogicProcessor;//НУ НАХУЯ СТАТІК БЛЯТЬ СУКА???????
-    public MapRenderer mapRenderer;
+    private GameLogicProcessor gameLogicProcessor;
+    private MapRenderer mapRenderer;
     public WorldMap worldMap;
     private GUI gui;
     private WorldLight worldLight;
     private SelectToolManager selectToolManager;
     private Settings settings;
     private volatile boolean done = false;
-    private WorldObject selectedObject = null;//todo: for what??
-    private Level level;//???
 
     public LevelLifecycle(int levelNumber, SimpleApplication simpleApplication){
         super(simpleApplication);
         this.levelNumber = levelNumber;
         done = false;
-        level = LevelFactory.getLevel(0);// TODO: getLevel(levelNumber);
+        Level level = LevelFactory.getLevel(0);// TODO: getLevel(levelNumber);
         settings = Settings.getInstance();
         settings.open(true);
         loadLevel(level);
@@ -100,10 +98,6 @@ public class LevelLifecycle extends Lifecycle {
         return LifecycleType.TEST_LIFECYCLE;
     }
 
-    public void setDone(){
-        done = true;
-    }
-
     public void setDone(boolean value){
         done = value;
     }
@@ -134,36 +128,25 @@ public class LevelLifecycle extends Lifecycle {
         return mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint(), size);
     }
 
-    GameLogicProcessor.LogicResultListener logicResultListener = new GameLogicProcessor.LogicResultListener() {
+    private GameLogicProcessor.LogicResultListener logicResultListener = new GameLogicProcessor.LogicResultListener() {
         @Override
         public void setStatusChanged(int population, int money, boolean grow) {
             long time = gameLogicProcessor.timeLeft()/1000;
             gui.setTime(time);
             gui.setStatusChanged(population, money, grow);
-            if(time <= 0){
-                gameLogicProcessor.setPaused(true);
-                setGameEnd(level.getLevelGoal().isDone());
-            }
         }
 
         @Override
         public void setGameEnd(boolean win) {
-            if(win){
-                if(levelNumber == settings.getProgress()){
-                    settings.setProgress(settings.getProgress()+1);
+            gui.guiScreen.showFrame(AllFrames.initLevelComplete(win));
+            if(win && (levelNumber == settings.getProgress())) {
+                    settings.setProgress(settings.getProgress() + 1);
                     settings.save();
-                }
-                AllFrames.initLevelComplete(true);
-                gui.guiScreen.showFrame(AllFrames.levelComplete);
-            }
-            else{
-                AllFrames.initLevelComplete(false);
-                gui.guiScreen.showFrame(AllFrames.levelComplete);
             }
         }
     };
 
-    GUIListener guiListener = new GUIListener() {
+    private GUIListener guiListener = new GUIListener() {
         @Override
         public void remove() {
             WorldObject worldObject = worldMap.fastRemove(getCenterPoint(1));
@@ -181,20 +164,6 @@ public class LevelLifecycle extends Lifecycle {
         @Override
         public void removeSave() {
             removeLevel();
-        }
-
-        @Override
-        public void upgrade() {
-            if (selectedObject!=null){
-                if (selectedObject.getLevelNumber()<selectedObject.getLevelsCount()-1){
-                    selectedObject.setLevelNumber(selectedObject.getLevelNumber()+1);
-                }
-            }
-        }
-
-        @Override
-        public void objectSelected(WorldObject object) {
-            selectedObject = object;
         }
 
         @Override
