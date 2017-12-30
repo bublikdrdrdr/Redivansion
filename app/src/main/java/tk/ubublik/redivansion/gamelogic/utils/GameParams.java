@@ -181,8 +181,10 @@ public class GameParams {
 
     public static final boolean ROUND_MAP_LIMIT = true;
     public static final int[] LEVELS_MONEY = new int[]{500000, 10000, 20000, 25000, 30000, 40000};
-    public static final long[] LEVELS_TIMES = new long[]{5*60*1000, 5*60*1000, 7*60*1000, 10*60*1000, 12*60*1000, 15*60*1000};
-    public static final int[] LEVELS_POPULATION_GOAL = new int[]{0, 3000, 10000, 30000, 100000, 500000};
+    //public static final long[] LEVELS_TIMES = new long[]{5*60*1000, 5*60*1000, 7*60*1000, 10*60*1000, 12*60*1000, 15*60*1000};
+    public static final long[] LEVELS_TIMES = new long[]{15*1000, 15*1000, 15*1000, 15*1000, 15*1000, 15*1000};
+    //public static final int[] LEVELS_POPULATION_GOAL = new int[]{0, 3000, 10000, 30000, 100000, 500000};
+    public static final int[] LEVELS_POPULATION_GOAL = new int[]{30, 30, 30, 30, 30, 30};
     public static final boolean[] LEVELS_MAP_LIMIT_TYPE = new boolean[]{ROUND_MAP_LIMIT, ROUND_MAP_LIMIT, ROUND_MAP_LIMIT, ROUND_MAP_LIMIT, ROUND_MAP_LIMIT, ROUND_MAP_LIMIT};
     public static final float[] LEVELS_AREA_SIZE = new float[]{200, 10, 10, 20, 30, 60};
 }

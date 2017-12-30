@@ -13,6 +13,7 @@ import tk.ubublik.redivansion.gamelogic.gui.AllFrames;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.units.Settings;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
+import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 
 /**
  * Created by Bublik on 02-Sep-17.
@@ -25,10 +26,10 @@ public class MenuLifecycle extends Lifecycle implements TouchListener {
         gui.touchCaptured(event, tpf);
     }
 
-    public enum MenuResult{ START_LEVEL, START_TUTORIAL, EXIT, IDLE};
-    public static int startLevelNumber;
-    public static MenuResult menuResult;
-    private static boolean done = false;
+    public enum MenuResult{ START_LEVEL, START_TUTORIAL, START_FREEPLAY, EXIT, IDLE};
+    public  int startLevelNumber;
+    public  MenuResult menuResult;
+    private  boolean done = false;
     private GUI gui;
     private Settings settings;
 
@@ -64,16 +65,43 @@ public class MenuLifecycle extends Lifecycle implements TouchListener {
     }
 
     private void createMenuElements(){
+        setIdle();
         settings = Settings.getInstance();
         settings.open();
-        gui = new GUI(simpleApplication.getGuiNode(), null, null, AllFrames.mainMenu);
+        gui = new GUI(simpleApplication.getGuiNode(), menuListener, AllFrames.mainMenu);
         Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
         done = false;
     }
 
-    public static void buttonClicked(MenuResult result){
-        menuResult = result;
-        done = true;
+    public void setIdle(){
+        menuResult = MenuResult.IDLE;
     }
+
+    MenuListener menuListener = new MenuListener() {
+        @Override
+        public void startTutorial() {
+            menuResult = MenuResult.START_TUTORIAL;
+            done = true;
+        }
+
+        @Override
+        public void startFreeplay() {
+            menuResult = MenuResult.START_FREEPLAY;
+            done = true;
+        }
+
+        @Override
+        public void startLevel(int level) {
+            startLevelNumber = level;
+            menuResult = MenuResult.START_LEVEL;
+            done = true;
+        }
+
+        @Override
+        public void exit() {
+            menuResult = MenuResult.EXIT;
+            done = true;
+        }
+    };
 }
 

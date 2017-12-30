@@ -41,22 +41,24 @@ import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
 
 public class TestLifecycle extends Lifecycle {
 
-    private static CameraControl cameraControl;
+    private CameraControl cameraControl;
     private static GameLogicProcessor gameLogicProcessor;
-    public static MapRenderer mapRenderer;
-    public static WorldMap worldMap;
+    public MapRenderer mapRenderer;
+    public WorldMap worldMap;
     private GUI gui;
     private WorldLight worldLight;
     private SelectToolManager selectToolManager;
     private Settings settings;
     private FpsMeter fpsMeter = FpsMeter.getInstance();
-    private static boolean done = false;
+    private boolean done = false;
+    Level level;
+    private WorldObject selectedObject = null;
 
     public TestLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
         done = false;
         loadModels();
-        Level level = LevelFactory.getLevel(0);
+        level = LevelFactory.getLevel(0);
         settings = Settings.getInstance();
         settings.open(true);
         loadLevel(level);
@@ -67,7 +69,6 @@ public class TestLifecycle extends Lifecycle {
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
         gui = new GUI(simpleApplication.getGuiNode(), guiListener, cameraControl, AllFrames.main);
-        gui.setStatusChanged(0,0,true);
         Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
@@ -96,10 +97,6 @@ public class TestLifecycle extends Lifecycle {
     private void removeLevel(){
         settings.setSavedLevel(null);
         settings.save();
-    }
-
-    public static void pauseTime(boolean pause){
-        gameLogicProcessor.setPaused(pause);
     }
 
     @Override
@@ -181,7 +178,7 @@ public class TestLifecycle extends Lifecycle {
                 case "Set icon": testSetIcon(); break;
                 case "Add house": worldMap.put(new House(getCenterPoint(2))); break;
                 case "Add power": worldMap.put(new ThermalPowerPlant(getCenterPoint(3))); break;
-                case "Upgrade": upgrade(); break;
+                case "Upgrade": guiListener.upgrade(); break;
                 case "Game speed": gameLogicProcessor.getTimer().setGameSpeed(gameLogicProcessor.getTimer().getGameSpeed()>1?1:4); break;
                 case "Save game": saveLevel(); break;
                 case "Remove game": removeLevel(); break;
@@ -194,13 +191,8 @@ public class TestLifecycle extends Lifecycle {
         if (worldObject!=null) worldObject.setIconState(WorldObject.IconState.WARNING);
     }
 
-    private void upgrade(){
-        WorldObject worldObject = worldMap.get(getCenterPoint(1));
-        if (worldObject!=null){
-            if (worldObject.getLevelNumber()<worldObject.getLevelsCount()-1){
-                worldObject.setLevelNumber(worldObject.getLevelNumber()+1);
-            }
-        }
+    public void selectedObject(WorldObject object){
+        selectedObject = object;
     }
 
     private Point getCenterPoint(int size){
@@ -211,14 +203,29 @@ public class TestLifecycle extends Lifecycle {
         @Override
         public void setStatusChanged(int population, int money, boolean grow) {
             // TODO: 11-Nov-17 update gui
-            long time = gameLogicProcessor.timeLeft();
+            long time = gameLogicProcessor.timeLeft()/1000;
             gui.setTime(time);
             gui.setStatusChanged(population, money, grow);
+            if(time <= 0){
+                gameLogicProcessor.setPaused(true);
+                setGameEnd(level.getLevelGoal().isDone());
+            }
         }
 
         @Override
         public void setGameEnd(boolean win) {
-
+            if(win){
+                if(level.getId() == settings.getProgress()){
+                    settings.setProgress(settings.getProgress()+1);
+                    settings.save();
+                }
+                AllFrames.initLevelComplete(true);
+                gui.guiScreen.showFrame(AllFrames.levelComplete);
+            }
+            else{
+                AllFrames.initLevelComplete(false);
+                gui.guiScreen.showFrame(AllFrames.levelComplete);
+            }
         }
     };
 
@@ -240,6 +247,35 @@ public class TestLifecycle extends Lifecycle {
         @Override
         public void removeSave() {
             removeLevel();
+        }
+
+        @Override
+        public void upgrade() {
+            if (selectedObject!=null){
+                if (selectedObject.getLevelNumber()<selectedObject.getLevelsCount()-1){
+                    selectedObject.setLevelNumber(selectedObject.getLevelNumber()+1);
+                }
+            }
+        }
+
+        @Override
+        public void objectSelected(WorldObject object) {
+            selectedObject = object;
+        }
+
+        @Override
+        public WorldMap getWorldMap() {
+            return worldMap;
+        }
+
+        @Override
+        public MapRenderer getMapRenderer() {
+            return mapRenderer;
+        }
+
+        @Override
+        public void pauseTime(boolean value) {
+            gameLogicProcessor.setPaused(value);
         }
 
         @Override

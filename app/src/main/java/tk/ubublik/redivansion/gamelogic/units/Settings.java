@@ -77,7 +77,7 @@ public class Settings extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(FeedEntry.COLUMN_NAME_FX, fx);
         cv.put(FeedEntry.COLUMN_NAME_MUSIC, music);
-        cv.put(FeedEntry.COLUMN_NAME_PROGRESS, music);
+        cv.put(FeedEntry.COLUMN_NAME_PROGRESS, progress);
         byte[] levelBytes = null;
         try{
             levelBytes = savedLevel.getBytes();

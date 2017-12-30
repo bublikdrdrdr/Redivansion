@@ -25,14 +25,14 @@ import tk.ubublik.redivansion.gamelogic.utils.TouchInputHook;
  */
 public class CameraControl implements ActionListener, AnalogListener, TouchListener {
 
-    public static final float minFov = 10f;
-    public static final float maxFov = 30f;
+    public final float minFov = 10f;
+    public final float maxFov = 30f;
     public float currentFoV = 10f;
     private float prevFov;
     private Vector3f prevPos;
 
-    public static final String TOUCH_MAPPING = "Mapping touch";
-    private static String[] mappings = new String[]{
+    public final String TOUCH_MAPPING = "Mapping touch";
+    private String[] mappings = new String[]{
             CameraInput.FLYCAM_STRAFELEFT,
             CameraInput.FLYCAM_STRAFERIGHT,
             CameraInput.FLYCAM_FORWARD,
@@ -41,8 +41,8 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
     };
 
     public Camera cam;
-    private static final float moveSpeed = 3f;
-    private static final float moveYSpeed = 2f;
+    private final float moveSpeed = 3f;
+    private final float moveYSpeed = 2f;
     private float moveSpeedScale = (550.f / MainActivity.getScreenDPI());
     private boolean enabled = true;
     private InputManager inputManager;

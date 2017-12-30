@@ -35,11 +35,10 @@ import static tk.ubublik.redivansion.gamelogic.gui.TouchEvents.guiListener;
  * Created by Bublik on 02-Sep-17.
  */
 
-public class LevelLifecycle extends Lifecycle {
+public class FreeplayLifecycle extends Lifecycle {
 
-    private int levelNumber;
     private CameraControl cameraControl;
-    private static GameLogicProcessor gameLogicProcessor;//НУ НАХУЯ СТАТІК БЛЯТЬ СУКА???????
+    private static GameLogicProcessor gameLogicProcessor;
     public MapRenderer mapRenderer;
     public WorldMap worldMap;
     private GUI gui;
@@ -47,14 +46,12 @@ public class LevelLifecycle extends Lifecycle {
     private SelectToolManager selectToolManager;
     private Settings settings;
     private volatile boolean done = false;
-    private WorldObject selectedObject = null;//todo: for what??
-    private Level level;//???
+    private WorldObject selectedObject = null;
 
-    public LevelLifecycle(int levelNumber, SimpleApplication simpleApplication){
+    public FreeplayLifecycle(SimpleApplication simpleApplication){
         super(simpleApplication);
-        this.levelNumber = levelNumber;
         done = false;
-        level = LevelFactory.getLevel(0);// TODO: getLevel(levelNumber);
+        Level level = LevelFactory.getLevel(0);
         settings = Settings.getInstance();
         settings.open(true);
         loadLevel(level);
@@ -94,14 +91,9 @@ public class LevelLifecycle extends Lifecycle {
         settings.save();
     }
 
-
     @Override
     public LifecycleType getType() {
-        return LifecycleType.TEST_LIFECYCLE;
-    }
-
-    public void setDone(){
-        done = true;
+        return LifecycleType.FREEPLAY;
     }
 
     public void setDone(boolean value){
@@ -137,29 +129,13 @@ public class LevelLifecycle extends Lifecycle {
     GameLogicProcessor.LogicResultListener logicResultListener = new GameLogicProcessor.LogicResultListener() {
         @Override
         public void setStatusChanged(int population, int money, boolean grow) {
-            long time = gameLogicProcessor.timeLeft()/1000;
-            gui.setTime(time);
+            gui.setTime(-666);
             gui.setStatusChanged(population, money, grow);
-            if(time <= 0){
-                gameLogicProcessor.setPaused(true);
-                setGameEnd(level.getLevelGoal().isDone());
-            }
         }
 
         @Override
         public void setGameEnd(boolean win) {
-            if(win){
-                if(levelNumber == settings.getProgress()){
-                    settings.setProgress(settings.getProgress()+1);
-                    settings.save();
-                }
-                AllFrames.initLevelComplete(true);
-                gui.guiScreen.showFrame(AllFrames.levelComplete);
-            }
-            else{
-                AllFrames.initLevelComplete(false);
-                gui.guiScreen.showFrame(AllFrames.levelComplete);
-            }
+            //You can't lose here.
         }
     };
 
@@ -214,7 +190,7 @@ public class LevelLifecycle extends Lifecycle {
 
         @Override
         public void setDone(boolean done) {
-            LevelLifecycle.this.setDone(done);
+            FreeplayLifecycle.this.setDone(done);
         }
 
         @Override
