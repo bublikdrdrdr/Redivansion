@@ -39,7 +39,7 @@ public class LevelLifecycle extends Lifecycle {
 
     private int levelNumber;
     private CameraControl cameraControl;
-    private static GameLogicProcessor gameLogicProcessor;
+    private static GameLogicProcessor gameLogicProcessor;//НУ НАХУЯ СТАТІК БЛЯТЬ СУКА???????
     public MapRenderer mapRenderer;
     public WorldMap worldMap;
     private GUI gui;
@@ -47,8 +47,8 @@ public class LevelLifecycle extends Lifecycle {
     private SelectToolManager selectToolManager;
     private Settings settings;
     private volatile boolean done = false;
-    private WorldObject selectedObject = null;
-    private Level level;
+    private WorldObject selectedObject = null;//todo: for what??
+    private Level level;//???
 
     public LevelLifecycle(int levelNumber, SimpleApplication simpleApplication){
         super(simpleApplication);
@@ -94,9 +94,14 @@ public class LevelLifecycle extends Lifecycle {
         settings.save();
     }
 
+
     @Override
     public LifecycleType getType() {
-        return LifecycleType.LEVEL;
+        return LifecycleType.TEST_LIFECYCLE;
+    }
+
+    public void setDone(){
+        done = true;
     }
 
     public void setDone(boolean value){
@@ -132,7 +137,6 @@ public class LevelLifecycle extends Lifecycle {
     GameLogicProcessor.LogicResultListener logicResultListener = new GameLogicProcessor.LogicResultListener() {
         @Override
         public void setStatusChanged(int population, int money, boolean grow) {
-            // TODO: 11-Nov-17 update gui
             long time = gameLogicProcessor.timeLeft()/1000;
             gui.setTime(time);
             gui.setStatusChanged(population, money, grow);
