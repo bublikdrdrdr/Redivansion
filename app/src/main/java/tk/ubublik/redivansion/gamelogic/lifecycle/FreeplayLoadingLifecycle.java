@@ -1,26 +1,21 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.ui.Picture;
 
-import java.util.HashMap;
-
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
-import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
- * Created by Bublik on 02-Sep-17.
- *
- * Difference between LevelLoadingLifecycle - additional tutorial nodes
+ * Created by SomeOne on 28-12-17.
  */
-public class TutorialLoadingLifecycle extends LoadingLifecycle {
+
+public class FreeplayLoadingLifecycle extends LoadingLifecycle {
 
     private volatile boolean done = false;
 
-    public TutorialLoadingLifecycle(SimpleApplication simpleApplication) {
+    public FreeplayLoadingLifecycle( SimpleApplication simpleApplication){
         super(simpleApplication);
         final Thread thread = new Thread(new Runnable() {
             @Override
@@ -52,11 +47,12 @@ public class TutorialLoadingLifecycle extends LoadingLifecycle {
 
     @Override
     public LifecycleType getType() {
-        return LifecycleType.TUTORIAL_LOADING;
+        return LifecycleType.FREEPLAY_LOADING;
     }
 
     @Override
     public boolean isDone() {
         return done;
     }
+
 }
