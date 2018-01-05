@@ -5,14 +5,11 @@ import com.jme3.input.TouchInput;
 import com.jme3.input.controls.TouchListener;
 import com.jme3.input.controls.TouchTrigger;
 import com.jme3.input.event.TouchEvent;
-import com.jme3.scene.Spatial;
-import com.simsilica.lemur.Container;
 
 import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.gui.AllFrames;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.units.Settings;
-import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 
 /**
@@ -88,6 +85,12 @@ public class MenuLifecycle extends Lifecycle implements TouchListener {
         public void startLevel(int level) {
             startLevelNumber = level;
             menuResult = MenuResult.START_LEVEL;
+            done = true;
+        }
+
+        @Override
+        public void startFreeplay() {
+            menuResult = MenuResult.START_FREEPLAY;
             done = true;
         }
 

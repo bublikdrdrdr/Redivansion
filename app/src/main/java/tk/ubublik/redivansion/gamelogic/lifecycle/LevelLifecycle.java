@@ -64,6 +64,7 @@ public class LevelLifecycle extends Lifecycle {
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
         gui = new GUI(simpleApplication.getGuiNode(), guiListener, cameraControl, AllFrames.main);
         Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
+        AllFrames.levelEndShowed = false;
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
         cameraControl.setTouchInputHook(gui);
@@ -138,7 +139,8 @@ public class LevelLifecycle extends Lifecycle {
 
         @Override
         public void setGameEnd(boolean win) {
-            gui.guiScreen.showFrame(AllFrames.initLevelComplete(win));
+            if(!AllFrames.levelEndShowed) //without this statement creates and shows multiply frames at once and it looks ugly
+                gui.guiScreen.showFrame(AllFrames.initLevelComplete(win));
             if(win && (levelNumber == settings.getProgress())) {
                     settings.setProgress(settings.getProgress() + 1);
                     settings.save();
@@ -177,6 +179,11 @@ public class LevelLifecycle extends Lifecycle {
         }
 
         @Override
+        public GUI getGui() {
+            return gui;
+        }
+
+        @Override
         public void pauseTime(boolean value) {
             gameLogicProcessor.setPaused(value);
         }
@@ -184,6 +191,11 @@ public class LevelLifecycle extends Lifecycle {
         @Override
         public void setDone(boolean done) {
             LevelLifecycle.this.setDone(done);
+        }
+
+        @Override
+        public void cameraTutorial(TutorialLifecycle.CameraTutorial camTut) {
+
         }
 
         @Override

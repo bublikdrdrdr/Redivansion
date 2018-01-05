@@ -1,120 +1,112 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
 import android.graphics.Point;
+import android.support.v7.widget.LinearLayoutCompat;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.input.controls.TouchListener;
-import com.jme3.input.event.MouseButtonEvent;
-import com.jme3.input.event.TouchEvent;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.light.Light;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.debug.Grid;
-import com.jme3.scene.shape.Box;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
-import com.simsilica.lemur.event.DefaultMouseListener;
-import com.simsilica.lemur.event.MouseListener;
+import com.simsilica.lemur.Label;
 
+import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
+import tk.ubublik.redivansion.gamelogic.graphics.Model;
+import tk.ubublik.redivansion.gamelogic.graphics.WorldLight;
+import tk.ubublik.redivansion.gamelogic.gui.AllFrames;
 import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
+import tk.ubublik.redivansion.gamelogic.gui.TouchEvents;
+import tk.ubublik.redivansion.gamelogic.gui.TutorialFrames;
+import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
 import tk.ubublik.redivansion.gamelogic.units.Level;
+import tk.ubublik.redivansion.gamelogic.units.SavedLevel;
+import tk.ubublik.redivansion.gamelogic.units.Settings;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
+import tk.ubublik.redivansion.gamelogic.units.objects.House;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
+import tk.ubublik.redivansion.gamelogic.units.objects.Road;
+import tk.ubublik.redivansion.gamelogic.units.objects.ThermalPowerPlant;
+import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
+import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
+import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
-import tk.ubublik.redivansion.gamelogic.utils.WorldObjectFactory;
-
-import static tk.ubublik.redivansion.gamelogic.Main.BACK_PRESS_EVENT;
+import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
 
 /**
- * Created by Bublik on 02-Sep-17.
+ * Created by Bublik on 22-Sep-17.
  */
+
+//TODO: при туторі на створення об'єкту потрібно впевнитись що він поставився (клік на "будувати" при червоному селекторі хєрить туторіал)
 
 public class TutorialLifecycle extends Lifecycle {
 
-    private boolean done = false;
-    private GameLogicProcessor gameLogicProcessor;
-    private WorldMap worldMap;
     private CameraControl cameraControl;
-    private MapRenderer mapRenderer;
-    private Level currentLevel = (Level)NodesCache.getInstance().get("tutorial_level");
+    private static GameLogicProcessor gameLogicProcessor;
+    public MapRenderer mapRenderer;
+    public WorldMap worldMap;
+    private GUI gui;
+    private WorldLight worldLight;
+    private SelectToolManager selectToolManager;
+    private Settings settings;
+    private boolean done = false;
+    Level level;
+
+    public enum CameraTutorial{NONE, MOVE, ZOOM};
+    public static CameraTutorial cameraTutorial = CameraTutorial.NONE;
+    private Vector3f camPos;
+    private float fov;
 
     public TutorialLifecycle(SimpleApplication simpleApplication) {
         super(simpleApplication);
-        setup();
-        setCamera();
-        setLight();
-        addDebugPanel();
-        attachGrid(Vector3f.ZERO, 20, ColorRGBA.Yellow);
-        prepareLevel();
-        //putGeometriesToNode();
-    }
 
-    private void setup(){
-        //exit on back press
-        simpleApplication.getInputManager().addListener(touchListener,  new String[]{BACK_PRESS_EVENT});
-        mapRenderer = new MapRenderer(simpleApplication.getRootNode());
-    }
-
-    /*GeometryAnimationManager geometryAnimationManager;
-    private void addTestModel(){
-        //surprise: does not work on emulator... but on real device is good
-        geometryAnimationManager = (GeometryAnimationManager) NodesCache.getInstance().get("simple");
-        if (geometryAnimationManager!=null) {
-            simpleApplication.getRootNode().attachChild(geometryAnimationManager);
-            geometryAnimationManager.beginAnimation("build_lvl_1");
-        }
-    }*/
-
-    private void setCamera(){
-        simpleApplication.getCamera().setLocation(new Vector3f(3,6,3));
-        simpleApplication.getCamera().setFrustumPerspective(30f, 1.7777f, 0.1f, 500f);
-        simpleApplication.getCamera().lookAt(new Vector3f(0,0,0), simpleApplication.getCamera().getUp());
+        TouchEvents.tutorial = true;
+        done = false;
+        level = LevelFactory.getLevel(0);
+        settings = Settings.getInstance();
+        settings.open(true);
+        loadLevel(level);
         cameraControl = new CameraControl(simpleApplication.getCamera(), simpleApplication.getInputManager());
-        //cameraControl.setEnabled(true);
-    }
-
-    private void setLight(){
-        Light allLight = new AmbientLight(ColorRGBA.DarkGray);
-        simpleApplication.getRootNode().addLight(allLight);
-        Light light = new DirectionalLight(simpleApplication.getCamera().getDirection());
-        simpleApplication.getRootNode().addLight(light);
-    }
-
-    private Geometry attachGrid(Vector3f pos, int size, ColorRGBA color){
-        Geometry g = new Geometry("wireframe grid", new Grid(size, size, 0.5f));
-        Material mat = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.getAdditionalRenderState().setWireframe(true);
-        mat.setColor("Color", color);
-        g.setMaterial(mat);
-        g.center().move(pos);
-        simpleApplication.getRootNode().attachChild(g);
-        return g;
-    }
-
-    private void prepareLevel(){
-        gameLogicProcessor = new GameLogicProcessor(worldMap, currentLevel, null);
+        cameraControl.setAreaLimitRound(level.isLimitTypeRound());
+        cameraControl.setAreaLimit(level.getMapLimit());
         worldMap = new WorldMap();
-        gameLogicProcessor.start();
+        gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
+        mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
+        gui = new GUI(simpleApplication.getGuiNode(), guiListener, cameraControl, AllFrames.main);
+        Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
+        worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
+        selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
+        cameraControl.setTouchInputHook(gui);
+        worldMap.addObserver(mapRenderer);
+        worldMap.addObserver(gameLogicProcessor);
+        worldMap.addObserver(selectToolManager);
+        worldMap.put(level.getWorldObjects());
+
+        gui.guiScreen.showFrame(TutorialFrames.blank());
+        gui.guiScreen.showFrame(TutorialFrames.frame("about"));
     }
 
-    private void putGeometriesToNode(){
-        mapRenderer.putObjects(currentLevel.getWorldObjects());
+    private void loadLevel(Level level) {
+        SavedLevel savedLevel = settings.getSavedLevel();
+        if (savedLevel != null && level.getId() == savedLevel.level) {
+            level.setWorldObjects(savedLevel.worldObjects);
+            level.setTime(savedLevel.time);
+            level.setMoney(savedLevel.money);
+        }
     }
 
     @Override
     public LifecycleType getType() {
         return LifecycleType.TUTORIAL;
+    }
+
+    public void setDone(boolean value){
+        done = value;
     }
 
     @Override
@@ -124,90 +116,163 @@ public class TutorialLifecycle extends Lifecycle {
 
     @Override
     public void update() {
-        if (gameLogicProcessor!=null) {
-            gameLogicProcessor.onUpdate();
-        }
+        mapRenderer.onUpdate();
+        worldLight.onUpdate();
+        worldMap.onUpdate();
+        gui.onUpdate();
+        gameLogicProcessor.onUpdate();
+        cameraControl.onUpdate();
+        selectToolManager.onUpdate();
+        NodesCache.getInstance().updateModels();
+        if(cameraTutorial != CameraTutorial.NONE)
+            guiListener.cameraTutorial(cameraTutorial);
     }
 
-    TouchListener touchListener = new TouchListener() {
+    private void testSetIcon() {
+        WorldObject worldObject = worldMap.get(getCenterPoint(1));
+        if (worldObject!=null) worldObject.setIconState(WorldObject.IconState.WARNING);
+    }
+
+    private Point getCenterPoint(int size){
+        return mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint(), size);
+    }
+
+    GameLogicProcessor.LogicResultListener logicResultListener = new GameLogicProcessor.LogicResultListener() {
         @Override
-        public void onTouch(String name, TouchEvent event, float tpf) {
-            if (name.equals(BACK_PRESS_EVENT)) {
-                switch (event.getType()) {
-                    case KEY_UP:
-                        done = true;
-                        break;
-                }
-            }
+        public void setStatusChanged(int population, int money, boolean grow) {
+            gui.setTime(-666);
+            gui.setStatusChanged(population, money, grow);
         }
+
+        @Override
+        public void setGameEnd(boolean win) {
+
+        }
+
     };
 
-    private void addDebugPanel(){
-        DebugPanel debugPanel = new DebugPanel(simpleApplication);
-        debugPanel.addButton("Console log", commands);
-        debugPanel.addButton("Add building", commands);
-    }
-
-    Command<Button> commands = new Command<Button>() {
+    GUIListener guiListener = new GUIListener() {
         @Override
-        public void execute(Button source) {
-            switch (source.getText()){
-                case "Console log": System.out.println("Console log"); break;
-                case "Add building": addBuilding(); break;
+        public void remove() {
+            WorldObject worldObject = worldMap.fastRemove(getCenterPoint(1));
+            if (worldObject instanceof Road){
+                Road road = (Road)worldObject;
+                Road.updateRoadStates(road.getPosition(), road.getPosition(), worldMap.getNearbyRoads(road.getPosition(), road.getPosition()));
             }
         }
-    };
 
-    private Geometry getBox(){
-        Box b = new Box(0.3f, 0.3f, 0.3f); // create cube shape
-        Geometry geom = new Geometry("Box", b);  // create cube geometry from the shape
-        Material mat = new Material(simpleApplication.getAssetManager(),
-                "Common/MatDefs/Misc/Unshaded.j3md");  // create a simple material
-        mat.setColor("Color", new ColorRGBA(0f, 0.5f, 1f, 0.5f));   // set color of material to blue
-        geom.setMaterial(mat);
-        mat.setTransparent(true);
-        return geom;
-    }
-
-    private void addBuilding(){
-        Vector3f vector3f = cameraControl.getCameraCenterPoint();
-        Point position = mapRenderer.worldPointToMap(vector3f);
-        WorldObject worldObject = WorldObjectFactory.get(Office.class);
-        worldObject.setPosition(position);
-        if (worldMap.canPut(worldObject)){
-            worldMap.put(worldObject);
-            //mapRenderer.putObject(worldObject);
-            Geometry geometry = getBox();
-            geometry.move(mapRenderer.mapPointToWorld(position));
-            simpleApplication.getRootNode().attachChild(geometry);
-
-            geometry = getBox();
-            position.x += 1;
-            geometry.move(mapRenderer.mapPointToWorld(position));
-            simpleApplication.getRootNode().attachChild(geometry);
-
-            geometry = getBox();
-            position.y+=1;
-            geometry.move(mapRenderer.mapPointToWorld(position));
-            simpleApplication.getRootNode().attachChild(geometry);
-
-            geometry = getBox();
-            position.x-=1;
-            geometry.move(mapRenderer.mapPointToWorld(position));
-            simpleApplication.getRootNode().attachChild(geometry);
-        }
-    }
-
-    MouseListener objectPickListener = new DefaultMouseListener(GUI.CLICK_OFFSET, GUI.CLICK_OFFSET){
         @Override
-        protected void click(MouseButtonEvent event, Spatial target, Spatial capture) {
-            Vector3f v2 = new Vector3f(2f, 2f, 2f);
-            Vector3f v1 = new Vector3f(1f, 1f, 1f);
-            if (!target.getLocalScale().equals(v2)){
-                target.setLocalScale(v2);
-            } else {
-                target.setLocalScale(v1);
+        public void cameraTutorial(CameraTutorial camTut){
+            switch (camTut){
+                case MOVE:
+                    if(cameraControl.getCameraCenterPoint().getX() > camPos.getX() + 2 || cameraControl.getCameraCenterPoint().getX() < camPos.getX() - 2 ||
+                            cameraControl.getCameraCenterPoint().getY() > camPos.getY() + 2 || cameraControl.getCameraCenterPoint().getY() < camPos.getY() - 2){
+                        cameraTutorial = CameraTutorial.NONE;
+                        gui.guiScreen.removeFrame();//blank
+                        gui.guiScreen.showFrame(TutorialFrames.frame("cameraZoom"));
+                    }
+                    break;
+                case ZOOM:
+                    if(cameraControl.currentFoV > fov + 10 || cameraControl.currentFoV < fov - 10){
+                        cameraTutorial = CameraTutorial.NONE;
+                        gui.guiScreen.showFrame(TutorialFrames.buildMenu(false));
+                    }
+                    break;
+                default:
+                    camPos = cameraControl.getCameraCenterPoint().clone();
+                    fov = cameraControl.currentFoV;
+                    break;
             }
+        }
+
+        @Override
+        public void save() {
+        }
+
+        @Override
+        public void removeSave() {
+
+        }
+
+        @Override
+        public WorldMap getWorldMap() {
+            return worldMap;
+        }
+
+        @Override
+        public MapRenderer getMapRenderer() {
+            return mapRenderer;
+        }
+
+        @Override
+        public GUI getGui() {
+            return gui;
+        }
+
+        @Override
+        public void pauseTime(boolean value) {
+            gameLogicProcessor.setPaused(value);
+        }
+
+        @Override
+        public void setDone(boolean done) {
+            TutorialLifecycle.this.setDone(done);
+        }
+
+        @Override
+        public void addBuilding() {
+            Point position = getCenterPoint(2);
+            Office office = new Office(position);
+            if (worldMap.put(office))
+                System.out.println("Object created at " + office.getPosition());
+        }
+
+        @Override
+        public void addTree(){
+            Tree tree = new Tree(getCenterPoint(1));
+            worldMap.put(tree);
+        }
+
+        @Override
+        public void addHouse() {
+            worldMap.put(new House(getCenterPoint(2)));
+        }
+
+        @Override
+        public void addPower() {
+            worldMap.put(new ThermalPowerPlant(getCenterPoint(3)));
+        }
+
+        @Override
+        public void addRoad(){
+            if (selectToolManager.buildRoad()){
+                selectToolManager.cancel();
+            }
+        }
+
+        @Override
+        public void setRoadPoints() {
+            selectToolManager.setRoadSelect();
+        }
+
+        @Override
+        public void selectTree() {
+            selectToolManager.setSelectSinglePoint(Tree.class);
+        }
+
+        @Override
+        public void selectPower() {
+            selectToolManager.setSelectSinglePoint(ThermalPowerPlant.class);
+        }
+
+        @Override
+        public void selectOffice() {
+            selectToolManager.setSelectSinglePoint(Office.class);
+        }
+
+        @Override
+        public void selectClear() {
+            selectToolManager.cancel();
         }
     };
 }

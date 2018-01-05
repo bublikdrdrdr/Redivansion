@@ -7,6 +7,7 @@ package tk.ubublik.redivansion.gamelogic.utils;
 public interface MenuListener {
 
     void startTutorial();
+    void startFreeplay();
     void startLevel(int level);
     void exit();
 }

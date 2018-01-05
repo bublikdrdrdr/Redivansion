@@ -14,6 +14,7 @@ import com.jme3.scene.shape.Quad;
 
 import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
+import tk.ubublik.redivansion.gamelogic.lifecycle.TutorialLifecycle;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
@@ -92,15 +93,7 @@ public class GUI implements TouchInputHook {
                 if (name.equals(Main.BACK_PRESS_EVENT)) {
                     switch (event.getType()) {
                         case KEY_UP:
-                            if(guiScreen.getActiveFrame().frameName.equals("main")){
-                                guiListener.pauseTime(true);
-                                guiScreen.showFrame(AllFrames.menu);
-                            }
-                            else if(guiScreen.getActiveFrame().frameName.equals("mainMenu")){
-                                guiScreen.removeFrame();
-                                menuListener.exit();
-                            }
-                            else TouchEvents.closeFrame(guiScreen);
+                            TouchEvents.backKeyPressed(guiScreen);
                             break;
                     }
                 }
@@ -117,7 +110,10 @@ public class GUI implements TouchInputHook {
             touchedGUI = guiScreen.touchEvent(startX, startY, guiListener, menuListener, touchEvent);
         }
         else if(!touchedGUI && touchEvent.getType() == TouchEvent.Type.LONGPRESSED){
-            showInfo(touchEvent);
+            if(TouchEvents.tutorial){
+                if(TutorialLifecycle.cameraTutorial == TutorialLifecycle.CameraTutorial.NONE) showInfo(touchEvent);
+            }
+            else showInfo(touchEvent);
         }
 
         else if(touchEvent.getType() == TouchEvent.Type.SCROLL &&
@@ -164,27 +160,25 @@ public class GUI implements TouchInputHook {
             selectedObject = object;
             if(object!=null){
                 cameraControl.saveCameraPosition();
-                AllFrames.initInfo(object);
-                guiScreen.showFrame(AllFrames.info);
+                guiScreen.removeAllFrames();//blank
+                guiScreen.showFrame(AllFrames.initInfo(object));
                 float x = object.getPosition().x + 1f + object.getSize()/3f, y = object.getPosition().y - 1f + object.getSize()/3f;
                 float delta = cameraControl.cam.getLocation().getY() / (cameraControl.cam.getDirection().getY() * -1f);
                 Vector3f fullDirection = cameraControl.cam.getDirection().mult(delta);
                 cameraControl.currentFoV = cameraControl.minFov;
                 cameraControl.setFov();
                 cameraControl.cam.setLocation(new Vector3f(x, 0, y).subtract(fullDirection));
+                if(TouchEvents.tutorial)
+                    guiScreen.showFrame(TutorialFrames.objectInfo2());
 
             }}
     }
 
-    /******TODO
-     * вставиш як upgrade:
-     *
-
-     if (selectedObject!=null){
-     if (selectedObject.getLevelNumber()<selectedObject.getLevelsCount()-1){
-     selectedObject.setLevelNumber(selectedObject.getLevelNumber()+1);
-     }
-     }
-     */
-
+    public void upgradeObject(){
+        if (selectedObject!=null){
+            if (selectedObject.getLevelNumber()<selectedObject.getLevelsCount()-1){
+                selectedObject.setLevelNumber(selectedObject.getLevelNumber()+1);
+            }
+        }
+    }
 }

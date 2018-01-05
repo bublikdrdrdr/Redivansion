@@ -1,12 +1,10 @@
 package tk.ubublik.redivansion.gamelogic.gui;
 
-import com.jme3.font.Rectangle;
 import com.jme3.input.event.TouchEvent;
 import com.jme3.scene.Node;
 
 import java.util.ArrayList;
 
-import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 
@@ -48,6 +46,16 @@ public class Screen {
             }
 
             activeFrame.remove(activeFrame.size()-1);
+        }
+    }
+
+    public void removeAllFrames(){
+        while (!activeFrame.isEmpty()) {
+            for (Element element : getActiveFrame().elements) {
+                if (element.p != null) guiNode.detachChild(element.p);
+                if (element.txt != null) guiNode.detachChild(element.txt);
+            }
+            activeFrame.remove(activeFrame.size() - 1);
         }
     }
 

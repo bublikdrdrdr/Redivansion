@@ -45,12 +45,18 @@ public class MainLifecycle extends Lifecycle {
                     currentLifecycle = new MainLoadingLifecycle(simpleApplication);
                     break;
                 case TUTORIAL_LOADING:
-                    currentLifecycle = new TestLifecycle(simpleApplication);
+                    currentLifecycle = new TutorialLifecycle(simpleApplication);
                     break;
                 case TUTORIAL:
                     currentLifecycle = new MainLoadingLifecycle(simpleApplication);
                     break;
                 case TEST_LIFECYCLE:
+                    currentLifecycle = new MainLoadingLifecycle(simpleApplication);
+                    break;
+                case FREEPLAY_LOADING:
+                    currentLifecycle = new FreeplayLifecycle(simpleApplication);
+                    break;
+                case FREEPLAY:
                     currentLifecycle = new MainLoadingLifecycle(simpleApplication);
                     break;
             }
@@ -64,6 +70,9 @@ public class MainLifecycle extends Lifecycle {
                 break;
             case START_TUTORIAL:
                 currentLifecycle = new TutorialLoadingLifecycle(simpleApplication);
+                break;
+            case START_FREEPLAY:
+                currentLifecycle = new FreeplayLoadingLifecycle(simpleApplication);
                 break;
             case EXIT:
                 done = true;

@@ -12,11 +12,11 @@ import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 
 public class AllFrames {
 
-    public static Frame main, add, build, menu, info, levelMenu, mainMenu, levelComplete;
+    public static Frame main, add, build, info, levelMenu, mainMenu, levelComplete;
+    public static boolean levelEndShowed = false;
 
     public AllFrames() {
         initMain();
-        initMenu();
         initAdd();
         initBuild();
         initMainMenu();
@@ -30,7 +30,8 @@ public class AllFrames {
         mainMenu.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/temp_menu.png");
         mainMenu.addElement("levelSelect", "Levels", true, null, 32, 58, 36, 10, false, "Textures/btnLong1.png");
         mainMenu.addElement("tutorial", "Tutorial", true, null, 32, 46, 36, 10, false, "Textures/btnLong1.png");
-        mainMenu.addElement("exit", "Exit", true, null, 32, 34, 36, 10, false, "Textures/btnLong1.png");
+        mainMenu.addElement("freeplay", "Free Play", true, null, 32, 34, 36, 10, false, "Textures/btnLong1.png");
+        mainMenu.addElement("exit", "Exit", true, null, 32, 22, 36, 10, false, "Textures/btnLong1.png");
 
     }
 
@@ -48,27 +49,34 @@ public class AllFrames {
     }
 
     private void initBuild(){
-        Element.z = -0.5f;
+        Element.z = 30;
         build = new Frame("build");
         build.addElement("build", "+", true, null, 0, 65, 20, 20, true, "Textures/btn1.png");
         build.addElement("cancel", "X", true, null, 0, 45, 20, 20, true, "Textures/btn1.png");
     }
 
-    private void initMenu(){
-        Element.z = 0;
-        menu = new Frame("menu");
+    public static Frame gameMenu(){
+        Element.z = 30;
+        Frame menu = new Frame("menu");
         menu.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/2.png");
         menu.addElement("bg", null, false, null, 30, 23, 40, 41, false, "Textures/menubg.png");
         menu.addElement("bg", "Menu", false, Element.TextPosition.Left_VCenter, 30, 61, 33, 10, false, "Textures/bg.jpg");
         menu.addElement("close", "X", true, null, 63, 61, 7, 10, false, "Textures/btn1.png");
-        menu.addElement("save", "Save", true, null, 32, 49, 36, 10, false, "Textures/btnLong1.png");
-        menu.addElement("removeSave", "Remove last save", true, null, 32, 37, 36, 10, false, "Textures/btnLong1.png");
+        boolean interactive; String path;
+        if(TouchEvents.tutorial){
+            interactive = false; path = "Textures/btnLong2.png";
+        } else{
+            interactive = true; path = "Textures/btnLong1.png";
+        }
+        menu.addElement("save", "Save", interactive, null, 32, 49, 36, 10, false, path);
+        menu.addElement("removeSave", "Remove last save", interactive, null, 32, 37, 36, 10, false, path);
         menu.addElement("returnToMainMenu", "Main Menu", true, null, 32, 25, 36, 10, false, "Textures/btnLong1.png");
+        return menu;
     }
 
     private void initAdd(){
         add = new Frame("add");
-        Element.z = 0;
+        Element.z = 30;
         add.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/2.png");
         add.addElement("bg", null, false, null, 30, 5, 40, 90, false, "Textures/menubg.png");
         add.addElement("bg", "Buildings", false, Element.TextPosition.Left_VCenter, 30, 85, 33, 10, false, "Textures/bg.jpg");
@@ -105,8 +113,8 @@ public class AllFrames {
 
     }
 
-    public static void initInfo(WorldObject object){
-        Element.z = 10;
+    public static Frame initInfo(WorldObject object){
+        Element.z = 50;
         info = new Frame("info");
         info.addElement("bg", null, false, null, 0, 0, 60, 100, false, "Textures/pickedbg.png");
         info.addElement("bg", null, false, null, 60, 0, 40, 100, false, "Textures/menubg.png");
@@ -164,10 +172,13 @@ public class AllFrames {
         }
         info.addElement("upgrade", "Upgrade", interactive, null, 62, y, 36, 10, false, "Textures/" + button);
         info.addElement("info", "Short description, maybe something else.", false, null, 62, y-28, 36, 26, false, "Textures/2.png");
+
+        return info;
     }
 
     public static Frame initLevelComplete(boolean victory){
-        Element.z = 100;
+        Element.z = 150;
+        levelEndShowed = true;
         levelComplete = new Frame("levelComplete");
         levelComplete.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/2.png");
         levelComplete.addElement("bg", null, false, null, 30, 23, 40, 41, false, "Textures/menubg.png");

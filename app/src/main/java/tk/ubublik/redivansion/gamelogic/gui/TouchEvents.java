@@ -1,7 +1,6 @@
 package tk.ubublik.redivansion.gamelogic.gui;
 
-import tk.ubublik.redivansion.gamelogic.lifecycle.MenuLifecycle;
-import tk.ubublik.redivansion.gamelogic.lifecycle.TestLifecycle;
+import tk.ubublik.redivansion.gamelogic.lifecycle.TutorialLifecycle;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 
@@ -15,25 +14,160 @@ public class TouchEvents {
     public static GUIListener guiListener;
     public static MenuListener menuListener;
     public static Screen screen;
-    public static int roadKostyl = 0;
+    private static int roadKostyl = 0;
+    private static boolean roadBuildOver = true;
     public static boolean removeSelect = false;
+    public static boolean tutorial = false;
+
+    public static void backKeyPressed(Screen screen){
+        if(screen.getActiveFrame().frameName.equals("main")){
+            guiListener.pauseTime(true);
+            screen.showFrame(AllFrames.gameMenu());
+        }
+        else if(screen.getActiveFrame().frameName.equals("mainMenu")){
+            screen.removeFrame();
+            menuListener.exit();
+        }
+        else closeFrame(screen);
+    }
 
     public static void closeFrame(Screen scr){
+            if(tutorial){
+                for(String name:TutorialFrames.tutorialFrames){
+                    if(scr.getActiveFrame().frameName.equals(name))
+                        return;
+                }
+            }
             if(scr.getActiveFrame().frameName.equals("info")){
-                screen.removeFrame();
-                //guiListener.objectSelected(null); //у вот і нафіг не треба, GUI пропадає разом з об'єктом
+                screen.removeAllFrames();
                 screen.showFrame(AllFrames.main);
                 screen.gui.cameraControl.restoreCameraPosition();
+                if(tutorial){
+                    scr.showFrame(TutorialFrames.blank());
+                    scr.showFrame(TutorialFrames.frame("roadInfo"));
+                }
             }
             else if(scr.getActiveFrame().frameName.equals("menu")){
                 guiListener.pauseTime(false);
                 screen.removeFrame();
             }
             else if (scr.getActiveFrame().frameName.equals("levelComplete")){
+                AllFrames.levelEndShowed = false;
                 guiListener.setDone(true);
             }
+            else if(scr.getActiveFrame().frameName.equals("blank"))
+                screen.showFrame(AllFrames.gameMenu());
             else screen.removeFrame();
             return;
+    }
+
+    public static void tutorial(Screen scr){
+        switch (scr.getActiveFrame().frameName){
+            case "about":
+                scr.removeFrame();
+                scr.showFrame(TutorialFrames.frame("goals"));
+                break;
+            case "goals":
+                scr.removeFrame();
+                scr.showFrame(TutorialFrames.population());
+                break;
+            case "population":
+                scr.removeFrame();
+                scr.showFrame(TutorialFrames.time());
+                break;
+            case "time":
+                scr.removeFrame();
+                scr.showFrame(TutorialFrames.money());
+                break;
+            case "money":
+                scr.removeFrame();
+                scr.showFrame(TutorialFrames.frame("cameraMove"));
+                break;
+            case "cameraMove":
+                guiListener.cameraTutorial(TutorialLifecycle.CameraTutorial.NONE);
+                TutorialLifecycle.cameraTutorial = TutorialLifecycle.CameraTutorial.MOVE;
+                scr.removeFrame();
+                scr.showFrame(TutorialFrames.blank());
+                break;
+            case "cameraZoom":
+                guiListener.cameraTutorial(TutorialLifecycle.CameraTutorial.NONE);
+                TutorialLifecycle.cameraTutorial = TutorialLifecycle.CameraTutorial.ZOOM;
+                scr.removeFrame();
+                scr.showFrame(TutorialFrames.blank());
+                break;
+            case "buildMenu1":
+                scr.removeFrame();
+                scr.removeFrame(); //blank
+                screen.showFrame(GUI.frames.add);
+                screen.showFrame(TutorialFrames.buildChoose(false));
+                break;
+            case "buildChoose1":
+                screen.removeFrame();
+                addEvents("addHouse");
+                screen.showFrame(TutorialFrames.frame("buildAddHouse"));
+                break;
+            case "buildAddHouse":
+                screen.removeFrame();
+                screen.showFrame(TutorialFrames.buildAdd(false));
+                break;
+            case "buildAdd1":
+                screen.removeFrame();
+                build("build");
+                screen.showFrame(TutorialFrames.frame("objectInfo"));
+                break;
+            case "objectInfo":
+                screen.removeFrame();
+                scr.showFrame(TutorialFrames.blank());
+                break;
+            case "objectInfo2":
+                screen.removeFrame();
+                break;
+            case "roadInfo":
+                scr.removeFrame();
+                scr.removeFrame();
+                scr.showFrame(TutorialFrames.blank());
+                screen.showFrame(TutorialFrames.buildMenu(true));
+                break;
+            case "buildMenu2":
+                scr.removeFrame();
+                scr.removeFrame(); //blank
+                screen.showFrame(GUI.frames.add);
+                screen.showFrame(TutorialFrames.buildChoose(true));
+                break;
+            case "buildChoose2":
+                screen.removeFrame();
+                addEvents("setRoadPoints");
+                screen.showFrame(TutorialFrames.frame("buildAddRoad1"));
+                break;
+            case "buildAddRoad1":
+                screen.removeFrame();
+                roadBuildOver = false;
+                screen.showFrame(TutorialFrames.buildAdd(true));
+                break;
+            case "buildAddRoad2":
+                screen.removeFrame();
+                roadBuildOver = true;
+                break;
+            case "buildAdd2":
+                if(!roadBuildOver){
+                    build("build");
+                    screen.showFrame(TutorialFrames.frame("buildAddRoad2"));
+                }else{
+                    screen.removeFrame();
+                    build("build");
+                    screen.showFrame(TutorialFrames.frame("finish"));
+                }
+                break;
+            case "finish":
+                TouchEvents.tutorial = false;
+                TutorialLifecycle.cameraTutorial = TutorialLifecycle.CameraTutorial.NONE;
+                guiListener.setDone(true);
+                break;
+            default:
+                scr.removeFrame();
+                break;
+        }
+        return;
     }
 
     public static void doSmthing(String event, MenuListener menu, Screen scr){
@@ -54,6 +188,8 @@ public class TouchEvents {
     public static void doSmthing(String event, GUIListener gui, Screen scr) {
         guiListener = gui;
         screen = scr;
+        if(event.equals("next"))
+            tutorial(scr);
         if(event.equals("close"))
             closeFrame(scr);
         else switch (screen.getCurrentFrameName()) {
@@ -75,6 +211,17 @@ public class TouchEvents {
             case "levelMenu":
                 levelMenu(event);
                 break;
+            case "info":
+                info(event);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public static void info(String event){
+        if(event.equals("upgrade")){
+            guiListener.getGui().upgradeObject();
         }
     }
 
@@ -89,6 +236,10 @@ public class TouchEvents {
                 screen.removeFrame();
                 break;
             case "returnToMainMenu":
+                if(tutorial){
+                    TouchEvents.tutorial = false;
+                    TutorialLifecycle.cameraTutorial = TutorialLifecycle.CameraTutorial.NONE;
+                }
                 screen.removeFrame();
                 guiListener.setDone(true);
                 break;
@@ -101,7 +252,7 @@ public class TouchEvents {
                 screen.showFrame(GUI.frames.add);
                 break;
             case "menu":
-                screen.showFrame(GUI.frames.menu);
+                screen.showFrame(GUI.frames.gameMenu());
                 break;
             case "remove":
                 if(!removeSelect){
@@ -210,6 +361,10 @@ public class TouchEvents {
             case "tutorial":
                 screen.removeFrame();
                 menuListener.startTutorial();
+                break;
+            case "freeplay":
+                screen.removeFrame();
+                menuListener.startFreeplay();
                 break;
             case "exit":
                 screen.removeFrame();
