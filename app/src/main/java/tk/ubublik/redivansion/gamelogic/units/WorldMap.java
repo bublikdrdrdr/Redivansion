@@ -128,7 +128,7 @@ public class WorldMap extends Observable implements Cloneable{
         Iterator<WorldObject> iterator = worldObjects.iterator();
         while (iterator.hasNext()){
             WorldObject worldObject = iterator.next();
-            if (objectInPoint(worldObject, position)){
+            if (objectInPoint(worldObject, position) && !worldObject.isPermanent()){
                 iterator.remove();
                 setChanged();
                 notifyObservers(new WorldMapAction(WorldMapAction.Action.REMOVE, worldObject));

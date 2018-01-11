@@ -180,6 +180,11 @@ public class FreeplayLifecycle extends Lifecycle {
         }
 
         @Override
+        public void changeTimeSpeed() {
+
+        }
+
+        @Override
         public void setDone(boolean done) {
             FreeplayLifecycle.this.setDone(done);
         }

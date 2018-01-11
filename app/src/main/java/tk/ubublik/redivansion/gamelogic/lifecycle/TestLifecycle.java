@@ -270,6 +270,11 @@ public class TestLifecycle extends Lifecycle {
         }
 
         @Override
+        public void changeTimeSpeed() {
+
+        }
+
+        @Override
         public void setDone(boolean done) {
             TestLifecycle.this.setDone(done);
         }

@@ -31,11 +31,15 @@ public class Screen {
         if(frame.frameName.equals("info"))
             removeFrame();
         activeFrame.add(frame);
-        for(Element element:activeFrame.get(activeFrame.size()-1).elements){
+        for(Element element:getActiveFrame().elements){
             guiNode.attachChild(element.p);
             if(element.txt.getText() != null)
                 guiNode.attachChild(element.txt);
         }
+    }
+
+    public String getCurrentFrameName(){
+        return activeFrame.get(activeFrame.size()-1).frameName;
     }
 
     public void removeFrame(){
@@ -67,9 +71,6 @@ public class Screen {
         return activeFrame.isEmpty();
     }
 
-    public String getCurrentFrameName(){
-        return activeFrame.get(activeFrame.size()-1).frameName;
-    }
 
     public boolean touchEvent(float x, float y, GUIListener guiListener, MenuListener menuListener, TouchEvent touchEvent){
         return activeFrame.get(activeFrame.size()-1).touchResult(x,y, guiListener, menuListener, touchEvent, this);

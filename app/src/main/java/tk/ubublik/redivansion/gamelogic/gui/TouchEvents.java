@@ -1,6 +1,7 @@
 package tk.ubublik.redivansion.gamelogic.gui;
 
 import tk.ubublik.redivansion.gamelogic.lifecycle.TutorialLifecycle;
+import tk.ubublik.redivansion.gamelogic.units.Settings;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 
@@ -10,6 +11,7 @@ import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 
 public class TouchEvents {
 
+    public static String confirmType = "NONE";
     public static String object = null;
     public static GUIListener guiListener;
     public static MenuListener menuListener;
@@ -50,6 +52,10 @@ public class TouchEvents {
             else if(scr.getActiveFrame().frameName.equals("menu")){
                 guiListener.pauseTime(false);
                 screen.removeFrame();
+            }
+            else if(scr.getActiveFrame().frameName.equals("mainMenu")){
+                screen.removeFrame();
+                menuListener.exit();
             }
             else if (scr.getActiveFrame().frameName.equals("levelComplete")){
                 AllFrames.levelEndShowed = false;
@@ -182,6 +188,9 @@ public class TouchEvents {
             case "levelMenu":
                 levelMenu(event);
                 break;
+            case "confirmMenu":
+                confirmMenu(event);
+                break;
         }
     }
 
@@ -203,6 +212,7 @@ public class TouchEvents {
                 build(event);
                 break;
             case "menu":
+                guiListener.pauseTime(true);
                 menu(event);
                 break;
             case "mainMenu":
@@ -214,6 +224,8 @@ public class TouchEvents {
             case "info":
                 info(event);
                 break;
+            case "confirmMenu":
+                confirmMenu(event);
             default:
                 break;
         }
@@ -230,18 +242,16 @@ public class TouchEvents {
             case "save":
                 guiListener.save();
                 screen.removeFrame();
+                guiListener.pauseTime(false);
                 break;
             case "removeSave":
                 guiListener.removeSave();
                 screen.removeFrame();
+                guiListener.pauseTime(false);
                 break;
             case "returnToMainMenu":
-                if(tutorial){
-                    TouchEvents.tutorial = false;
-                    TutorialLifecycle.cameraTutorial = TutorialLifecycle.CameraTutorial.NONE;
-                }
                 screen.removeFrame();
-                guiListener.setDone(true);
+                screen.showFrame(AllFrames.confirmMenu("exit"));
                 break;
         }
     }
@@ -264,6 +274,9 @@ public class TouchEvents {
                     guiListener.selectClear();
                     removeSelect = false;
                 }
+                break;
+            case "timeSpeed":
+                guiListener.changeTimeSpeed();
                 break;
             default: break;
         }
@@ -370,7 +383,75 @@ public class TouchEvents {
                 screen.removeFrame();
                 menuListener.exit();
                 break;
+            case "resetButton":
+                screen.showFrame(AllFrames.confirmMenu("reset"));
+                break;
         }
+    }
+
+    private static void confirmMenu(String event){
+        switch (event){
+            case "confirm":
+                confirmed();
+                break;
+            case "decline":
+                declined();
+                break;
+        }
+    }
+
+    private static void confirmed(){
+        Settings settings;
+        switch (confirmType){
+            case "firstLaunch":
+                settings = Settings.getInstance();
+                settings.open();
+                settings.setFirstLaunch(false);
+                settings.save();
+
+                screen.removeAllFrames();
+                menuListener.startTutorial();
+                break;
+            case "exit":
+                if(guiListener != null){
+                    if(tutorial){
+                        TouchEvents.tutorial = false;
+                        TutorialLifecycle.cameraTutorial = TutorialLifecycle.CameraTutorial.NONE;
+                    }
+                    screen.removeFrame();
+                    guiListener.setDone(true);
+                }
+                else{
+                    screen.removeFrame();
+                    menuListener.exit();
+                }
+                break;
+            case "reset":
+                //reset
+                screen.removeFrame();
+                break;
+        }
+        confirmType = "NONE";
+    }
+
+    private static void declined(){
+        switch (confirmType){
+            case "firstLaunch":
+                Settings settings = Settings.getInstance();
+                settings.open();
+                settings.setFirstLaunch(false);
+                settings.save();
+
+                screen.removeFrame();
+                screen.showFrame(AllFrames.mainMenu);
+                break;
+            default:
+                if(guiListener != null)
+                    guiListener.pauseTime(false);
+                screen.removeFrame();
+                break;
+        }
+        confirmType = "NONE";
     }
 
     private static void levelMenu(String event){

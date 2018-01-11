@@ -32,14 +32,39 @@ public class AllFrames {
         mainMenu.addElement("tutorial", "Tutorial", true, null, 32, 46, 36, 10, false, "Textures/btnLong1.png");
         mainMenu.addElement("freeplay", "Free Play", true, null, 32, 34, 36, 10, false, "Textures/btnLong1.png");
         mainMenu.addElement("exit", "Exit", true, null, 32, 22, 36, 10, false, "Textures/btnLong1.png");
+        //mainMenu.addElement("resetButton", "Reset", true, null, 0, 0, 20, 20, true, "Textures/btn1.png");
 
     }
 
+    public static Frame confirmMenu(String confirmType){
+        Element.z = 200;
+
+        Frame confirmMenu = new Frame("confirmMenu");
+        confirmMenu.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/2.png");
+        confirmMenu.addElement("bg", null, false, null, 30, 23, 40, 41, false, "Textures/menubg.png");
+
+        if(confirmType.equals("firstLaunch")){
+            TouchEvents.confirmType = confirmType;
+            confirmMenu.addElement("bg", "Seems like you are new here. Do you want to play tutorial first?", false, null, 31, 35, 38, 28, false, "Textures/2.png");
+        } else if(confirmType.equals("exit")){
+            TouchEvents.confirmType = confirmType;
+            confirmMenu.addElement("bg", "Exit?", false, null, 31, 35, 38, 28, false, "Textures/2.png");
+        }else if(confirmType.equals("reset")){
+            TouchEvents.confirmType = confirmType;
+            confirmMenu.addElement("bg", "Are you sure? This will permamently reset all progress.", false, null, 31, 35, 38, 28, false, "Textures/2.png");
+        }
+        confirmMenu.addElement("confirm", "Yes", true, null, 31, 24, 18, 10, false, "Textures/btn1.png");
+        confirmMenu.addElement("decline", "No", true, null, 50, 24, 18, 10, false, "Textures/btn1.png");
+        return confirmMenu;
+    }
+
     private void initMain(){
+        //name, text (null if none), interactive, align (null if center), (in percents) x, y, wight, height,
+        //square (if true then width = height), picture path
         main = new Frame("main");
         Element.z = -2;
         main.addElement("bg", null, false, null, 0, 85, 40, 15, false, "Textures/btnLong1.png");
-        main.addElement("bg", null, false, null, 2, 87, 11, 11, true, "Textures/time.png");
+        main.addElement("timeSpeed", null, true, null, 2, 87, 11, 11, true, "Textures/time.png");
         main.addElement("time", "Time: ", false, Element.TextPosition.Left_VCenter, 11, 87, 26, 11, false, "Textures/btn2.png");
         main.addElement("population", "Population: ", false, Element.TextPosition.Left_VCenter, 74, 89, 26, 11, false, "Textures/btnLong1.png");
         main.addElement("money", "Money: ", false, Element.TextPosition.Left_VCenter, 74, 78, 26, 11, false, "Textures/btnLong1.png");

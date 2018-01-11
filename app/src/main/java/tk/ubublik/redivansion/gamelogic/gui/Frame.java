@@ -58,6 +58,7 @@ public class Frame {
             if (element.touchCheck(x, y)) {
                 if(element.interactive && touchEvent.getType() == TouchEvent.Type.DOWN) {
                     touchedElement = element;
+                    //change button image
                     touchedElement.p.setImage(StaticAssetManager.getAssetManager(), "Textures/btn2.png", false);
                 }
                 if(element.interactive && element == touchedElement && touchEvent.getType() == TouchEvent.Type.UP) {
@@ -73,6 +74,7 @@ public class Frame {
         return touchedElem;
     }
 
+    //restore button image
     public void removeTouch(){
         if(touchedElement != null)
             touchedElement.p.setImage(StaticAssetManager.getAssetManager(), "Textures/btnLong1.png", false);

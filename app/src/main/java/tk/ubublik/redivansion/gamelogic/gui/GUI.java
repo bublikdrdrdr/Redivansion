@@ -170,9 +170,7 @@ public class GUI implements TouchInputHook {
                 cameraControl.cam.setLocation(new Vector3f(x, 0, y).subtract(fullDirection));
                 if(TouchEvents.tutorial)
                     guiScreen.showFrame(TutorialFrames.objectInfo2());
-
-            }}
-    }
+            }}}
 
     public void upgradeObject(){
         if (selectedObject!=null){

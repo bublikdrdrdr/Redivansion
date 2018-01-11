@@ -164,21 +164,23 @@ public class TutorialLifecycle extends Lifecycle {
         @Override
         public void cameraTutorial(CameraTutorial camTut){
             switch (camTut){
-                case MOVE:
-                    if(cameraControl.getCameraCenterPoint().getX() > camPos.getX() + 2 || cameraControl.getCameraCenterPoint().getX() < camPos.getX() - 2 ||
-                            cameraControl.getCameraCenterPoint().getY() > camPos.getY() + 2 || cameraControl.getCameraCenterPoint().getY() < camPos.getY() - 2){
+                case MOVE: //continue tutorial if camera moved
+                    if(cameraControl.getCameraCenterPoint().getX() > camPos.getX() + 2
+                            || cameraControl.getCameraCenterPoint().getX() < camPos.getX() - 2
+                            || cameraControl.getCameraCenterPoint().getY() > camPos.getY() + 2
+                            || cameraControl.getCameraCenterPoint().getY() < camPos.getY() - 2){
                         cameraTutorial = CameraTutorial.NONE;
                         gui.guiScreen.removeFrame();//blank
                         gui.guiScreen.showFrame(TutorialFrames.frame("cameraZoom"));
                     }
                     break;
-                case ZOOM:
+                case ZOOM: //continue if zoom changes
                     if(cameraControl.currentFoV > fov + 10 || cameraControl.currentFoV < fov - 10){
                         cameraTutorial = CameraTutorial.NONE;
                         gui.guiScreen.showFrame(TutorialFrames.buildMenu(false));
                     }
                     break;
-                default:
+                default: //save camera position and zoom as tutorial checkpoint
                     camPos = cameraControl.getCameraCenterPoint().clone();
                     fov = cameraControl.currentFoV;
                     break;
@@ -212,6 +214,11 @@ public class TutorialLifecycle extends Lifecycle {
         @Override
         public void pauseTime(boolean value) {
             gameLogicProcessor.setPaused(value);
+        }
+
+        @Override
+        public void changeTimeSpeed() {
+
         }
 
         @Override

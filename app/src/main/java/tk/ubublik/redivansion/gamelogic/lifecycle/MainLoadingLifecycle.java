@@ -20,7 +20,6 @@ public class MainLoadingLifecycle extends LoadingLifecycle {
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                // TODO: 02-Sep-17 load gui nodes to NodesCache
                 try {
                     Picture picture = new Picture("menu_background");
                     picture.setImage(StaticAssetManager.getAssetManager(), "Textures/menu_background.png", true);
