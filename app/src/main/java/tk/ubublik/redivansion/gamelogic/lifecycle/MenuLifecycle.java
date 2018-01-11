@@ -8,6 +8,7 @@ import com.jme3.input.event.TouchEvent;
 
 import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.gui.AllFrames;
+import tk.ubublik.redivansion.gamelogic.gui.Frame;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.units.Settings;
 import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
@@ -29,6 +30,7 @@ public class MenuLifecycle extends Lifecycle implements TouchListener {
     private  boolean done = false;
     private GUI gui;
     private Settings settings;
+    private Frame frame = AllFrames.mainMenu;
 
     private static final String TOUCH_MAPPING = "touch";
 
@@ -65,7 +67,9 @@ public class MenuLifecycle extends Lifecycle implements TouchListener {
         setIdle();
         settings = Settings.getInstance();
         settings.open();
-        gui = new GUI(simpleApplication.getGuiNode(), menuListener, AllFrames.mainMenu);
+        if(settings.isFirstLaunch())
+            gui = new GUI(simpleApplication.getGuiNode(), menuListener, AllFrames.confirmMenu("firstLaunch"));
+        else gui = new GUI(simpleApplication.getGuiNode(), menuListener, AllFrames.mainMenu);
         Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
         done = false;
     }

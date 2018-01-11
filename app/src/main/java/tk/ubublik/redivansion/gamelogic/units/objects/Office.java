@@ -33,14 +33,14 @@ public class Office extends Building {
         setNeedsRoad(true);
         setBuildCost(GameParams.OFFICE_LEVELS_BUILD_COST[0]);
         //
-        beginAnimation("build_lvl_1");
+        beginAnimation("build"+(level+1));
     }
 
     @Override
     public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
         // TODO: 11-Nov-17 i don't remember destroy animation name
         try {
-            ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+            ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy"+(level+1), onAnimationEndListener);
         } catch (Exception e){
             onAnimationEndListener.animationEnd();
         }
@@ -78,7 +78,7 @@ public class Office extends Building {
     @Override
     public void setLevelNumber(int level) {
         if (level<0 || level>=getLevelsCount()) throw new IllegalArgumentException("Wrong level number: "+level);
-        beginAnimation("fastDestroy"+Integer.toString(getLevelNumber()), "fastBuild"+Integer.toString(level));
+        beginAnimation("destroy"+level, "build"+(level+1));
         this.level = level;
         setParamsByLevel(level);
         power = 0;//will set in next recalculateParams()

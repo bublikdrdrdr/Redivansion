@@ -52,7 +52,7 @@ public class LevelLifecycle extends Lifecycle {
         super(simpleApplication);
         this.levelNumber = levelNumber;
         done = false;
-        Level level = LevelFactory.getLevel(0);// TODO: getLevel(levelNumber);
+        Level level = LevelFactory.getLevel(levelNumber);// TODO: getLevel(levelNumber);
         settings = Settings.getInstance();
         settings.open(true);
         loadLevel(level);
@@ -186,6 +186,13 @@ public class LevelLifecycle extends Lifecycle {
         @Override
         public void pauseTime(boolean value) {
             gameLogicProcessor.setPaused(value);
+        }
+
+        @Override
+        public void changeTimeSpeed() {
+            if(gameLogicProcessor.getTimer().getGameSpeed() == 1)
+                gameLogicProcessor.setGameSpeed(2);
+            else gameLogicProcessor.setGameSpeed(1);
         }
 
         @Override

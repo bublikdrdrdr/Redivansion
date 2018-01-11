@@ -27,7 +27,7 @@ public class House extends Building {
     public House(Point position) {
         setGeometryManager(new GeometryAnimationManager("house", (Model) NodesCache.getInstance().get("houseModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(1.8f, 0.5f, 1.8f);
+        getGeometryManager().setLocalScale(0.8f, 1, 0.8f);
         getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
         //params
         setSize(2);
@@ -35,7 +35,7 @@ public class House extends Building {
         setNeedsRoad(true);
         setBuildCost(GameParams.HOUSE_LEVELS_BUILD_COST[0]);
         //
-        beginAnimation("build");
+        beginAnimation("build"+(level+1));
     }
 
     @Override
@@ -65,6 +65,11 @@ public class House extends Building {
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName, new GeometryManager.OnAnimationEndListener() {
             @Override
             public void animationEnd() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 ((GeometryAnimationManager)getGeometryManager()).beginAnimation(nextAnimation);
             }
         });
@@ -101,7 +106,7 @@ public class House extends Building {
     @Override
     public void setLevelNumber(int level) {
         if (level<0 || level>=getLevelsCount()) throw new IllegalArgumentException("Wrong level number: "+level);
-        //beginAnimation("destroy", "build");
+        beginAnimation("destroy"+(level), "build"+(level+1));
         //beginAnimation("destroy"+Integer.toString(getLevelNumber()), "build"+Integer.toString(level));
         this.level = level;
         setPopulation(getPopulation());//if population is more than max it will cut it

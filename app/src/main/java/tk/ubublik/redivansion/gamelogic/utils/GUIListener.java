@@ -27,6 +27,7 @@ public interface GUIListener {
     MapRenderer getMapRenderer();
     GUI getGui();
     void pauseTime(boolean value);
+    void changeTimeSpeed();
 
     void setDone(boolean done);
 

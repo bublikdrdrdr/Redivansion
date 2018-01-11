@@ -21,7 +21,7 @@ public class FreeplayLoadingLifecycle extends LoadingLifecycle {
             @Override
             public void run() {
                 try {
-                    Model simpleModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/simple.crm");
+                    Model simpleModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/testOffice.crm");
                     NodesCache.getInstance().put("officeModel", simpleModel);
                     Model treeModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/tree.crm");
                     NodesCache.getInstance().put("treeModel", treeModel);
@@ -29,7 +29,7 @@ public class FreeplayLoadingLifecycle extends LoadingLifecycle {
                     NodesCache.getInstance().put("terrainModel", terrainModel);
                     Model roadModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/road.crm");
                     NodesCache.getInstance().put("roadModel", roadModel);
-                    Model houseModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/house.crm");
+                    Model houseModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/testHouse.crm");
                     NodesCache.getInstance().put("houseModel", houseModel);
                     Model powerPlantModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/powerplant.crm");
                     NodesCache.getInstance().put("powerPlantModel", powerPlantModel);
