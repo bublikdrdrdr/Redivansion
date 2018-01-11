@@ -65,11 +65,6 @@ public class House extends Building {
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName, new GeometryManager.OnAnimationEndListener() {
             @Override
             public void animationEnd() {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 ((GeometryAnimationManager)getGeometryManager()).beginAnimation(nextAnimation);
             }
         });
