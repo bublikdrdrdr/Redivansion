@@ -43,7 +43,7 @@ public class Screen {
     }
 
     public void removeFrame(){
-        if(!activeFrame.isEmpty()) {
+        if(activeFrame.size()-1 > 0) {
             for (Element element : getActiveFrame().elements) {
                 if (element.p!=null) guiNode.detachChild(element.p);
                 if (element.txt!=null) guiNode.detachChild(element.txt);

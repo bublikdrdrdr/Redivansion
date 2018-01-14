@@ -38,18 +38,7 @@ public abstract class LoadingLifecycle extends Lifecycle {
     }
 
     private void setLoadingNode(){
-        BitmapFont font = StaticAssetManager.loadFont("Interface/Fonts/Default.fnt");
-        bitmapText = new BitmapText(font, false);
-        bitmapText.setBox(new Rectangle(0,0, simpleApplication.getCamera().getWidth(), simpleApplication.getCamera().getHeight()/2));
-        bitmapText.setSize(font.getCharSet().getRenderedSize()*2);
-        bitmapText.setAlignment(BitmapFont.Align.Center);
-        bitmapText.setColor(ColorRGBA.Red);
-        bitmapText.setVerticalAlignment(BitmapFont.VAlign.Center);
-        bitmapText.setText("LOADING");
-        bitmapText.setLocalTranslation(0,simpleApplication.getCamera().getHeight(), 5);
-        simpleApplication.getGuiNode().attachChild(bitmapText);
-
-        Picture pic = new Picture("HUD Picture");
+       Picture pic = new Picture("HUD Picture");
         pic.setImage(StaticAssetManager.getAssetManager(), "Textures/loadingBackground.png", true);
         pic.setWidth(simpleApplication.getCamera().getWidth());
         pic.setHeight(simpleApplication.getCamera().getHeight());

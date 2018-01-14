@@ -71,9 +71,10 @@ public class GeometryAnimationManager extends GeometryManager{
         if (meshRender!=null){
             meshRender.onUpdate();
             if (meshRender.isDone()) {
-                if (meshRender.getListener()!=null) meshRender.getListener().animationEnd();
+                OnAnimationEndListener listener = meshRender.getListener();
                 meshRender = null;
                 done = true;
+                if (listener!=null) listener.animationEnd();
             }
             this.updateModelBound();
         }

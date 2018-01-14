@@ -10,11 +10,17 @@ import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 
 public interface GUIListener {
 
-    void addTree();
-    void addHouse();
-    void addPower();
-    void addBuilding();
-    void addRoad();
+    boolean addTree();
+    boolean addHouse();
+    boolean addPower();
+    boolean addPolice();
+    boolean addFire();
+    boolean addWater();
+    boolean addHospital();
+    boolean addSchool();
+    boolean addShop();
+    boolean addBuilding();
+    boolean addRoad();
     void setRoadPoints();
     void selectTree();
     void selectPower();

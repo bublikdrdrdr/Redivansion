@@ -5,21 +5,30 @@ import android.graphics.Point;
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.Vector3f;
 
+import java.util.Iterator;
+
 import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.WorldLight;
 import tk.ubublik.redivansion.gamelogic.gui.AllFrames;
+import tk.ubublik.redivansion.gamelogic.gui.Element;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.SavedLevel;
 import tk.ubublik.redivansion.gamelogic.units.Settings;
 import tk.ubublik.redivansion.gamelogic.units.WorldMap;
+import tk.ubublik.redivansion.gamelogic.units.objects.FireStation;
+import tk.ubublik.redivansion.gamelogic.units.objects.Hospital;
 import tk.ubublik.redivansion.gamelogic.units.objects.House;
 import tk.ubublik.redivansion.gamelogic.units.objects.Office;
+import tk.ubublik.redivansion.gamelogic.units.objects.PoliceStation;
 import tk.ubublik.redivansion.gamelogic.units.objects.Road;
+import tk.ubublik.redivansion.gamelogic.units.objects.School;
+import tk.ubublik.redivansion.gamelogic.units.objects.ShoppingMall;
 import tk.ubublik.redivansion.gamelogic.units.objects.ThermalPowerPlant;
 import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
+import tk.ubublik.redivansion.gamelogic.units.objects.WaterPlant;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
 import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
@@ -139,6 +148,14 @@ public class LevelLifecycle extends Lifecycle {
 
         @Override
         public void setGameEnd(boolean win) {
+            for(Element element:gui.guiScreen.getActiveFrame().elements)
+                if(element.p.getName().equals("timeSpeedBg")){
+                    element.p.setImage(StaticAssetManager.getAssetManager(), "Textures/btn1.png", false);
+                    break;
+                }
+            gameLogicProcessor.setGameSpeed(1);
+            boolean additionalGoalCompleted = checkAdditionalGoals();
+            if(!additionalGoalCompleted) win = false;
             if(!AllFrames.levelEndShowed) //without this statement creates and shows multiply frames at once and it looks ugly
                 gui.guiScreen.showFrame(AllFrames.initLevelComplete(win));
             if(win && (levelNumber == settings.getProgress())) {
@@ -190,9 +207,22 @@ public class LevelLifecycle extends Lifecycle {
 
         @Override
         public void changeTimeSpeed() {
-            if(gameLogicProcessor.getTimer().getGameSpeed() == 1)
-                gameLogicProcessor.setGameSpeed(2);
-            else gameLogicProcessor.setGameSpeed(1);
+            if(gameLogicProcessor.getTimer().getGameSpeed() == 1) {
+                for(Element element:getGui().guiScreen.getActiveFrame().elements)
+                    if(element.p.getName().equals("timeSpeedBg")){
+                        element.p.setImage(StaticAssetManager.getAssetManager(), "Textures/btn2.png", false);
+                        break;
+                    }
+                gameLogicProcessor.setGameSpeed(5);
+            }
+            else{
+                for(Element element:getGui().guiScreen.getActiveFrame().elements)
+                if(element.p.getName().equals("timeSpeedBg")){
+                    element.p.setImage(StaticAssetManager.getAssetManager(), "Textures/btn1.png", false);
+                    break;
+                }
+                gameLogicProcessor.setGameSpeed(1);
+            }
         }
 
         @Override
@@ -206,34 +236,65 @@ public class LevelLifecycle extends Lifecycle {
         }
 
         @Override
-        public void addBuilding() {
+        public boolean addBuilding() {
             Point position = getCenterPoint(2);
             Office office = new Office(position);
-            if (worldMap.put(office))
-                System.out.println("Object created at " + office.getPosition());
+            return worldMap.put(office);
         }
 
         @Override
-        public void addTree(){
+        public boolean addTree(){
             Tree tree = new Tree(getCenterPoint(1));
-            worldMap.put(tree);
+            return worldMap.put(tree);
         }
 
         @Override
-        public void addHouse() {
-            worldMap.put(new House(getCenterPoint(2)));
+        public boolean addHouse() {
+            return worldMap.put(new House(getCenterPoint(2)));
         }
 
         @Override
-        public void addPower() {
-            worldMap.put(new ThermalPowerPlant(getCenterPoint(3)));
+        public boolean addPower() {
+            return worldMap.put(new ThermalPowerPlant(getCenterPoint(3)));
         }
 
         @Override
-        public void addRoad(){
+        public boolean addPolice() {
+            return worldMap.put(new PoliceStation(getCenterPoint(2)));
+        }
+
+        @Override
+        public boolean addFire() {
+            return worldMap.put(new FireStation(getCenterPoint(2)));
+        }
+
+        @Override
+        public boolean addWater() {
+            return worldMap.put(new WaterPlant(getCenterPoint(2)));
+        }
+
+        @Override
+        public boolean addHospital() {
+            return worldMap.put(new Hospital(getCenterPoint(3)));
+        }
+
+        @Override
+        public boolean addSchool() {
+            return worldMap.put(new School(getCenterPoint(2)));
+        }
+
+        @Override
+        public boolean addShop() {
+            return worldMap.put(new ShoppingMall(getCenterPoint(2)));
+        }
+
+        @Override
+        public boolean addRoad(){
             if (selectToolManager.buildRoad()){
                 selectToolManager.cancel();
+                return true;
             }
+            return false;
         }
 
         @Override
@@ -261,4 +322,62 @@ public class LevelLifecycle extends Lifecycle {
             selectToolManager.cancel();
         }
     };
+
+    private boolean checkAdditionalGoals(){
+        switch (levelNumber){
+            case 0: //2 power plants
+                int i = 0;
+                for(WorldObject object:worldMap.getWorldObjects()){
+                    if(object instanceof ThermalPowerPlant)
+                        i++;
+                }
+                if(i >= 1)
+                    return true;
+                break;
+            case 1: //fire and police stations
+                boolean police = false, fire = false;
+                for(WorldObject object:worldMap.getWorldObjects()){
+                    if(object instanceof PoliceStation)
+                        police = true;
+                    else if(object instanceof FireStation)
+                        fire = true;
+                }
+                if(police && fire)
+                    return true;
+                break;
+            case 2: // like 2 but with two hospitals too
+                police = false; fire = false;
+                i = 0;
+                for(WorldObject object:worldMap.getWorldObjects()){
+                    if(object instanceof PoliceStation)
+                        police = true;
+                    else if(object instanceof FireStation)
+                        fire = true;
+                    else if(object instanceof Hospital)
+                        i++;
+                }
+                if(police && fire && i >= 2)
+                    return true;
+                break;
+            case 3: //five shops
+                i = 0;
+                for(WorldObject object:worldMap.getWorldObjects()){
+                    if(object instanceof ShoppingMall)
+                        i++;
+                }
+                if(i >= 5)
+                    return true;
+                break;
+            case 4: // three schools
+                i = 0;
+                for(WorldObject object:worldMap.getWorldObjects()){
+                    if(object instanceof School)
+                        i++;
+                }
+                if(i >= 3)
+                    return true;
+                break;
+        }
+        return false;
+    }
 }

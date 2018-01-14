@@ -23,7 +23,7 @@ public class LevelLoadingLifecycle extends LoadingLifecycle {
             @Override
             public void run() {
                 try {
-                    Model simpleModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/simple.crm");
+                    Model simpleModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/officeModel.crm");
                     NodesCache.getInstance().put("officeModel", simpleModel);
                     Model treeModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/tree.crm");
                     NodesCache.getInstance().put("treeModel", treeModel);
@@ -31,10 +31,22 @@ public class LevelLoadingLifecycle extends LoadingLifecycle {
                     NodesCache.getInstance().put("terrainModel", terrainModel);
                     Model roadModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/road.crm");
                     NodesCache.getInstance().put("roadModel", roadModel);
-                    Model houseModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/house.crm");
+                    Model houseModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/houseModel.crm");
                     NodesCache.getInstance().put("houseModel", houseModel);
-                    Model powerPlantModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/powerplant.crm");
-                    NodesCache.getInstance().put("powerPlantModel", powerPlantModel);
+                    Model powerPlantModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/powerplantModel.crm");
+                    NodesCache.getInstance().put("powerplantModel", powerPlantModel);
+                    Model firestationModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/firestationModel.crm");
+                    NodesCache.getInstance().put("firestationModel", firestationModel);
+                    Model hospitalModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/hospitalModel.crm");
+                    NodesCache.getInstance().put("hospitalModel", hospitalModel);
+                    Model policestationModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/policestationModel.crm");
+                    NodesCache.getInstance().put("policestationModel", policestationModel);
+                    Model schoolModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/schoolModel.crm");
+                    NodesCache.getInstance().put("schoolModel", schoolModel);
+                    Model shopModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/shopModel.crm");
+                    NodesCache.getInstance().put("shopModel", shopModel);
+                    Model waterplantModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/waterplantModel.crm");
+                    NodesCache.getInstance().put("waterplantModel", waterplantModel);
 
                     // TODO: 27-Dec-17 load other models
                 } catch (Exception e){

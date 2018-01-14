@@ -93,7 +93,9 @@ public class GUI implements TouchInputHook {
                 if (name.equals(Main.BACK_PRESS_EVENT)) {
                     switch (event.getType()) {
                         case KEY_UP:
-                            TouchEvents.backKeyPressed(guiScreen);
+                            if(guiScreen.getActiveFrame().frameName.equals("mainMenu"))
+                                menuListener.exit();
+                            else TouchEvents.backKeyPressed(guiScreen);
                             break;
                     }
                 }
@@ -111,7 +113,8 @@ public class GUI implements TouchInputHook {
         }
         else if(!touchedGUI && touchEvent.getType() == TouchEvent.Type.LONGPRESSED){
             if(TouchEvents.tutorial){
-                if(TutorialLifecycle.cameraTutorial == TutorialLifecycle.CameraTutorial.NONE) showInfo(touchEvent);
+                if(TutorialLifecycle.cameraTutorial == TutorialLifecycle.CameraTutorial.NONE)
+                        if(!guiScreen.getCurrentFrameName().equals("build")) showInfo(touchEvent);
             }
             else showInfo(touchEvent);
         }
@@ -133,10 +136,10 @@ public class GUI implements TouchInputHook {
         }
 
         else if(touchEvent.getType() == TouchEvent.Type.UP && touchedGUI){
+            touchedGUI = false;
             guiScreen.getActiveFrame().touchedElem = false;
             guiScreen.getActiveFrame().removeTouch();
             guiScreen.touchEvent(touchEvent.getX(), touchEvent.getY(), guiListener, menuListener, touchEvent);
-            touchedGUI = false;
         }}
         return touchedGUI;
     }

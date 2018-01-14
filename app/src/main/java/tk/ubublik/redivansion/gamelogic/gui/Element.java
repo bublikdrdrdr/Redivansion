@@ -63,7 +63,7 @@ public class Element {
     }
 
     private void setText(String text) {
-        BitmapFont fnt = StaticAssetManager.loadFont("Interface/Fonts/Default.fnt");
+        BitmapFont fnt = StaticAssetManager.loadFont("Fonts/final.fnt");
         txt = new BitmapText(fnt, false);
         setTextPosition();
         float size = 5f*dY;
@@ -73,38 +73,39 @@ public class Element {
     }
 
     public void setTextPosition(){
+        float t = h/3.2f;
         if(align == null){
-            txt.setBox(new Rectangle(x,y+(h/2.3f),w,h/2));
+            txt.setBox(new Rectangle(x+1*dX,y+t,w-2*dX,h/1.7f));
             txt.setAlignment(BitmapFont.Align.Center);
             txt.setVerticalAlignment(BitmapFont.VAlign.Center);
         }else switch (align){
             case Left_VCenter:
-                txt.setBox(new Rectangle(x+1*dX, y+(h/2.3f), w, h/2));
+                txt.setBox(new Rectangle(x+1*dX, y+t, w-1*dX, h/2));
                 txt.setAlignment(BitmapFont.Align.Left);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Center);
                 break;
             case Right_VCenter:
-                txt.setBox(new Rectangle(x, y+(h/2.3f), w-1*dX, h/2));
+                txt.setBox(new Rectangle(x+1*dX, y+t, w-2*dX, h/2));
                 txt.setAlignment(BitmapFont.Align.Right);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Center);
                 break;
             case Left_VTop:
-                txt.setBox(new Rectangle(x+1*dX, y, w, h/1.2f));
+                txt.setBox(new Rectangle(x+2*dX, y-1*dY, w-3*dX, h/1.2f));
                 txt.setAlignment(BitmapFont.Align.Left);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Top);
                 break;
             case Right_VTop:
-                txt.setBox(new Rectangle(x, y, w, h/1.2f));
+                txt.setBox(new Rectangle(x+1*dX, y, w-2*dX, h/1.2f));
                 txt.setAlignment(BitmapFont.Align.Right);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Top);
                 break;
             case Center_VTop:
-                txt.setBox(new Rectangle(x, y, w, h/1.2f));
+                txt.setBox(new Rectangle(x+1*dX, y, w-2*dX, h/1.2f));
                 txt.setAlignment(BitmapFont.Align.Center);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Top);
                 break;
             default:
-                txt.setBox(new Rectangle(x, y+(h/2.3f), w, h/2));
+                txt.setBox(new Rectangle(x+1*dX, y+t, w-2*1*dX, h/1.7f));
                 txt.setAlignment(BitmapFont.Align.Center);
                 txt.setVerticalAlignment(BitmapFont.VAlign.Center);
                 break;

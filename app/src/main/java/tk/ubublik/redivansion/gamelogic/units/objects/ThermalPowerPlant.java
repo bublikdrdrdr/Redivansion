@@ -18,11 +18,15 @@ public class ThermalPowerPlant extends PowerPlant {
         this(new Point());
     }
 
+    public ThermalPowerPlant(int x, int y){
+        this(new Point(x,y));
+    }
+
     public ThermalPowerPlant(Point position){
 
-        setGeometryManager(new GeometryAnimationManager("powerPlant", (Model) NodesCache.getInstance().get("powerPlantModel")));
+        setGeometryManager(new GeometryAnimationManager("powerPlant", (Model) NodesCache.getInstance().get("powerplantModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(2.7f, 0.5f, 2.7f);
+        getGeometryManager().setLocalScale(0.9f, 1f, 0.9f);
         getGeometryManager().setLocalTranslation(-1.3f,0,-1.3f);
         //params
         setPosition(position);
@@ -30,7 +34,7 @@ public class ThermalPowerPlant extends PowerPlant {
         setNeedsRoad(true);
         setBuildCost(GameParams.THERMAL_POWER_PLANT_LEVELS_BUILD_COST[0]);
         //
-        beginAnimation("build");
+        beginAnimation("build"+level);
     }
 
     private void beginAnimation(String animationName, final String nextAnimation){
@@ -45,7 +49,7 @@ public class ThermalPowerPlant extends PowerPlant {
 
     @Override
     public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
-        ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+        ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy"+level, onAnimationEndListener);
     }
 
     /*
@@ -59,13 +63,13 @@ public class ThermalPowerPlant extends PowerPlant {
 
     @Override
     public int getLevelsCount() {
-        return -GameParams.THERMAL_POWER_PLANT_LEVELS_BUILD_COST.length;
+        return GameParams.THERMAL_POWER_PLANT_LEVELS_BUILD_COST.length;
     }
 
     @Override
     public void setLevelNumber(int level) {
         if (level<0 || level>=getLevelsCount()) throw new IllegalArgumentException("Wrong level number: "+level);
-        //beginAnimation("destroy", "build");
+        beginAnimation("destroy"+(level-1), "build"+(level));
         //beginAnimation("destroy"+Integer.toString(getLevelNumber()), "build"+Integer.toString(level));
         this.level = level;
         setLevelParams();

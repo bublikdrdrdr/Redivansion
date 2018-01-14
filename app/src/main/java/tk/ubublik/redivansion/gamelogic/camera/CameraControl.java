@@ -26,8 +26,8 @@ import tk.ubublik.redivansion.gamelogic.utils.TouchInputHook;
 public class CameraControl implements ActionListener, AnalogListener, TouchListener {
 
     public final float minFov = 10f;
-    public final float maxFov = 30f;
-    public float currentFoV = 10f;
+    public final float maxFov = 35f;
+    public float currentFoV = 20f;
     private float prevFov;
     private Vector3f prevPos;
 

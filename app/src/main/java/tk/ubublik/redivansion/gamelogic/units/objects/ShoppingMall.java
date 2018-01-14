@@ -15,9 +15,9 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 public class ShoppingMall extends WorldObject {
 
     public ShoppingMall(Point position) {
-        setGeometryManager(new GeometryAnimationManager("SHOPPING_MALL", (Model) NodesCache.getInstance().get("houseModel")));
+        setGeometryManager(new GeometryAnimationManager("SHOPPING_MALL", (Model) NodesCache.getInstance().get("shopModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(1.8f, 0.5f, 1.8f);
+        getGeometryManager().setLocalScale(1.8f, 3f, 1.8f);
         getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
         //params
         setSize(2);
@@ -25,12 +25,12 @@ public class ShoppingMall extends WorldObject {
         setNeedsRoad(true);
         setBuildCost(GameParams.SHOPPING_MALL_LEVELS_BUILD_COST[0]);
         //
-        beginAnimation("build");
+        beginAnimation("build"+level);
     }
 
     @Override
     public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
-        ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+        ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy"+level, onAnimationEndListener);
     }
 
     @Override

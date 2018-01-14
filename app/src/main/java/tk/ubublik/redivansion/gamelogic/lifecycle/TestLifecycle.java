@@ -68,7 +68,7 @@ public class TestLifecycle extends Lifecycle {
         worldMap = new WorldMap();
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
-        gui = new GUI(simpleApplication.getGuiNode(), guiListener, cameraControl, AllFrames.main);
+        //gui = new GUI(simpleApplication.getGuiNode(), guiListener, cameraControl, AllFrames.main);
         Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
@@ -228,7 +228,7 @@ public class TestLifecycle extends Lifecycle {
             }
         }
     };
-
+/*
     GUIListener guiListener = new GUIListener() {
         @Override
         public void remove() {
@@ -339,5 +339,5 @@ public class TestLifecycle extends Lifecycle {
         public void selectClear() {
             selectToolManager.cancel();
         }
-    };
+    };*/
 }
