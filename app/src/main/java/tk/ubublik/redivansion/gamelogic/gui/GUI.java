@@ -40,7 +40,6 @@ public class GUI implements TouchInputHook {
         menuListener = null;
         this.cameraControl = cameraControl;
         guiScreen = new Screen(frame.frameName, guiNode, frame, this);
-        setStatusChanged(0,0, true);
         setTime(0);
         initListener();
     }

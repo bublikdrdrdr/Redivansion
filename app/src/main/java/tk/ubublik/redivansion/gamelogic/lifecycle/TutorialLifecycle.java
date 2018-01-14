@@ -37,6 +37,7 @@ import tk.ubublik.redivansion.gamelogic.units.objects.Tree;
 import tk.ubublik.redivansion.gamelogic.units.objects.WaterPlant;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 import tk.ubublik.redivansion.gamelogic.utils.GUIListener;
+import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
 import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
@@ -84,6 +85,8 @@ public class TutorialLifecycle extends Lifecycle {
         gameLogicProcessor = new GameLogicProcessor(worldMap, level, logicResultListener);
         mapRenderer = new MapRenderer(simpleApplication.getRootNode(), 1f, simpleApplication.getCamera());
         gui = new GUI(simpleApplication.getGuiNode(), guiListener, cameraControl, AllFrames.main);
+        gui.setTime(-666);
+        gui.setStatusChanged(0, GameParams.LEVELS_MONEY[0], true);
         Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
         worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);

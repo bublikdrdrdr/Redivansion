@@ -103,7 +103,8 @@ public class AllFrames {
         main.addElement("money", "Money: ", false, Element.TextPosition.Left_VCenter, 74, 78, 26, 11, false, "Textures/btnLong1.png");
         main.addElement("plus", null, true, null, 0, 65, 20, 20, true, "Textures/btn1.png");
         main.addElement("addSmthing", null, true, null, 0, 65, 20, 20, true, "Textures/addX.png");
-        main.addElement("remove", "Remove", true, null, 0, 45, 20, 20, true, "Textures/btn1.png");
+        main.addElement("x", null, true, null, 0, 45, 20, 20, true, "Textures/btn1.png");
+        main.addElement("remove", null, true, null, 0, 45, 20, 20, true, "Textures/closeX.png");
         main.addElement("menu", "Menu", true, null, 0, 0, 20, 20, true, "Textures/btn1.png");
     }
 
@@ -189,9 +190,9 @@ public class AllFrames {
         add.addElement("bg", "Buildings", false, Element.TextPosition.Left_VCenter, 30, 75, 33, 10, false, "Textures/bg.jpg");
         add.addElement("x", null, true, null, 63, 75, 7, 10, false, "Textures/btn1.png");
         add.addElement("close", null, true, null, 63, 75, 7, 10, false, "Textures/closeX.png");
-        add.addElement("addPolice", "Add Police Station", (progress > 0)?true:false, null, 32, 60, 36, 10, false, (progress > 0)?"Textures/btnLong1.png":"Textures/btnLong2.png");
-        add.addElement("addFire", "Add Fire Station", (progress > 0)?true:false, null, 32, 48, 36, 10, false,  (progress > 0)?"Textures/btnLong1.png":"Textures/btnLong2.png");
-        add.addElement("addWater", "Add Water Station", (progress > 1)?true:false, null, 32, 36, 36, 10, false,  (progress > 1)?"Textures/btnLong1.png":"Textures/btnLong2.png");
+        add.addElement("addPolice", "Add Police Station", (progress > -1)?true:false, null, 32, 60, 36, 10, false, (progress > -1)?"Textures/btnLong1.png":"Textures/btnLong2.png");
+        add.addElement("addFire", "Add Fire Station", (progress > -1)?true:false, null, 32, 48, 36, 10, false,  (progress > -1)?"Textures/btnLong1.png":"Textures/btnLong2.png");
+        add.addElement("addWater", "Add Water Station", (progress > -1)?true:false, null, 32, 36, 36, 10, false,  (progress > -1)?"Textures/btnLong1.png":"Textures/btnLong2.png");
         add.addElement("addPrev", null, true, null, 32, 17, 16, 10, false, "Textures/btn1.png");
         add.addElement("addNext", null, true, null, 52, 17, 16, 10, false, "Textures/btn1.png");
         add.addElement("addPrev1", null, true, null, 32, 17, 16, 10, false, "Textures/arrowPrev.png");
@@ -210,12 +211,12 @@ public class AllFrames {
         add.addElement("bg", "Buildings", false, Element.TextPosition.Left_VCenter, 30, 75, 33, 10, false, "Textures/bg.jpg");
         add.addElement("x", null, true, null, 63, 75, 7, 10, false, "Textures/btn1.png");
         add.addElement("close", null, true, null, 63, 75, 7, 10, false, "Textures/closeX.png");
-        add.addElement("addSchool", "Add School", (progress > 3)?true:false, null, 32, 60, 36, 10, false, (progress > 3)?"Textures/btnLong1.png":"Textures/btnLong2.png");
+        add.addElement("addHospital", "Add Hospital", (progress > -1)?true:false, null, 32, 60, 36, 10, false, (progress > -1)?"Textures/btnLong1.png":"Textures/btnLong2.png");
         add.addElement("addShop", "Add Shop", (progress > 2)?true:false, null, 32, 48, 36, 10, false,  (progress > 2)?"Textures/btnLong1.png":"Textures/btnLong2.png");
-        add.addElement("addHospital", "Add Hospital", (progress > 1)?true:false, null, 32, 36, 36, 10, false,  (progress > 1)?"Textures/btnLong1.png":"Textures/btnLong2.png");
+        add.addElement("addSchool", "Add School", (progress > 3)?true:false, null, 32, 36, 36, 10, false,  (progress > 3)?"Textures/btnLong1.png":"Textures/btnLong2.png");
         add.addElement("addPrev", null, true, null, 32, 17, 16, 10, false, "Textures/btn1.png");
         add.addElement("bg", null, false, null, 52, 17, 16, 10, false, "Textures/btn2.png");
-        add.addElement("addPrev1", null, true, null, 32, 17, 16, 10, false, "Textures/arrowPrev.png");
+        add.addElement("addPrev2", null, true, null, 32, 17, 16, 10, false, "Textures/arrowPrev.png");
         add.addElement("bg", null, false, null, 52, 17, 16, 10, false, "Textures/arrowNext.png");
         return add;
     }
@@ -270,31 +271,31 @@ public class AllFrames {
         info.addElement("bg", object.getGeometryManager().getName(), false, Element.TextPosition.Left_VCenter, 60, 90, 33, 10, false, "Textures/bg.jpg");
 
         float x = 60.8f;
-        String state = (object.getResourceValue(WorldObject.ResourceType.POWER)>= GameParams.getResourceValue(object, WorldObject.ResourceType.POWER))?"stable":"warning";
+        String state = (object.getResourceValue(WorldObject.ResourceType.POWER)>= GameParams.getResourceValue(object, WorldObject.ResourceType.POWER)*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)?"stable":"warning";
         info.addElement("power", null, false, null, x, 82, 7, 7, true, "Textures/" + state + "/power.png"); x += 4.3f;
 
-        state = (object.getResourceValue(WorldObject.ResourceType.FIRE)>= GameParams.getResourceValue(object, WorldObject.ResourceType.FIRE))?"stable":"warning";
+        state = (object.getResourceValue(WorldObject.ResourceType.FIRE)>= GameParams.getResourceValue(object, WorldObject.ResourceType.FIRE)*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)?"stable":"warning";
         info.addElement("fire", null, false, null, x, 82, 7, 7, true, "Textures/" + state + "/fire.png"); x += 4.3f;
 
-        state = (object.getResourceValue(WorldObject.ResourceType.WATER)>= GameParams.getResourceValue(object, WorldObject.ResourceType.WATER))?"stable":"warning";
+        state = (object.getResourceValue(WorldObject.ResourceType.WATER)>= GameParams.getResourceValue(object, WorldObject.ResourceType.WATER)*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)?"stable":"warning";
         info.addElement("water", null, false, null, x, 82, 7, 7, true, "Textures/" + state + "/water.png"); x += 4.3f;
 
-        state = (object.getResourceValue(WorldObject.ResourceType.POLLUTION)>= GameParams.getResourceValue(object, WorldObject.ResourceType.POLLUTION))?"stable":"warning";
+        state = (object.getResourceValue(WorldObject.ResourceType.POLLUTION)>= GameParams.getResourceValue(object, WorldObject.ResourceType.POLLUTION)*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)?"stable":"warning";
         info.addElement("pollution", null, false, null, x, 82, 7, 7, true, "Textures/" + state + "/pollution.png"); x += 4.3f;
 
-        state = (object.getResourceValue(WorldObject.ResourceType.CRIMINAL)>= GameParams.getResourceValue(object, WorldObject.ResourceType.CRIMINAL))?"stable":"warning";
+        state = (object.getResourceValue(WorldObject.ResourceType.CRIMINAL)>= GameParams.getResourceValue(object, WorldObject.ResourceType.CRIMINAL)*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)?"stable":"warning";
         info.addElement("criminal", null, false, null, x, 82, 7, 7, true, "Textures/" + state + "/criminal.png"); x += 4.3f;
 
-        state = (object.getResourceValue(WorldObject.ResourceType.HEALTH)>= GameParams.getResourceValue(object, WorldObject.ResourceType.HEALTH))?"stable":"warning";
+        state = (object.getResourceValue(WorldObject.ResourceType.HEALTH)>= GameParams.getResourceValue(object, WorldObject.ResourceType.HEALTH)*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)?"stable":"warning";
         info.addElement("health", null, false, null, x, 82, 7, 7, true, "Textures/" + state + "/health.png"); x += 4.3f;
 
-        state = (object.getResourceValue(WorldObject.ResourceType.WORK)>= GameParams.getResourceValue(object, WorldObject.ResourceType.WORK))?"stable":"warning";
+        state = (object.getResourceValue(WorldObject.ResourceType.WORK)>= GameParams.getResourceValue(object, WorldObject.ResourceType.WORK)*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)?"stable":"warning";
         info.addElement("work", null, false, null, x, 82, 7, 7, true, "Textures/" + state + "/work.png"); x += 4.3f;
 
-        state = (object.getResourceValue(WorldObject.ResourceType.HAPPINESS)>= GameParams.getResourceValue(object, WorldObject.ResourceType.HAPPINESS))?"stable":"warning";
+        state = (object.getResourceValue(WorldObject.ResourceType.HAPPINESS)>= GameParams.getResourceValue(object, WorldObject.ResourceType.HAPPINESS)*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)?"stable":"warning";
         info.addElement("happiness", null, false, null, x, 82, 7, 7, true, "Textures/" + state + "/happiness.png"); x += 4.3f;
 
-        state = (object.getResourceValue(WorldObject.ResourceType.EDUCATION)>= GameParams.getResourceValue(object, WorldObject.ResourceType.EDUCATION))?"stable":"warning";
+        state = (object.getResourceValue(WorldObject.ResourceType.EDUCATION)>= GameParams.getResourceValue(object, WorldObject.ResourceType.EDUCATION)*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)?"stable":"warning";
         info.addElement("education", null, false, null, x, 82, 7, 7, true, "Textures/" + state + "/education.png");
 
         int y;

@@ -119,25 +119,13 @@ public class Road extends WorldObject {
         if (getGeometryManager()!=null){
             this.detachChild(getGeometryManager());
         }
-        String newName = MANAGER_NAME+animationName+Float.toString(rotation);
-        GeometryAnimationManager geometryAnimationManager = (GeometryAnimationManager)NodesCache.getInstance().get(newName);
-        if (newName.equals(name)) geometryAnimationManager = null;
-        name = newName;
-        if (geometryAnimationManager!=null) {
-            setGeometryManager(((GeometryAnimationManager) NodesCache.getInstance().get(name)).clone());
-        } else {
-            geometryAnimationManager = new GeometryAnimationManager("road", (Model) NodesCache.getInstance().get("roadModel"));
+        name = MANAGER_NAME+animationName+Float.toString(rotation);
+            GeometryAnimationManager geometryAnimationManager = new GeometryAnimationManager("road", (Model) NodesCache.getInstance().get("roadModel"));
             setCacheInstance(name, geometryAnimationManager);
             geometryAnimationManager.setLocalScale(0.1f);
             geometryAnimationManager.setLocalTranslation(-0.5f, 0, -0.5f);
-            geometryAnimationManager.beginAnimation("build" + animationName, new GeometryManager.OnAnimationEndListener() {
-                @Override
-                public void animationEnd() {
-                    setCacheInstance(name, null);
-                }
-            });
+            geometryAnimationManager.beginAnimation("build" + animationName);
             setGeometryManager(((GeometryAnimationManager) NodesCache.getInstance().get(name)));
-        }
         this.setLocalRotation(getLocalRotation().fromAngles(0,rotation*FastMath.TWO_PI, 0));
     }
 

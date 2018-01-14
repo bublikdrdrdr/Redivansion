@@ -74,6 +74,9 @@ public class Frame {
                         case "addSmthing":
                             sit1 = "plus";
                             break;
+                        case "remove":
+                            sit1 = "x";
+                            break;
                         case "cancel":
                             sit1 = "x";
                             sit2 = "close";

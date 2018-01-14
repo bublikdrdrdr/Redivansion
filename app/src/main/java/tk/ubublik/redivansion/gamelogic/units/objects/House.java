@@ -2,6 +2,7 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 
 import android.graphics.Point;
 
+import com.jme3.cinematic.events.SoundTrack;
 import com.jme3.math.Vector3f;
 
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
@@ -136,14 +137,86 @@ public class House extends Building {
     }
 
     public void checkPopulation(){
-        float mainMin = getMinMainParamPercent();
+        float result;
+        if(checkMainParams() <=0 && checkMinorParams() > checkMainParams())
+            result = checkMainParams();
+        else result = checkMainParams() + checkMinorParams();
+        int lastPopulation = getPopulation();
+        setPopulation(lastPopulation + (int)result);
+        lastPopulationDelta = getPopulation()-lastPopulation;
+
+        System.out.println("Azaza power and need: " + power + " " + getPowerNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
+        System.out.println("Azaza water and need: " + water + " " + getWaterNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
+        System.out.println("Azaza fire and need: " + fire + " " + getFireNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
+        System.out.println("Azaza health and need: " + health + " " + getHealthNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
+        System.out.println("Azaza work and need: " + work + " " + getWorkNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
+        System.out.println("Azaza criminal and need: " + criminal + " " + getCriminalNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
+        System.out.println("Azaza pollution and need: " + pollution + " " + getPollutionNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT);
+        System.out.println("Azaza happiness and need: " + happiness + " " + getHappinessNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT);
+        System.out.println("Azaza education and need: " + education + " " + getEducationNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT);
+
+        System.out.println("Azaza main: " + checkMainParams());
+        System.out.println("Azaza minor: " + checkMinorParams());
+        System.out.println("Azaza result: " + result);
+        /*float main = ((float)power/getPowerNeed() + water/(float)getWaterNeed() + fire/(float)getFireNeed() +
+                        health/(float)getHealthNeed() + work/(float)getWorkNeed() + criminal/(float)getCriminalNeed())/6;
+        float minor = (pollution/(float)getPollutionNeed() + happiness/(float)getHappinessNeed()
+                        + education/(float)getEducationNeed())/3;
+
+        float result = ((main-GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT +
+                minor-GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)*GameParams.POPULATION_GROW_DELTA)/2;
+        System.out.println("Azaza result: " + result);
+        int lastPopulation = getPopulation();
+        setPopulation(lastPopulation + (int)result);
+        lastPopulationDelta = getPopulation()-lastPopulation;
+
+        /*float mainMin = getMinMainParamPercent();
         float minorMin = getMinMinorParamPercent();
         int mainMinPopulationDelta = (int)((mainMin-GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)*GameParams.POPULATION_GROW_DELTA);
         int minorMinPopulationDelta = (int)((minorMin-GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)*GameParams.POPULATION_GROW_DELTA);
 
         int lastPopulation = getPopulation();
         setPopulation(lastPopulation + Math.min(mainMinPopulationDelta, minorMinPopulationDelta));
-        lastPopulationDelta = getPopulation()-lastPopulation;
+        lastPopulationDelta = getPopulation()-lastPopulation;*/
+    }
+
+    private float checkMainParams(){
+        int positive = 0;
+        boolean pow = false;
+        if(power > getPowerNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            pow = true;
+        if(water > getWaterNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            positive++;
+        if(fire > getFireNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            positive++;
+        if(health > getHealthNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            positive++;
+        if(work > getWorkNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            positive++;
+        if(criminal > getCriminalNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            positive++;
+        if(pow && positive >= 5)
+            return 2;//*(int)GameParams.POPULATION_GROW_DELTA;
+        else if(pow && positive >= 3)
+            return 1;//*(int)GameParams.POPULATION_GROW_DELTA;
+        else if(!pow && positive >= 3)
+            return 0;
+        else return -1;//*(int)GameParams.POPULATION_GROW_DELTA;
+    }
+
+    private float checkMinorParams(){
+        int positive = 0;
+        if(pollution > getPollutionNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)
+            positive++;
+        if(happiness > getHappinessNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)
+            positive++;
+        if(education > getEducationNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)
+            positive++;
+        if(positive >= 2)
+            return 1;//*(int)GameParams.POPULATION_GROW_DELTA;
+        else if(positive >= 0)
+            return 0;
+        else return -1;//*(int)GameParams.POPULATION_GROW_DELTA;
     }
 
     private float getMinMainParamPercent(){
