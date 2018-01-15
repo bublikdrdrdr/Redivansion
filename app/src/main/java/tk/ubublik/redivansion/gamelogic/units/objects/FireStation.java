@@ -15,9 +15,9 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 public class FireStation extends WorldObject {
 
     public FireStation(Point position) {
-        setGeometryManager(new GeometryAnimationManager("fire station", (Model) NodesCache.getInstance().get("houseModel")));
+        setGeometryManager(new GeometryAnimationManager("fire station", (Model) NodesCache.getInstance().get("firestationModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(1.8f, 0.5f, 1.8f);
+        getGeometryManager().setLocalScale(0.8f, 1.2f, 0.8f);
         getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
         //params
         setSize(2);
@@ -25,12 +25,12 @@ public class FireStation extends WorldObject {
         setNeedsRoad(true);
         setBuildCost(GameParams.FIRE_STATION_LEVELS_BUILD_COST[0]);
         //
-        beginAnimation("build");
+        beginAnimation("build"+level);
     }
 
     @Override
     public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
-        ((GeometryAnimationManager)getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+        ((GeometryAnimationManager)getGeometryManager()).beginAnimation("destroy"+level, onAnimationEndListener);
     }
 
     @Override

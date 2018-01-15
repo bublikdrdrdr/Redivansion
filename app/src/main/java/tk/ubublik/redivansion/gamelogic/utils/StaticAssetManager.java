@@ -23,10 +23,6 @@ public class StaticAssetManager {
         StaticAssetManager.assetManager = assetManager;
     }
 
-    public static BitmapFont getBitmapFont() {
-        return bitmapFont;
-    }
-
     public static void setBitmapFont(BitmapFont bitmapFont) {
         StaticAssetManager.bitmapFont = bitmapFont;
     }

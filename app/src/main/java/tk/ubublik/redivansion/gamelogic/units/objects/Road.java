@@ -3,12 +3,10 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 import android.graphics.Point;
 
 import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 
 import java.util.Arrays;
 import java.util.List;
 
-import tk.ubublik.redivansion.R;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
@@ -77,7 +75,6 @@ public class Road extends WorldObject {
         ByteSettings.ByteConverter.insertArray(bytes, superBytes, 0);
         byte[] state = roadState.toBytes();
         ByteSettings.ByteConverter.insertArray(bytes, state, superBytes.length);
-        System.out.println("AAA"+state[0]);
         return bytes;
     }
 
@@ -88,7 +85,6 @@ public class Road extends WorldObject {
         byte[] state = Arrays.copyOfRange(bytes, index, index+ROAD_STATE_SIZE);
         roadState = new RoadState(state);
         setRoadState(roadState);
-        System.out.println("AAA"+state[0]);
         return size+ROAD_STATE_SIZE;
     }
 
@@ -112,32 +108,19 @@ public class Road extends WorldObject {
     }
 
     public void setRoadState(RoadState roadState) {
-        // TODO: 21-Oct-17 fix it with animation cache
         this.roadState = roadState;
         String animationName = roadState.getModelName();
         float rotation = roadState.getRotation();
         if (getGeometryManager()!=null){
             this.detachChild(getGeometryManager());
         }
-        String newName = MANAGER_NAME+animationName+Float.toString(rotation);
-        GeometryAnimationManager geometryAnimationManager = (GeometryAnimationManager)NodesCache.getInstance().get(newName);
-        if (newName.equals(name)) geometryAnimationManager = null;
-        name = newName;
-        if (geometryAnimationManager!=null) {
-            setGeometryManager(((GeometryAnimationManager) NodesCache.getInstance().get(name)).clone());
-        } else {
-            geometryAnimationManager = new GeometryAnimationManager("road", (Model) NodesCache.getInstance().get("roadModel"));
+        name = MANAGER_NAME+animationName+Float.toString(rotation);
+            GeometryAnimationManager geometryAnimationManager = new GeometryAnimationManager("road", (Model) NodesCache.getInstance().get("roadModel"));
             setCacheInstance(name, geometryAnimationManager);
             geometryAnimationManager.setLocalScale(0.1f);
             geometryAnimationManager.setLocalTranslation(-0.5f, 0, -0.5f);
-            geometryAnimationManager.beginAnimation("build" + animationName, new GeometryManager.OnAnimationEndListener() {
-                @Override
-                public void animationEnd() {
-                    setCacheInstance(name, null);
-                }
-            });
+            geometryAnimationManager.beginAnimation("build" + animationName);
             setGeometryManager(((GeometryAnimationManager) NodesCache.getInstance().get(name)));
-        }
         this.setLocalRotation(getLocalRotation().fromAngles(0,rotation*FastMath.TWO_PI, 0));
     }
 

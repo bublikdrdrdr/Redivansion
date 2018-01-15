@@ -20,13 +20,11 @@ public class SelectLineGeometry {
 
     private List<Geometry> geometries = new LinkedList<>();
     private MapRenderer mapRenderer;
-    private ColorRGBA colorRGBA;
     private Node node;
     private SelectGeometry origin;
 
-    public SelectLineGeometry(MapRenderer mapRenderer, ColorRGBA colorRGBA, Node node){
+    public SelectLineGeometry(MapRenderer mapRenderer, Node node){
         this.mapRenderer = mapRenderer;
-        this.colorRGBA = colorRGBA;
         this.node = node;
         origin = new SelectGeometry(SelectToolManager.DEFAULT_SELECT_COLOR, Road.DEFAULT_SIZE, mapRenderer.getScale());
     }
@@ -80,23 +78,6 @@ public class SelectLineGeometry {
         lastStart = start;
         lastEnd = end;
         return true;
-    }
-
-    public void setChanged(boolean refresh){
-        if (refresh){
-            Point tempStart = lastStart;
-            Point tempEnd = lastEnd;
-            lastStart = null;
-            lastEnd = null;
-            if (tempStart!=null && tempEnd!=null) setPoints(tempStart, tempEnd);
-        } else {
-            lastStart = null;
-            lastEnd = null;
-        }
-    }
-
-    private boolean pointsOnLine(Point p1, Point p2){
-        return p1.x==p2.x||p1.y==p2.y;
     }
 
     private enum Axis{NONE, X, Y}

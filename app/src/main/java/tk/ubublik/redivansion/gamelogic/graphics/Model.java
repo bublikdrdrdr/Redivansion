@@ -36,7 +36,7 @@ public class Model implements Cloneable{
             List<PolyAnimation> list = new ArrayList<>();
             int count = ByteConverter.getInt(bytes, 0);
             if (count < 0) throw new IllegalArgumentException("Count number is negative");
-            int index = 4;//current position in array, 4 - size of int
+            int index = 4;
             for (int i = 0; i < count; i++){
                 int size = ByteConverter.getInt(bytes, index);
                 index+=4;
@@ -111,9 +111,6 @@ public class Model implements Cloneable{
         }
         return null;
     }
-
-    // TODO: 09-Sep-17 override clone method to full clone
-
 
     @Override
     public Model clone() {

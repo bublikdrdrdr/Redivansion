@@ -22,7 +22,6 @@ import tk.ubublik.redivansion.gamelogic.utils.TouchInputHook;
 
 public class GUI implements TouchInputHook {
 
-    public static final int CLICK_OFFSET = 5;
     public GUIListener guiListener;
     public MenuListener menuListener;
     public Screen guiScreen;
@@ -39,8 +38,7 @@ public class GUI implements TouchInputHook {
         this.guiListener = guiListener;
         menuListener = null;
         this.cameraControl = cameraControl;
-        guiScreen = new Screen(frame.frameName, guiNode, frame, this);
-        setStatusChanged(0,0, true);
+        guiScreen = new Screen(guiNode, frame, this);
         setTime(0);
         initListener();
     }
@@ -48,7 +46,7 @@ public class GUI implements TouchInputHook {
     public GUI(Node guiNode, MenuListener menuListener, Frame frame) {
         this.menuListener = menuListener;
         guiListener = null;
-        guiScreen = new Screen(frame.frameName, guiNode, frame, this);
+        guiScreen = new Screen(guiNode, frame, this);
         initListener();
     }
 
@@ -62,13 +60,12 @@ public class GUI implements TouchInputHook {
                 if(time == -666)
                     element.txt.setText("Time: UNLIMITED");
                 else{
-                    int sec = (int)time % 10;
-                    if(sec > 2 && sec < 8)
-                        time += 5 - sec;
-                    else if(sec > 7)
-                        time += 10 - sec;
-                    else time -= sec;
-                    element.txt.setText("Time: " + (time));
+                    int min = (int) time/60;
+                    int sec1 = (int)time % 60 / 10;
+                    int sec2 = (int)time % 10;
+                    sec2 = (sec2 > 2 && sec2 < 8)?5:((sec2 > 7)?10:0);
+                    sec1 = sec1*10 + sec2;
+                    element.txt.setText("Time: " + min + " m " + sec1 + " s");
                 }
                 return;
             }
@@ -93,7 +90,9 @@ public class GUI implements TouchInputHook {
                 if (name.equals(Main.BACK_PRESS_EVENT)) {
                     switch (event.getType()) {
                         case KEY_UP:
-                            TouchEvents.backKeyPressed(guiScreen);
+                            if(guiScreen.getActiveFrame().frameName.equals("mainMenu"))
+                                menuListener.exit();
+                            else TouchEvents.backKeyPressed(guiScreen);
                             break;
                     }
                 }
@@ -111,7 +110,8 @@ public class GUI implements TouchInputHook {
         }
         else if(!touchedGUI && touchEvent.getType() == TouchEvent.Type.LONGPRESSED){
             if(TouchEvents.tutorial){
-                if(TutorialLifecycle.cameraTutorial == TutorialLifecycle.CameraTutorial.NONE) showInfo(touchEvent);
+                if(TutorialLifecycle.cameraTutorial == TutorialLifecycle.CameraTutorial.NONE)
+                        if(!guiScreen.getCurrentFrameName().equals("build")) showInfo(touchEvent);
             }
             else showInfo(touchEvent);
         }
@@ -133,10 +133,10 @@ public class GUI implements TouchInputHook {
         }
 
         else if(touchEvent.getType() == TouchEvent.Type.UP && touchedGUI){
+            touchedGUI = false;
             guiScreen.getActiveFrame().touchedElem = false;
             guiScreen.getActiveFrame().removeTouch();
             guiScreen.touchEvent(touchEvent.getX(), touchEvent.getY(), guiListener, menuListener, touchEvent);
-            touchedGUI = false;
         }}
         return touchedGUI;
     }
@@ -160,7 +160,7 @@ public class GUI implements TouchInputHook {
             selectedObject = object;
             if(object!=null){
                 cameraControl.saveCameraPosition();
-                guiScreen.removeAllFrames();//blank
+                guiScreen.removeAllFrames();
                 guiScreen.showFrame(AllFrames.initInfo(object));
                 float x = object.getPosition().x + 1f + object.getSize()/3f, y = object.getPosition().y - 1f + object.getSize()/3f;
                 float delta = cameraControl.cam.getLocation().getY() / (cameraControl.cam.getDirection().getY() * -1f);

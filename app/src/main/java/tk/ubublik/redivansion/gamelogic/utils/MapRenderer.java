@@ -2,16 +2,11 @@ package tk.ubublik.redivansion.gamelogic.utils;
 
 import android.graphics.Point;
 
-import com.jme3.material.Material;
-import com.jme3.material.RenderState;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -21,15 +16,11 @@ import java.util.Observer;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.TerrainDrawer;
-import tk.ubublik.redivansion.gamelogic.units.WorldMap;
 import tk.ubublik.redivansion.gamelogic.units.WorldMapAction;
-import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
  * Created by Bublik on 21-Sep-17.
- *
- * Puts geometries on their positions in 3D world
  */
 public class MapRenderer implements Observer{
 
@@ -39,10 +30,6 @@ public class MapRenderer implements Observer{
     private LinkedList<WorldObject> worldObjectList = new LinkedList<>();
 
     private TerrainDrawer terrainDrawer;
-
-    public MapRenderer(Node node) {
-        this(node, null);
-    }
 
     public MapRenderer(Node node, Camera camera){
         this(node, 1, camera);
@@ -79,15 +66,6 @@ public class MapRenderer implements Observer{
         node.attachChild(worldObject);
     }
 
-    public void putObjects(Collection<WorldObject> worldObjects){
-        for (WorldObject worldObject: worldObjects)
-            putObject(worldObject);
-    }
-
-    public boolean contains(WorldObject worldObject){
-        return contains(worldObject.getGeometryManager());
-    }
-
     public boolean contains(Spatial spatial){
         return (node.getChildIndex(spatial)!=-1);
     }
@@ -105,17 +83,7 @@ public class MapRenderer implements Observer{
         return result[0];
     }
 
-    @Deprecated
-    public void removeObject(Spatial spatial){
-        node.detachChild(spatial);
-    }
-
-    public void removeObject(int index){
-        removeObject(worldObjectList.get(index));
-    }
-
     public void onUpdate() {
-        // TODO: 26-Oct-17 OPTIMIZE
         try {
             for (WorldObject worldObject : worldObjectList) {
                 if ((camera.contains(worldObject.getWorldBound()) != Camera.FrustumIntersect.Outside)) {

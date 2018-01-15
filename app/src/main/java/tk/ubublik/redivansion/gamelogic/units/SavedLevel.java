@@ -7,7 +7,6 @@ import java.util.List;
 
 import tk.ubublik.redivansion.gamelogic.exceptions.ParseLevelException;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
-import tk.ubublik.redivansion.gamelogic.utils.ByteSettings;
 
 import static tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter.*;
 
@@ -30,7 +29,6 @@ public class SavedLevel {
     }
 
     public SavedLevel(byte[] bytes) throws ParseLevelException {
-        System.out.println("ARRAY: "+ Arrays.toString(bytes));
         try {
             worldObjects = new LinkedList<>();
             int index = 0;
@@ -75,7 +73,6 @@ public class SavedLevel {
             insertArray(bytes, tempBytes, index);
             index+=tempBytes.length;
         }
-        System.out.println("ARRAY: "+ Arrays.toString(bytes));
         return bytes;
     }
 }

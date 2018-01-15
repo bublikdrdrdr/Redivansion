@@ -22,7 +22,7 @@ public class MainLoadingLifecycle extends LoadingLifecycle {
             public void run() {
                 try {
                     Picture picture = new Picture("menu_background");
-                    picture.setImage(StaticAssetManager.getAssetManager(), "Textures/menu_background.png", true);
+                    picture.setImage(StaticAssetManager.getAssetManager(), "Textures/loadingBackground.png", true);
                     NodesCache.getInstance().put("menu_background", picture);
                 } catch (Exception e){
                     System.exit(1);

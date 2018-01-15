@@ -12,7 +12,6 @@ public class MainLifecycle extends Lifecycle {
     private boolean done = false;
 
     public MainLifecycle(SimpleApplication simpleApplication) {
-        //todo: use simpleApplication to get rootNode, guiNode, listeners etc.
         super(simpleApplication);
         currentLifecycle = new MainLoadingLifecycle(simpleApplication);
     }
@@ -48,9 +47,6 @@ public class MainLifecycle extends Lifecycle {
                     currentLifecycle = new TutorialLifecycle(simpleApplication);
                     break;
                 case TUTORIAL:
-                    currentLifecycle = new MainLoadingLifecycle(simpleApplication);
-                    break;
-                case TEST_LIFECYCLE:
                     currentLifecycle = new MainLoadingLifecycle(simpleApplication);
                     break;
                 case FREEPLAY_LOADING:

@@ -2,6 +2,7 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 
 import android.graphics.Point;
 
+import com.jme3.cinematic.events.SoundTrack;
 import com.jme3.math.Vector3f;
 
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
@@ -17,8 +18,7 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 
 public class House extends Building {
 
-    private int population = GameParams.HOUSE_LEVELS_MAX_POPULATION[0]/2;
-    private int lastPopulationDelta = 0;
+    private int population = GameParams.HOUSE_LEVELS_MAX_POPULATION[0]/3;
 
     public House(int x, int y){
         this(new Point(x,y));
@@ -27,7 +27,7 @@ public class House extends Building {
     public House(Point position) {
         setGeometryManager(new GeometryAnimationManager("house", (Model) NodesCache.getInstance().get("houseModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(0.8f, 1, 0.8f);
+        getGeometryManager().setLocalScale(0.8f, 0.9f, 0.8f);
         getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
         //params
         setSize(2);
@@ -35,12 +35,12 @@ public class House extends Building {
         setNeedsRoad(true);
         setBuildCost(GameParams.HOUSE_LEVELS_BUILD_COST[0]);
         //
-        beginAnimation("build"+(level+1));
+        beginAnimation("build"+level);
     }
 
     @Override
     public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
-        ((GeometryAnimationManager)getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+        ((GeometryAnimationManager)getGeometryManager()).beginAnimation("destroy"+level, onAnimationEndListener);
     }
 
     private static final int INT_SIZE = 4;
@@ -70,14 +70,6 @@ public class House extends Building {
         });
     }
 
-    public int getLastPopulationDelta() {
-        return lastPopulationDelta;
-    }
-
-    /*
-    logic block
-     */
-
     @Override
     public int getLevelsCount() {
         return GameParams.HOUSE_LEVELS_BUILD_COST.length;
@@ -101,10 +93,9 @@ public class House extends Building {
     @Override
     public void setLevelNumber(int level) {
         if (level<0 || level>=getLevelsCount()) throw new IllegalArgumentException("Wrong level number: "+level);
-        beginAnimation("destroy"+(level), "build"+(level+1));
-        //beginAnimation("destroy"+Integer.toString(getLevelNumber()), "build"+Integer.toString(level));
+        beginAnimation("destroy"+(level-1), "build"+(level));
         this.level = level;
-        setPopulation(getPopulation());//if population is more than max it will cut it
+        setPopulation(getPopulation());
     }
 
     @Override
@@ -136,31 +127,51 @@ public class House extends Building {
     }
 
     public void checkPopulation(){
-        float mainMin = getMinMainParamPercent();
-        float minorMin = getMinMinorParamPercent();
-        int mainMinPopulationDelta = (int)((mainMin-GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)*GameParams.POPULATION_GROW_DELTA);
-        int minorMinPopulationDelta = (int)((minorMin-GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)*GameParams.POPULATION_GROW_DELTA);
-
+        float result;
+        if(checkMainParams() <=0 && checkMinorParams() > checkMainParams())
+            result = checkMainParams();
+        else result = checkMainParams() + checkMinorParams();
         int lastPopulation = getPopulation();
-        setPopulation(lastPopulation + Math.min(mainMinPopulationDelta, minorMinPopulationDelta));
-        lastPopulationDelta = getPopulation()-lastPopulation;
+        setPopulation(lastPopulation + (int)result);
     }
 
-    private float getMinMainParamPercent(){
-        float min = (float)power/getPowerNeed();
-        min = Math.min(min, water/(float)getWaterNeed());
-        min = Math.min(min, fire/(float)getFireNeed());
-        min = Math.min(min, health/(float)getHealthNeed());
-        min = Math.min(min, work/(float)getWorkNeed());
-        min = Math.min(min, criminal/(float)getCriminalNeed());
-        return min;
+    private float checkMainParams(){
+        int positive = 0;
+        boolean pow = false;
+        if(power > getPowerNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            pow = true;
+        if(water > getWaterNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            positive++;
+        if(fire > getFireNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            positive++;
+        if(health > getHealthNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            positive++;
+        if(work > getWorkNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            positive++;
+        if(criminal > getCriminalNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
+            positive++;
+        if(pow && positive >= 5)
+            return 2;
+        else if(pow && positive >= 3)
+            return 1;
+        else if(!pow && positive >= 3)
+            return 0;
+        else return -1;
     }
 
-    private float getMinMinorParamPercent(){
-        float min = pollution/(float)getPollutionNeed(); //is it main or not?
-        min = Math.min(min, happiness/(float)getHappinessNeed());
-        min = Math.min(min, education/(float)getEducationNeed());
-        return min;
+    private float checkMinorParams(){
+        int positive = 0;
+        if(pollution > getPollutionNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)
+            positive++;
+        if(happiness > getHappinessNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)
+            positive++;
+        if(education > getEducationNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)
+            positive++;
+        if(positive >= 2)
+            return 1;
+        else if(positive >= 0)
+            return 0;
+        else return -1;
     }
 
     private int getPowerNeed(){

@@ -2,7 +2,6 @@ package tk.ubublik.redivansion.gamelogic.utils.game_tools;
 
 import android.graphics.Point;
 
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 
 import java.util.Observable;
@@ -26,7 +25,6 @@ public class RoadBuilder extends SelectTool implements Observer {
     private SelectStage selectStage;
 
     private MapRenderer mapRenderer;
-    private Node node;
     private CameraControl cameraControl;
     private WorldMap worldMap;
 
@@ -34,10 +32,9 @@ public class RoadBuilder extends SelectTool implements Observer {
 
     public RoadBuilder(MapRenderer mapRenderer, Node node, CameraControl cameraControl, WorldMap worldMap) {
         this.mapRenderer = mapRenderer;
-        this.node = node;
         this.cameraControl = cameraControl;
         this.worldMap = worldMap;
-        this.selectLineGeometry = new SelectLineGeometry(mapRenderer, SelectToolManager.DEFAULT_SELECT_COLOR, node);
+        this.selectLineGeometry = new SelectLineGeometry(mapRenderer, node);
         selectStage = SelectStage.NONE;
     }
 
@@ -142,25 +139,6 @@ public class RoadBuilder extends SelectTool implements Observer {
         if (p1.x == p2.x) return Axis.X;
         if (p1.y == p2.y) return Axis.Y;
         return Axis.NONE;
-    }
-
-
-    ////////////////////////////
-
-    public boolean isStartSet(){
-        return startPoint!=null;
-    }
-
-    public boolean isEndSet(){
-        return endPoint!=null;
-    }
-
-    public Point getStartPoint() {
-        return startPoint;
-    }
-
-    public Point getEndPoint() {
-        return endPoint;
     }
 
     public SelectStage getSelectStage() {

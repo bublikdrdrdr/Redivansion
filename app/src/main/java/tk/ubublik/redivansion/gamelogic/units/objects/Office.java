@@ -25,22 +25,21 @@ public class Office extends Building {
     public Office(Point position) {
         setGeometryManager(new GeometryAnimationManager("office", (Model)NodesCache.getInstance().get("officeModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(1.8f, 0.5f, 1.8f);
-        getGeometryManager().setLocalTranslation(0,0, 0);
+        getGeometryManager().setLocalScale(0.8f, 1.2f, 0.8f);
+        getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
         //params
         setSize(2);
         setPosition(position);
         setNeedsRoad(true);
         setBuildCost(GameParams.OFFICE_LEVELS_BUILD_COST[0]);
         //
-        beginAnimation("build"+(level+1));
+        beginAnimation("build"+(level));
     }
 
     @Override
     public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
-        // TODO: 11-Nov-17 i don't remember destroy animation name
         try {
-            ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy"+(level+1), onAnimationEndListener);
+            ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy"+level, onAnimationEndListener);
         } catch (Exception e){
             onAnimationEndListener.animationEnd();
         }
@@ -55,11 +54,6 @@ public class Office extends Building {
         });
     }
 
-    /*
-
-    Level logic block
-
-     */
     @Override
     public void recalculateParams() {
         int oldPower = power;
@@ -78,10 +72,10 @@ public class Office extends Building {
     @Override
     public void setLevelNumber(int level) {
         if (level<0 || level>=getLevelsCount()) throw new IllegalArgumentException("Wrong level number: "+level);
-        beginAnimation("destroy"+level, "build"+(level+1));
+        beginAnimation("destroy"+(level-1), "build"+(level));
         this.level = level;
         setParamsByLevel(level);
-        power = 0;//will set in next recalculateParams()
+        power = 0;
     }
 
     private void setParamsByLevel(int level){

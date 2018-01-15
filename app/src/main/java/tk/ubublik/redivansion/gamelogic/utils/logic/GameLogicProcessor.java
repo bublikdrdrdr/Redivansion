@@ -10,19 +10,12 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
 
 /**
  * Created by Bublik on 31-Aug-17.
- *
- * Calculates game units (population/resources)
  */
 public class GameLogicProcessor implements Observer {
-
-    private static final Object threadLock = new Object();
-
-    enum LogicStage{NONE, WAIT_FOR_ROAD, ROAD, RESOURCES, RESULTS, DONE}
 
     private final Level level;
     private Timer timer;
     private final WorldMap worldMap;
-    private boolean stateChanged = true;
     private Thread logicThread;
     private LogicResultListener logicResultListener;
 
@@ -46,7 +39,7 @@ public class GameLogicProcessor implements Observer {
         if (timer.isPaused()) return;
         if (roadConnectionChecker.isDone()){
             if (!(resourcesChecker.isWorking()||singleObjectChecker.isWorking()||finalChecker.isWorking())){
-                synchronizeRoadResults(true);
+                synchronizeRoadResults();
             }
         }
         if (finalChecker.isDone()){
@@ -56,9 +49,7 @@ public class GameLogicProcessor implements Observer {
         if (timer.calculateReady()) {
             if (logicThread!=null && logicThread.isAlive()) {
                 logicThread.interrupt();
-                System.out.println("ACHTUNG! can't process logic in one game loop");
             }
-            //full calculation
             logicThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -86,10 +77,6 @@ public class GameLogicProcessor implements Observer {
         timer.setPaused(value);
     }
 
-    public void stop(){
-        setPaused(true);
-    }
-
     public void invalidateRoad(){
         roadConnectionChecker.refresh();
     }
@@ -106,7 +93,7 @@ public class GameLogicProcessor implements Observer {
         timer.setGameSpeed(speed);
     }
 
-    @Deprecated//test
+    @Deprecated
     public Timer getTimer(){
         return timer;
     }
@@ -119,7 +106,7 @@ public class GameLogicProcessor implements Observer {
         }
     }
 
-    private void synchronizeRoadResults(boolean showWarningIcon){
+    private void synchronizeRoadResults(){
         List<RoadConnectionChecker.WorldObjectRoadConnectionStatus> results = roadConnectionChecker.getResult();
         Iterator<RoadConnectionChecker.WorldObjectRoadConnectionStatus> iterator = results.iterator();
         for (WorldObject worldObject: worldMap.getWorldObjects()){
@@ -127,7 +114,6 @@ public class GameLogicProcessor implements Observer {
                 RoadConnectionChecker.WorldObjectRoadConnectionStatus current = iterator.next();
                 if (worldObject == current.worldObject){
                     worldObject.roadConnected = current.connected;
-                    if (showWarningIcon) worldObject.setIconState(current.connected||!current.worldObject.needsRoad()?WorldObject.IconState.NONE:WorldObject.IconState.WARNING);
                     break;
                 } else{
                     iterator.remove();
@@ -141,9 +127,6 @@ public class GameLogicProcessor implements Observer {
         level.setPopulation(newPopulation);
         logicResultListener.setStatusChanged(newPopulation, level.getMoney(), deltaMoney>0);
     }
-
-    //when some house population is more than N% of max population - show alert icon
-    public final static float HOUSE_POPULATION_ALERT_PERCENT = 0.9f;
 
     public interface LogicResultListener{
         void setStatusChanged(int population, int money, boolean grow);

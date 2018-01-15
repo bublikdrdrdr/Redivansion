@@ -9,7 +9,7 @@ public class Timer {
     private long startTime;
     private boolean paused = false;
     private int gameSpeed = 1;
-    private long calculateUnitTime;//once per 5 seconds
+    private long calculateUnitTime;
     private long lastCalculateElapsed = 0;
     private long pauseTime;
 

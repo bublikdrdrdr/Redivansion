@@ -19,9 +19,7 @@ import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter;
  */
 public class PolyAnimation implements Cloneable{
 
-    //list of single polygons animation
     private List<Polygon> polygons;
-    //animation name ("build", "upgrade", "destroy")
     private String name;
 
     public PolyAnimation(String name, List<Polygon> polygons){
@@ -133,10 +131,6 @@ public class PolyAnimation implements Cloneable{
             count = this.polygons.size();
         }
         return count;
-    }
-
-    public void reset(){
-        for (Polygon polygon: polygons) polygon.reset();
     }
 
     @Override

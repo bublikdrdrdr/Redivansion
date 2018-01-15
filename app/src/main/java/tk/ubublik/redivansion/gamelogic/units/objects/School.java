@@ -16,9 +16,9 @@ public class School extends WorldObject {
 
 
     public School(Point position) {
-        setGeometryManager(new GeometryAnimationManager("school", (Model) NodesCache.getInstance().get("houseModel")));
+        setGeometryManager(new GeometryAnimationManager("school", (Model) NodesCache.getInstance().get("schoolModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(1.8f, 0.5f, 1.8f);
+        getGeometryManager().setLocalScale(0.5f, 0.9f, 0.5f);
         getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
         //params
         setSize(2);
@@ -26,12 +26,12 @@ public class School extends WorldObject {
         setNeedsRoad(true);
         setBuildCost(GameParams.SCHOOL_LEVELS_BUILD_COST[0]);
         //
-        beginAnimation("build");
+        beginAnimation("build"+level);
     }
 
     @Override
     public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
-        ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+        ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy"+level, onAnimationEndListener);
     }
 
     @Override

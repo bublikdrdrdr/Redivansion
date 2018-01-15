@@ -88,10 +88,6 @@ public class GeometryAnimationManager extends GeometryManager{
         return clone;
     }
 
-    public GeometryManager fullClone(){
-        return new GeometryAnimationManager(name, model.clone());
-    }
-
     public void beginAnimation(String name) {
         PolyAnimation polyAnimation = model.getAnimationByName(name);
         if (polyAnimation==null) throw new NullPointerException("Can't find animation with name +\""+name+"\"");

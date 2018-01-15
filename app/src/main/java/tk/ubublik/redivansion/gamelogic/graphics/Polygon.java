@@ -17,8 +17,8 @@ public class Polygon implements Cloneable{
     private Vector3f[] startPoints;
     private Vector3f[] endPoints;
 
-    private long duration;//animation duration
-    private long delay;//delay before animation start
+    private long duration;
+    private long delay;
 
     private void setValues(ColorRGBA startColor, ColorRGBA endColor, Vector3f[] startPoints, Vector3f[] endPoints, long duration, long delay){
         if (startPoints.length !=VECTOR_ARRAY_COUNT || endPoints.length != VECTOR_ARRAY_COUNT)
@@ -125,7 +125,6 @@ public class Polygon implements Cloneable{
         return bytes;
     }
 
-    //do not get single vector bytes, cause of time wasting
     private byte[] getVectorArrayBytes(Vector3f[] vectorArray){
         byte[] bytes = new byte[VECTOR_ARRAY_SIZE];
         int index = 0;
@@ -138,14 +137,6 @@ public class Polygon implements Cloneable{
             index+=FLOAT_SIZE;
         }
         return bytes;
-    }
-
-    @Deprecated
-    public boolean isUpdating(long time){
-        boolean res = (((getDelay()<=time) && ((!lastUpdate) || (getDelay()+getDuration()>=time))) || !init);
-        if (init) init = true;
-        if (done) lastUpdate = true;
-        return res;
     }
 
     private boolean lastUpdate = false;
@@ -205,12 +196,6 @@ public class Polygon implements Cloneable{
 
     public void setDelay(long delay) {
         this.delay = delay;
-    }
-
-    public void reset(){
-        lastUpdate = false;
-        init = false;
-        done = false;
     }
 
     @Override

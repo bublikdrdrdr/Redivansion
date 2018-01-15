@@ -10,8 +10,6 @@ import tk.ubublik.redivansion.gamelogic.graphics.GeometryLoopAnimationManager;
  *
  * Contains all loaded nodes (3d, gui, audio etc.)
  * Nodes must be loaded only when LoadingLifecycle is running and used later directly from this cache
- *
- * todo: make thread safe (optionally)
  */
 public class NodesCache {
     private static final NodesCache ourInstance = new NodesCache();
@@ -40,17 +38,8 @@ public class NodesCache {
         map.remove(key);
     }
 
-    public void removeAll(){
-        map.clear();
-        animations.clear();
-    }
-
     public void addModel(String key, GeometryLoopAnimationManager geometryLoopAnimationManager){
         animations.put(key, geometryLoopAnimationManager);
-    }
-
-    public void removeModels(){
-        animations.clear();
     }
 
     public GeometryLoopAnimationManager getModel(String key){
@@ -59,23 +48,6 @@ public class NodesCache {
 
     public void updateModels() {
         for (GeometryLoopAnimationManager geometryLoopAnimationManager: animations.values()){
-            geometryLoopAnimationManager.onUpdate();
-            //new ModelExecutor(geometryLoopAnimationManager);
-        }
-    }
-
-    @Deprecated
-    private class ModelExecutor implements Runnable{
-        private GeometryLoopAnimationManager geometryLoopAnimationManager;
-
-        public ModelExecutor(GeometryLoopAnimationManager geometryLoopAnimationManager) {
-            this.geometryLoopAnimationManager = geometryLoopAnimationManager;
-            Thread thread = new Thread(this);
-            thread.start();
-        }
-
-        @Override
-        public void run() {
             geometryLoopAnimationManager.onUpdate();
         }
     }

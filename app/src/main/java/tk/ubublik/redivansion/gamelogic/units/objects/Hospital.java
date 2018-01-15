@@ -15,22 +15,22 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 public class Hospital extends WorldObject {
 
     public Hospital(Point position) {
-        setGeometryManager(new GeometryAnimationManager("hospital", (Model) NodesCache.getInstance().get("houseModel")));
+        setGeometryManager(new GeometryAnimationManager("hospital", (Model) NodesCache.getInstance().get("hospitalModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(1.8f, 0.5f, 1.8f);//fix model size to 3
-        getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
+        getGeometryManager().setLocalScale(0.9f, 1f, 0.9f);
+        getGeometryManager().setLocalTranslation(-1.3f,0,-1.3f);
         //params
         setSize(3);
         setPosition(position);
         setNeedsRoad(true);
         setBuildCost(GameParams.HOSPITAL_LEVELS_BUILD_COST[0]);
         //
-        beginAnimation("build");
+        beginAnimation("build"+level);
     }
 
     @Override
     public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
-        ((GeometryAnimationManager)getGeometryManager()).beginAnimation("destroy", onAnimationEndListener);
+        ((GeometryAnimationManager)getGeometryManager()).beginAnimation("destroy"+level, onAnimationEndListener);
     }
 
     @Override

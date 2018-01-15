@@ -15,7 +15,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 
 import tk.ubublik.redivansion.MainActivity;
-import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.utils.TouchInputHook;
 
 /**
@@ -26,8 +25,8 @@ import tk.ubublik.redivansion.gamelogic.utils.TouchInputHook;
 public class CameraControl implements ActionListener, AnalogListener, TouchListener {
 
     public final float minFov = 10f;
-    public final float maxFov = 30f;
-    public float currentFoV = 10f;
+    public final float maxFov = 35f;
+    public float currentFoV = 20f;
     private float prevFov;
     private Vector3f prevPos;
 
@@ -99,21 +98,6 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
         inputManager.setCursorVisible(!isEnabled());
     }
 
-    public void unregisterInput() {
-
-        if (inputManager == null) {
-            return;
-        }
-
-        for (String s : mappings) {
-            if (inputManager.hasMapping(s)) {
-                inputManager.deleteMapping(s);
-            }
-        }
-
-        inputManager.removeListener(this);
-    }
-
     public Camera getCamera(){
         return cam;
     }
@@ -131,7 +115,6 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
             vel.multLocal(moveYSpeed);
         }
         vel.multLocal(value * moveSpeed * moveSpeedScale);
-        System.out.println("ALAHU! value: "+value+", vel"+vel);
         pos.addLocal(vel);
         pos = limitPosition(pos);
         cam.setLocation(pos);
@@ -140,14 +123,10 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
     private Vector3f limitPosition(Vector3f position){
         Vector3f center = getCameraCenterPoint();
         if (areaLimitRound){
-            System.out.println("Center: "+center);
-            System.out.println("Area limit: "+areaLimit);
-            System.out.println("Area limit2: "+areaLimit*areaLimit);
-            System.out.println("Distance: "+center.distanceSquared(Vector3f.ZERO));
             if (center.distanceSquared(Vector3f.ZERO)>areaLimit*areaLimit){
                 Vector3f difference = position.subtract(center);
                 Vector3f centerClone = center.normalize();
-                centerClone.multLocal(areaLimit);// FIXME: find faster solution
+                centerClone.multLocal(areaLimit);
                 position = centerClone.add(difference);
             }
         } else {
@@ -187,7 +166,6 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
 
     @Override
     public void onTouch(String name, TouchEvent event, float tpf) {
-        System.out.println("MoveSpeedScale: " +moveSpeedScale);
         if (touchInputHook!=null && touchInputHook.touchCaptured(event, tpf)){
             this.setEnabled(false);
         } else {
@@ -211,14 +189,6 @@ public class CameraControl implements ActionListener, AnalogListener, TouchListe
     public void setFov(){
         moveSpeedScale = (550.f / MainActivity.getScreenDPI()) * (currentFoV / 10);
         cam.setFrustumPerspective(currentFoV, screenAspect, 1f, 50f);
-    }
-
-    public void moveToPosition(Vector3f position){
-        Vector3f currentPos = getCameraCenterPoint();
-        /*case CameraInput.FLYCAM_FORWARD: moveCamera(value, false); break;
-        case CameraInput.FLYCAM_BACKWARD: moveCamera(-value, false); break;
-        case CameraInput.FLYCAM_STRAFELEFT: moveCamera(-value, true); break;
-        case CameraInput.FLYCAM_STRAFERIGHT: moveCamera(value, true); break;*/
     }
 
     public void saveCameraPosition(){

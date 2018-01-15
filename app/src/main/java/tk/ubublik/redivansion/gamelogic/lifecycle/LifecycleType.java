@@ -7,13 +7,10 @@ package tk.ubublik.redivansion.gamelogic.lifecycle;
 public enum LifecycleType {
     MAIN_LOADING,
     MENU,
-    LEVEL_MAP,
     LEVEL_LOADING,
     LEVEL,
-    SETTINGS,
     TUTORIAL,
     TUTORIAL_LOADING,
-    TEST_LIFECYCLE,
     FREEPLAY_LOADING,
     FREEPLAY
 }

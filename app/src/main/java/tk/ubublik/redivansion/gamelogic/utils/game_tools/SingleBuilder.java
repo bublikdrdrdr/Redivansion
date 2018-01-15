@@ -18,10 +18,8 @@ import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
  * Created by Bublik on 12-Oct-17.
  */
 
-//select point on the center of screen
 public class SingleBuilder extends SelectTool implements Observer{
 
-    private Class<? extends WorldObject> clazz;
     private int size;
     private MapRenderer mapRenderer;
     private Node node;
@@ -33,7 +31,6 @@ public class SingleBuilder extends SelectTool implements Observer{
     public SingleBuilder(Class<? extends WorldObject> clazz, MapRenderer mapRenderer, Node node, CameraControl cameraControl, WorldMap worldMap){
         try {
             WorldObject worldObject = clazz.newInstance();
-            this.clazz = clazz;
             this.size = worldObject.getSize();
         } catch (Exception e){
             throw new RuntimeException("Can't create "+SingleBuilder.class.getSimpleName()+" with "+clazz.getCanonicalName(), e);

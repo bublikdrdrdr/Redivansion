@@ -15,16 +15,8 @@ public class GeometryLoopAnimationManager extends GeometryManager {
     private Model model;
     private MeshRender meshRender;
 
-    public GeometryLoopAnimationManager(byte[] bytes){
-        this(null, bytes);
-    }
-
     public GeometryLoopAnimationManager(String name, byte[] bytes) {
         this(name, new Model(bytes));
-    }
-
-    public GeometryLoopAnimationManager(Model model){
-        this(null, model);
     }
 
     public GeometryLoopAnimationManager(String name, Model model){
@@ -40,7 +32,6 @@ public class GeometryLoopAnimationManager extends GeometryManager {
         this.model = model;
         this.mesh = mesh;
     }
-
 
     private void setBase(){
         this.setMesh(new Mesh());

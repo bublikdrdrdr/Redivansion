@@ -22,92 +22,111 @@ public class TouchEvents {
     public static boolean tutorial = false;
 
     public static void backKeyPressed(Screen screen){
-        if(screen.getActiveFrame().frameName.equals("main")){
-            guiListener.pauseTime(true);
-            screen.showFrame(AllFrames.gameMenu());
-        }
-        else if(screen.getActiveFrame().frameName.equals("mainMenu")){
-            screen.removeFrame();
-            menuListener.exit();
-        }
-        else closeFrame(screen);
+        closeFrame(screen);
     }
 
-    public static void closeFrame(Screen scr){
+    public static void closeFrame(Screen screen){
             if(tutorial){
                 for(String name:TutorialFrames.tutorialFrames){
-                    if(scr.getActiveFrame().frameName.equals(name))
+                    if(screen.getActiveFrame().frameName.equals(name))
                         return;
                 }
             }
-            if(scr.getActiveFrame().frameName.equals("info")){
+            if(screen.getActiveFrame().frameName.equals("info")){
                 screen.removeAllFrames();
                 screen.showFrame(AllFrames.main);
                 screen.gui.cameraControl.restoreCameraPosition();
                 if(tutorial){
-                    scr.showFrame(TutorialFrames.blank());
-                    scr.showFrame(TutorialFrames.frame("roadInfo"));
+                    screen.showFrame(TutorialFrames.blank());
+                    screen.showFrame(TutorialFrames.frame("roadInfo"));
                 }
+                return;
             }
-            else if(scr.getActiveFrame().frameName.equals("menu")){
-                guiListener.pauseTime(false);
+            else if(screen.getActiveFrame().frameName.equals("menu")){
+                if(guiListener != null)
+                    guiListener.pauseTime(false);
                 screen.removeFrame();
+                return;
             }
-            else if(scr.getActiveFrame().frameName.equals("mainMenu")){
+            else if(screen.getActiveFrame().frameName.equals("mainMenu")){
                 screen.removeFrame();
-                menuListener.exit();
+                if(menuListener != null)
+                    menuListener.exit();
+                return;
             }
-            else if (scr.getActiveFrame().frameName.equals("levelComplete")){
+            else if (screen.getActiveFrame().frameName.equals("levelComplete")){
                 AllFrames.levelEndShowed = false;
                 guiListener.setDone(true);
+                return;
             }
-            else if(scr.getActiveFrame().frameName.equals("blank"))
+            else if(screen.getActiveFrame().frameName.equals("blank")) {
                 screen.showFrame(AllFrames.gameMenu());
+                return;
+            }
+            else if(screen.getActiveFrame().frameName.equals("main")) {
+                if(guiListener != null)
+                    guiListener.pauseTime(true);
+                screen.showFrame(AllFrames.gameMenu());
+                return;
+            }
+            else if(screen.getActiveFrame().frameName.equals("confirmMenu")) {
+                declined();
+                return;
+            }
             else screen.removeFrame();
             return;
     }
 
-    public static void tutorial(Screen scr){
-        switch (scr.getActiveFrame().frameName){
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Tutorial Behavior
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public static void tutorial(Screen screen){
+        switch (screen.getActiveFrame().frameName){
             case "about":
-                scr.removeFrame();
-                scr.showFrame(TutorialFrames.frame("goals"));
+                screen.removeFrame();
+                screen.showFrame(TutorialFrames.frame("goals"));
                 break;
             case "goals":
-                scr.removeFrame();
-                scr.showFrame(TutorialFrames.population());
+                screen.removeFrame();
+                screen.showFrame(TutorialFrames.population());
                 break;
             case "population":
-                scr.removeFrame();
-                scr.showFrame(TutorialFrames.time());
+                screen.removeFrame();
+                screen.showFrame(TutorialFrames.time());
                 break;
             case "time":
-                scr.removeFrame();
-                scr.showFrame(TutorialFrames.money());
+                screen.removeFrame();
+                screen.showFrame(TutorialFrames.money());
                 break;
             case "money":
-                scr.removeFrame();
-                scr.showFrame(TutorialFrames.frame("cameraMove"));
+                screen.removeFrame();
+                screen.showFrame(TutorialFrames.frame("cameraMove"));
                 break;
             case "cameraMove":
                 guiListener.cameraTutorial(TutorialLifecycle.CameraTutorial.NONE);
                 TutorialLifecycle.cameraTutorial = TutorialLifecycle.CameraTutorial.MOVE;
-                scr.removeFrame();
-                scr.showFrame(TutorialFrames.blank());
+                screen.removeFrame();
+                screen.showFrame(TutorialFrames.blank());
                 break;
             case "cameraZoom":
                 guiListener.cameraTutorial(TutorialLifecycle.CameraTutorial.NONE);
                 TutorialLifecycle.cameraTutorial = TutorialLifecycle.CameraTutorial.ZOOM;
-                scr.removeFrame();
-                scr.showFrame(TutorialFrames.blank());
+                screen.removeFrame();
+                screen.showFrame(TutorialFrames.blank());
                 break;
             case "buildMenu1":
-                scr.removeFrame();
-                scr.removeFrame(); //blank
+                screen.removeFrame();
+                screen.removeFrame(); //blank
                 screen.showFrame(GUI.frames.add);
                 screen.showFrame(TutorialFrames.buildChoose(false));
                 break;
             case "buildChoose1":
+                screen.removeFrame();
                 screen.removeFrame();
                 addEvents("addHouse");
                 screen.showFrame(TutorialFrames.frame("buildAddHouse"));
@@ -117,26 +136,24 @@ public class TouchEvents {
                 screen.showFrame(TutorialFrames.buildAdd(false));
                 break;
             case "buildAdd1":
-                screen.removeFrame();
                 build("build");
-                screen.showFrame(TutorialFrames.frame("objectInfo"));
                 break;
             case "objectInfo":
                 screen.removeFrame();
-                scr.showFrame(TutorialFrames.blank());
+                screen.showFrame(TutorialFrames.blank());
                 break;
             case "objectInfo2":
                 screen.removeFrame();
                 break;
             case "roadInfo":
-                scr.removeFrame();
-                scr.removeFrame();
-                scr.showFrame(TutorialFrames.blank());
+                screen.removeFrame();
+                screen.removeFrame();
+                screen.showFrame(TutorialFrames.blank());
                 screen.showFrame(TutorialFrames.buildMenu(true));
                 break;
             case "buildMenu2":
-                scr.removeFrame();
-                scr.removeFrame(); //blank
+                screen.removeFrame();
+                screen.removeFrame(); //blank
                 screen.showFrame(GUI.frames.add);
                 screen.showFrame(TutorialFrames.buildChoose(true));
                 break;
@@ -170,11 +187,19 @@ public class TouchEvents {
                 guiListener.setDone(true);
                 break;
             default:
-                scr.removeFrame();
+                screen.removeFrame();
                 break;
         }
         return;
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Menu Behavior
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     public static void doSmthing(String event, MenuListener menu, Screen scr){
         menuListener = menu;
@@ -194,6 +219,14 @@ public class TouchEvents {
         }
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Ingame Menu
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     public static void doSmthing(String event, GUIListener gui, Screen scr) {
         guiListener = gui;
         screen = scr;
@@ -212,7 +245,6 @@ public class TouchEvents {
                 build(event);
                 break;
             case "menu":
-                guiListener.pauseTime(true);
                 menu(event);
                 break;
             case "mainMenu":
@@ -231,11 +263,34 @@ public class TouchEvents {
         }
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Upgrade
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     public static void info(String event){
         if(event.equals("upgrade")){
+            screen.removeAllFrames();
+            screen.showFrame(AllFrames.main);
+            screen.gui.cameraControl.restoreCameraPosition();
             guiListener.getGui().upgradeObject();
+            if(tutorial){
+                screen.showFrame(TutorialFrames.blank());
+                screen.showFrame(TutorialFrames.frame("roadInfo"));
+            }
         }
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Ingame Menu
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     public static void menu(String event){
         switch (event){
@@ -262,6 +317,8 @@ public class TouchEvents {
                 screen.showFrame(GUI.frames.add);
                 break;
             case "menu":
+                if(guiListener != null)
+                    guiListener.pauseTime(true);
                 screen.showFrame(GUI.frames.gameMenu());
                 break;
             case "remove":
@@ -282,8 +339,32 @@ public class TouchEvents {
         }
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Building Choose
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     public static void addEvents(String event){
         switch (event){
+            case "addNext1":
+                screen.removeFrame();
+                screen.showFrame(AllFrames.initAdd2());
+                break;
+            case "addNext2":
+                screen.removeFrame();
+                screen.showFrame(AllFrames.initAdd3());
+                break;
+            case "addPrev1":
+                screen.removeFrame();
+                screen.showFrame(AllFrames.add);
+                break;
+            case "addPrev2":
+                screen.removeFrame();
+                screen.showFrame(AllFrames.initAdd2());
+                break;
             case "addTree":
                 object = "tree";
                 guiListener.selectTree();
@@ -308,6 +389,42 @@ public class TouchEvents {
                 screen.removeFrame();
                 screen.showFrame(GUI.frames.build);
                 break;
+            case "addPolice":
+                object = "police";
+                guiListener.selectOffice();
+                screen.removeFrame();
+                screen.showFrame(GUI.frames.build);
+                break;
+            case "addFire":
+                object = "fire";
+                guiListener.selectOffice();
+                screen.removeFrame();
+                screen.showFrame(GUI.frames.build);
+                break;
+            case "addWater":
+                object = "water";
+                guiListener.selectOffice();
+                screen.removeFrame();
+                screen.showFrame(GUI.frames.build);
+                break;
+            case "addHospital":
+                object = "hospital";
+                guiListener.selectPower();
+                screen.removeFrame();
+                screen.showFrame(GUI.frames.build);
+                break;
+            case "addSchool":
+                object = "school";
+                guiListener.selectOffice();
+                screen.removeFrame();
+                screen.showFrame(GUI.frames.build);
+                break;
+            case "addShop":
+                object = "shop";
+                guiListener.selectOffice();
+                screen.removeFrame();
+                screen.showFrame(GUI.frames.build);
+                break;
             case "setRoadPoints":
                 object = "road";
                 roadKostyl = 0;
@@ -319,29 +436,37 @@ public class TouchEvents {
         }
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Build
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     public static void build(String event){
         switch (event){
             case "build":
                 switch (object){
                     case "office":
-                        guiListener.addBuilding();
-                        guiListener.selectClear();
-                        screen.removeFrame();
+                        if(guiListener.addBuilding())
+                            added();
                         break;
                     case "tree":
-                        guiListener.addTree();
-                        guiListener.selectClear();
-                        screen.removeFrame();
+                        if(guiListener.addTree())
+                            added();
                         break;
                     case "house":
-                        guiListener.addHouse();
-                        guiListener.selectClear();
-                        screen.removeFrame();
+                        if(guiListener.addHouse()){
+                            added();
+                        if(tutorial){
+                            screen.removeFrame();
+                            screen.showFrame(TutorialFrames.frame("objectInfo"));
+                        }}
                         break;
                     case "power":
-                        guiListener.addPower();
-                        guiListener.selectClear();
-                        screen.removeFrame();
+                        if(guiListener.addPower())
+                            added();
                         break;
                     case "road":
                         if(roadKostyl < 2){
@@ -349,11 +474,35 @@ public class TouchEvents {
                             roadKostyl++;
                         }
                         if(roadKostyl == 2){
-                            guiListener.addRoad();
-                            guiListener.selectClear();
-                            roadKostyl = 0;
-                            screen.removeFrame();
+                            if(guiListener.addRoad()) {
+                                roadKostyl = 0;
+                                added();
+                            }
                         }
+                        break;
+                    case "police":
+                        if(guiListener.addPolice())
+                            added();
+                        break;
+                    case "fire":
+                        if(guiListener.addFire())
+                            added();
+                        break;
+                    case "water":
+                        if(guiListener.addWater())
+                            added();
+                        break;
+                    case "hospital":
+                        if(guiListener.addHospital())
+                            added();
+                        break;
+                    case "school":
+                        if(guiListener.addSchool())
+                            added();
+                        break;
+                    case "shop":
+                        if(guiListener.addShop())
+                            added();
                         break;
                     default: break;
                 }
@@ -364,6 +513,18 @@ public class TouchEvents {
                 break;
         }
     }
+    private static void added(){
+        guiListener.selectClear();
+        screen.removeFrame();
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Main Menu
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     private static void mainMenu(String event){
         switch (event){
@@ -388,6 +549,18 @@ public class TouchEvents {
                 break;
         }
     }
+
+    private static void levelMenu(String event){
+        screen.removeFrame();
+        menuListener.startLevel(Integer.valueOf(event));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Confirmation Window
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     private static void confirmMenu(String event){
         switch (event){
@@ -422,13 +595,10 @@ public class TouchEvents {
                     guiListener.setDone(true);
                 }
                 else{
+                    confirmType = "NONE";
                     screen.removeFrame();
                     menuListener.exit();
                 }
-                break;
-            case "reset":
-                //reset
-                screen.removeFrame();
                 break;
         }
         confirmType = "NONE";
@@ -453,11 +623,4 @@ public class TouchEvents {
         }
         confirmType = "NONE";
     }
-
-    private static void levelMenu(String event){
-        screen.removeFrame();
-        menuListener.startLevel(Integer.valueOf(event));
-    }
-
-
 }

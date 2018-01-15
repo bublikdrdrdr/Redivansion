@@ -46,7 +46,7 @@ public class Settings extends SQLiteOpenHelper {
         static final String COLUMN_NAME_LEVEL = "saved_level";
         static final String COLUMN_NAME_MUSIC = "music";
         static final String COLUMN_NAME_FX = "fx";
-        static final String COLUMN_NAME_PROGRESS = "progress";//last done level
+        static final String COLUMN_NAME_PROGRESS = "progress";
     }
 
     private static final String SQL_CREATE_ENTRIES =
