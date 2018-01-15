@@ -24,7 +24,7 @@ public class AllFrames {
     public static Frame main, add, build, info, levelMenu, mainMenu, levelComplete;
     public static boolean levelEndShowed = false;
     private static String[] levelDesc = {"Build two power plants and get " + GameParams.LEVELS_POPULATION_GOAL[0] +" people in city.",
-                        "This city needs fire and police stations. Build them and reach  " + GameParams.LEVELS_POPULATION_GOAL[1] +" of population.",
+                        "This city needs fire and police stations. Build them and reach  " + GameParams.LEVELS_POPULATION_GOAL[1] +" population.",
                         "This one needs fire and police stations, one hospital and " + GameParams.LEVELS_POPULATION_GOAL[2] +"  population.",
                         "Shopping centre. Build 5 shopping malls and get  " + GameParams.LEVELS_POPULATION_GOAL[3] +"  people.",
                         "Just build here three schools. Also reach "  + GameParams.LEVELS_POPULATION_GOAL[4] +"  people in city.",};
