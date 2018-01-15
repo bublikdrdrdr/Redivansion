@@ -1,25 +1,17 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
 import android.graphics.Point;
-import android.support.v7.widget.LinearLayoutCompat;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.simsilica.lemur.Button;
-import com.simsilica.lemur.Command;
-import com.simsilica.lemur.Label;
 
 import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
-import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.graphics.WorldLight;
 import tk.ubublik.redivansion.gamelogic.gui.AllFrames;
-import tk.ubublik.redivansion.gamelogic.gui.DebugPanel;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
 import tk.ubublik.redivansion.gamelogic.gui.TouchEvents;
 import tk.ubublik.redivansion.gamelogic.gui.TutorialFrames;
-import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.SavedLevel;
 import tk.ubublik.redivansion.gamelogic.units.Settings;
@@ -42,14 +34,11 @@ import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
 import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
-import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
 
 /**
  * Created by Bublik on 22-Sep-17.
  */
-
-//TODO: при туторі на створення об'єкту потрібно впевнитись що він поставився (клік на "будувати" при червоному селекторі хєрить туторіал)
 
 public class TutorialLifecycle extends Lifecycle {
 
@@ -88,7 +77,7 @@ public class TutorialLifecycle extends Lifecycle {
         gui.setTime(-666);
         gui.setStatusChanged(0, GameParams.LEVELS_MONEY[0], true);
         Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
-        worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
+        worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f));
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
         cameraControl.setTouchInputHook(gui);
         worldMap.addObserver(mapRenderer);
@@ -137,11 +126,6 @@ public class TutorialLifecycle extends Lifecycle {
             guiListener.cameraTutorial(cameraTutorial);
     }
 
-    private void testSetIcon() {
-        WorldObject worldObject = worldMap.get(getCenterPoint(1));
-        if (worldObject!=null) worldObject.setIconState(WorldObject.IconState.WARNING);
-    }
-
     private Point getCenterPoint(int size){
         return mapRenderer.worldPointToMap(cameraControl.getCameraCenterPoint(), size);
     }
@@ -173,7 +157,7 @@ public class TutorialLifecycle extends Lifecycle {
         @Override
         public void cameraTutorial(CameraTutorial camTut){
             switch (camTut){
-                case MOVE: //continue tutorial if camera moved
+                case MOVE:
                     if(cameraControl.getCameraCenterPoint().getX() > camPos.getX() + 2
                             || cameraControl.getCameraCenterPoint().getX() < camPos.getX() - 2
                             || cameraControl.getCameraCenterPoint().getY() > camPos.getY() + 2
@@ -183,13 +167,13 @@ public class TutorialLifecycle extends Lifecycle {
                         gui.guiScreen.showFrame(TutorialFrames.frame("cameraZoom"));
                     }
                     break;
-                case ZOOM: //continue if zoom changes
+                case ZOOM:
                     if(cameraControl.currentFoV > fov + 10 || cameraControl.currentFoV < fov - 10){
                         cameraTutorial = CameraTutorial.NONE;
                         gui.guiScreen.showFrame(TutorialFrames.buildMenu(false));
                     }
                     break;
-                default: //save camera position and zoom as tutorial checkpoint
+                default:
                     camPos = cameraControl.getCameraCenterPoint().clone();
                     fov = cameraControl.currentFoV;
                     break;

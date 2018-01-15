@@ -1,19 +1,10 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
-import com.jme3.font.Rectangle;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
-import com.simsilica.lemur.Label;
-import com.simsilica.lemur.Panel;
-
-import tk.ubublik.redivansion.MainActivity;
-import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
@@ -22,8 +13,6 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 public abstract class LoadingLifecycle extends Lifecycle {
 
-    BitmapText bitmapText;
-    Picture background;
     Picture spinner;
     Node spinnerNode = new Node();
 

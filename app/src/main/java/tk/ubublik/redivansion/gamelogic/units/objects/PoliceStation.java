@@ -17,7 +17,7 @@ public class PoliceStation extends WorldObject {
     public PoliceStation(Point position) {
         setGeometryManager(new GeometryAnimationManager("police station", (Model) NodesCache.getInstance().get("policestationModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(1.8f, 2f, 1.8f);
+        getGeometryManager().setLocalScale(0.8f, 0.9f, 0.8f);
         getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
         //params
         setSize(2);

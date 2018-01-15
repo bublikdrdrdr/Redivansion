@@ -1,6 +1,5 @@
 package tk.ubublik.redivansion.gamelogic.gui;
 
-import tk.ubublik.redivansion.MainActivity;
 import tk.ubublik.redivansion.gamelogic.units.Settings;
 import tk.ubublik.redivansion.gamelogic.units.objects.FireStation;
 import tk.ubublik.redivansion.gamelogic.units.objects.Hospital;
@@ -25,10 +24,10 @@ public class AllFrames {
     public static Frame main, add, build, info, levelMenu, mainMenu, levelComplete;
     public static boolean levelEndShowed = false;
     private static String[] levelDesc = {"Build two power plants and get " + GameParams.LEVELS_POPULATION_GOAL[0] +" people in city.",
-                        "This city needs fire and police stations. Build them and reach  " + GameParams.LEVELS_POPULATION_GOAL[1] +" population.",
+                        "This city needs fire and police stations. Build them and reach  " + GameParams.LEVELS_POPULATION_GOAL[1] +" of population.",
                         "This one needs fire and police stations, one hospital and " + GameParams.LEVELS_POPULATION_GOAL[2] +"  population.",
                         "Shopping centre. Build 5 shopping malls and get  " + GameParams.LEVELS_POPULATION_GOAL[3] +"  people.",
-                        "Just build here three schools. Also reach "  + GameParams.LEVELS_POPULATION_GOAL[4] +"  students in city.",};
+                        "Just build here three schools. Also reach "  + GameParams.LEVELS_POPULATION_GOAL[4] +"  people in city.",};
 
     public AllFrames() {
         initMain();
@@ -53,10 +52,8 @@ public class AllFrames {
         mainMenu.addElement("tutorial", "Tutorial", true, null, 32, 46, 36, 10, false, "Textures/btnLong1.png");
         mainMenu.addElement("freeplay", "Freeplay", true, null, 32, 34, 36, 10, false, "Textures/btnLong1.png");
         mainMenu.addElement("exit", "Exit", true, null, 32, 22, 36, 10, false, "Textures/btnLong1.png");
-        //mainMenu.addElement("resetButton", "Reset", true, null, 0, 0, 20, 20, true, "Textures/btn1.png");
 
     }
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -124,7 +121,6 @@ public class AllFrames {
         build.addElement("cancel", null, true, null, 0, 45, 20, 20, true, "Textures/closeX.png");
     }
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // Ingame Menu
@@ -152,7 +148,6 @@ public class AllFrames {
         return menu;
     }
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // Building choose menus
@@ -166,13 +161,13 @@ public class AllFrames {
         add.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/2.png");
         add.addElement("bg", null, false, null, 30, 5, 40, 90, false, "Textures/menubg.png");
         add.addElement("bg", "Buildings", false, Element.TextPosition.Left_VCenter, 30, 85, 33, 10, false, "Textures/bg.jpg");
-        add.addElement("x", null, true, null, 63, 85, 7, 10, false, "Textures/btn1.png");
-        add.addElement("close", null, true, null, 63, 85, 7, 10, false, "Textures/closeX.png");
         add.addElement("addTree", "Add Tree", true, null, 32, 73, 36, 10, false, "Textures/btnLong1.png");
         add.addElement("addOffice", "Add Office", true, null, 32, 61, 36, 10, false, "Textures/btnLong1.png");
         add.addElement("addHouse", "Add House", true, null, 32, 49, 36, 10, false, "Textures/btnLong1.png");
         add.addElement("addPower", "Add Powerplant", true, null, 32, 37, 36, 10, false, "Textures/btnLong1.png");
-        add.addElement("setRoadPoints", "Add Road Points", true, null, 32, 25, 36, 10, false, "Textures/btnLong1.png");
+        add.addElement("setRoadPoints", "Add Road", true, null, 32, 25, 36, 10, false, "Textures/btnLong1.png");
+        add.addElement("x", null, true, null, 63, 85, 7, 10, false, "Textures/btn1.png");
+        add.addElement("close", null, true, null, 63, 85, 7, 10, false, "Textures/closeX.png");
         add.addElement("bg", null, false, null, 32, 7, 16, 10, false, "Textures/btn2.png");
         add.addElement("addNext", null, true, null, 52, 7, 16, 10, false, "Textures/btn1.png");
         add.addElement("bg", null, false, null, 32, 7, 16, 10, false, "Textures/arrowPrev.png");
@@ -182,17 +177,16 @@ public class AllFrames {
     public static Frame initAdd2(){
         Settings settings = Settings.getInstance();
         settings.open();
-        int progress = settings.getProgress();
         Frame add = new Frame("add");
         Element.z = 30;
         add.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/2.png");
         add.addElement("bg", null, false, null, 30, 15, 40, 70, false, "Textures/menubg.png");
         add.addElement("bg", "Buildings", false, Element.TextPosition.Left_VCenter, 30, 75, 33, 10, false, "Textures/bg.jpg");
+        add.addElement("addPolice", "Add Police Station", true, null, 32, 60, 36, 10, false, "Textures/btnLong1.png");
+        add.addElement("addFire", "Add Fire Station", true, null, 32, 48, 36, 10, false,  "Textures/btnLong1.png");
+        add.addElement("addWater", "Add Water Plant", true, null, 32, 36, 36, 10, false, "Textures/btnLong1.png");
         add.addElement("x", null, true, null, 63, 75, 7, 10, false, "Textures/btn1.png");
         add.addElement("close", null, true, null, 63, 75, 7, 10, false, "Textures/closeX.png");
-        add.addElement("addPolice", "Add Police Station", (progress > -1)?true:false, null, 32, 60, 36, 10, false, (progress > -1)?"Textures/btnLong1.png":"Textures/btnLong2.png");
-        add.addElement("addFire", "Add Fire Station", (progress > -1)?true:false, null, 32, 48, 36, 10, false,  (progress > -1)?"Textures/btnLong1.png":"Textures/btnLong2.png");
-        add.addElement("addWater", "Add Water Station", (progress > -1)?true:false, null, 32, 36, 36, 10, false,  (progress > -1)?"Textures/btnLong1.png":"Textures/btnLong2.png");
         add.addElement("addPrev", null, true, null, 32, 17, 16, 10, false, "Textures/btn1.png");
         add.addElement("addNext", null, true, null, 52, 17, 16, 10, false, "Textures/btn1.png");
         add.addElement("addPrev1", null, true, null, 32, 17, 16, 10, false, "Textures/arrowPrev.png");
@@ -209,18 +203,17 @@ public class AllFrames {
         add.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/2.png");
         add.addElement("bg", null, false, null, 30, 15, 40, 70, false, "Textures/menubg.png");
         add.addElement("bg", "Buildings", false, Element.TextPosition.Left_VCenter, 30, 75, 33, 10, false, "Textures/bg.jpg");
-        add.addElement("x", null, true, null, 63, 75, 7, 10, false, "Textures/btn1.png");
-        add.addElement("close", null, true, null, 63, 75, 7, 10, false, "Textures/closeX.png");
-        add.addElement("addHospital", "Add Hospital", (progress > -1)?true:false, null, 32, 60, 36, 10, false, (progress > -1)?"Textures/btnLong1.png":"Textures/btnLong2.png");
+        add.addElement("addHospital", "Add Hospital", true, null, 32, 60, 36, 10, false, "Textures/btnLong1.png");
         add.addElement("addShop", "Add Shop", (progress > 2)?true:false, null, 32, 48, 36, 10, false,  (progress > 2)?"Textures/btnLong1.png":"Textures/btnLong2.png");
         add.addElement("addSchool", "Add School", (progress > 3)?true:false, null, 32, 36, 36, 10, false,  (progress > 3)?"Textures/btnLong1.png":"Textures/btnLong2.png");
+        add.addElement("x", null, true, null, 63, 75, 7, 10, false, "Textures/btn1.png");
+        add.addElement("close", null, true, null, 63, 75, 7, 10, false, "Textures/closeX.png");
         add.addElement("addPrev", null, true, null, 32, 17, 16, 10, false, "Textures/btn1.png");
         add.addElement("bg", null, false, null, 52, 17, 16, 10, false, "Textures/btn2.png");
         add.addElement("addPrev2", null, true, null, 32, 17, 16, 10, false, "Textures/arrowPrev.png");
         add.addElement("bg", null, false, null, 52, 17, 16, 10, false, "Textures/arrowNext.png");
         return add;
     }
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -245,7 +238,10 @@ public class AllFrames {
                 levelMenu.addElement(Integer.toString(i), "Level " + (i + 1), true, Element.TextPosition.Left_VTop, 22, 89 - y, 56, 10, false, "Textures/btnLong1.png");
             else levelMenu.addElement(Integer.toString(i), "Level " + (i + 1), false, Element.TextPosition.Left_VTop, 22, 89 - y, 56, 10, false, "Textures/btnLong2.png");
             levelMenu.addElement("background", null, false, null, 22, 57 - y, 56, 32, false, "Textures/bg.jpg");
-            levelMenu.addElement("time", "Time: " + GameParams.LEVELS_TIMES[i]/1000, false, Element.TextPosition.Left_VTop, 23, 78 - y, 26, 10, false, "Textures/2.png");
+
+            int min = (int) GameParams.LEVELS_TIMES[i]/1000/60;
+            int sec1 = (int)GameParams.LEVELS_TIMES[i]/1000 % 60 / 10;
+            levelMenu.addElement("time", "Time: " + min + " m " + sec1 + " s" , false, Element.TextPosition.Left_VTop, 23, 78 - y, 26, 10, false, "Textures/2.png");
             levelMenu.addElement("money", "Money: " + GameParams.LEVELS_MONEY[i], false, Element.TextPosition.Left_VTop, 51, 78 - y, 26, 10, false, "Textures/2.png");
             levelMenu.addElement("info", levelDesc[i], false, Element.TextPosition.Center_VTop, 23, 59 - y, 54, 18, false, "Textures/2.png");
         }
@@ -307,8 +303,6 @@ public class AllFrames {
         }
         else y = 70;
 
-        //TODO: condition when upgrade is available
-
         boolean interactive;
         String button;
         if((object.getLevelNumber()<object.getLevelsCount()-1)) {
@@ -330,23 +324,23 @@ public class AllFrames {
         else if(object instanceof Hospital)
             return "Here people come to get medical help and increase their health.";
         else if(object instanceof House)
-            return "Place where people live. May be loud or quiet, but you never know..";
+            return "Place where people live.";
         else if(object instanceof Office)
-            return "Place to work. Place where to come every single day. Place to live";
+            return "Place where people work.";
         else if(object instanceof PoliceStation)
             return "Loud neighbours? Shoplifters? Who you gonna call? Policemen!";
         else if(object instanceof Road)
             return "A single piece of road. Nothing interesting";
         else if(object instanceof School)
-            return "Welcomes pupil every morning. They hate this place so much.";
+            return "Place where people get education.";
         else if(object instanceof ShoppingMall)
-            return "Here you can buy a new clothes or mobile phone. Or just have some fun watching people.";
+            return "Here people buy new stuff and just have some fun in different centers.";
         else if(object instanceof ThermalPowerPlant)
             return "Produces power.";
         else if(object instanceof WaterPlant)
             return "Filters and delivers clean water.";
         else if(object instanceof Tree)
-            return "Cute tree :3";
+            return "Cute tree :)";
         return "";
     }
 

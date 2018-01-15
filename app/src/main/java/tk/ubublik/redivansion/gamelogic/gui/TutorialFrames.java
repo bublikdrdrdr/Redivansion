@@ -4,19 +4,7 @@ package tk.ubublik.redivansion.gamelogic.gui;
  * Created by SomeOne.
  */
 
-//Треба було посидіти подумати над динамічним конструктором йопт
-
 public class TutorialFrames {
-
-    /*
-    1. Level loaded: greetings, about game.
-    2. Goal, population, time, money.
-    3. Camera move and zoom.
-    4. Add building button, choose house, add house;
-    5. Info about object, icons, upgrade;
-    6. Road importance and building;
-    7. Ending
-     */
 
     public static String[] tutorialFrames = {"about", "goals", "cameraMove", "cameraZoom", "buildAddHouse", "buildAddRoad1",
             "buildAddRoad2", "objectInfo", "objectInfo2", "roadInfo", "finish", "population", "time", "money", "buildMenu1", "buildMenu2",
@@ -38,16 +26,16 @@ public class TutorialFrames {
         String text = "";
         switch (name) {
             case "about":
-                text = "Welcome to Redivansion! In this tutorial you'll now learn about everything and how to play the game.";
+                text = "Welcome to Redivansion! In this tutorial you'll now learn how to play the game and everything about it .";
                 break;
             case "goals":
-                text = "Every level goal is to reach certain population or build something before the time ends.";
+                text = "Every levels goal is to reach certain population and build something before the time ends.";
                 break;
             case "cameraMove":
                 text = "To move the camera around, just move your finger over the screen. Try now, it's easy!";
                 break;
             case "cameraZoom":
-                text = "\"Pinch\" gesture allows you to zoom the camera. Suddenly, huh? Try it right now!";
+                text = "\"Pinch-to-zoom\" gesture allows you to zoom the camera. Try right now to see it!";
                 break;
             case "buildAddHouse":
                 text = "Now choose position where you want to build it and press \"Add\" button. Look at the colour of square.";
@@ -92,7 +80,7 @@ public class TutorialFrames {
         frame.addElement("bg", null, false, null, 0, 0, 100, 85, false, "Textures/2.png");
         frame.addElement("bg", null, false, null, 46, 85, 60, 15, false, "Textures/2.png");
         frame.addElement("bg", null, false, null, 30, 23, 40, 45, false, "Textures/menubg.png");
-        frame.addElement("bg", "Level ends when timer reaches zero. Here you can see how many time you still have.", false, null, 31, 35, 38, 31, false, "Textures/2.png");
+        frame.addElement("bg", "Level ends when timer reaches zero. Here you can see how much time you still have.", false, null, 31, 35, 38, 31, false, "Textures/2.png");
         frame.addElement("next", "Next", true, null, 31, 24, 38, 10, false, "Textures/btnLong1.png");
         return frame;
     }
@@ -104,7 +92,7 @@ public class TutorialFrames {
         frame.addElement("bg", null, false, null, 0, 89, 100, 11, false, "Textures/2.png");
         frame.addElement("bg", null, false, null, 0, 78, 74, 11, false, "Textures/2.png");
         frame.addElement("bg", null, false, null, 30, 23, 40, 45, false, "Textures/menubg.png");
-        frame.addElement("bg", "You build and upgrade everything with money. Here is information about your budget.", false, null, 31, 35, 38, 31, false, "Textures/2.png");
+        frame.addElement("bg", "You can build and upgrade everything with money. Here is information about your budget.", false, null, 31, 35, 38, 31, false, "Textures/2.png");
         frame.addElement("next", "Next", true, null, 31, 24, 38, 10, false, "Textures/btnLong1.png");
         return frame;
     }
@@ -129,7 +117,7 @@ public class TutorialFrames {
         frame.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/tutorbg.png");
         frame.addElement("bg", null, false, null, 30, 5, 40, 90, false, "Textures/2.png");
         if (road) {
-            frame.addElement("next", "Add Road Points", true, null, 32, 25, 36, 10, false, "Textures/btnLong1.png");
+            frame.addElement("next", "Add Road", true, null, 32, 25, 36, 10, false, "Textures/btnLong1.png");
             frame.addElement("bg", null, false, null, 30, 10, 40, 13, false, "Textures/menubg.png");
             frame.addElement("bg", "Choose road", false, null, 31, 11, 38, 11, false, "Textures/2.png");
         } else {
@@ -156,8 +144,8 @@ public class TutorialFrames {
         frame.addElement("bg", null, false, null, 0, 0, 100, 100, false, "Textures/tutorbg.png");
         frame.addElement("bg", null, false, null, 0, 0, 60, 100, false, "Textures/2.png");
         frame.addElement("bg", null, false, null, 60, 90, 40, 10, false, "Textures/2.png");
-        frame.addElement("bg", null, false, null, 10, 23, 40, 52, false, "Textures/menubg.png");
-        frame.addElement("bg", "Here you can see next info: params status, upgrade button, description and, if object has some, special params.", false, null, 11, 35, 38, 39, false, "Textures/2.png");
+        frame.addElement("bg", null, false, null, 10, 23, 40, 54, false, "Textures/menubg.png");
+        frame.addElement("bg", "Here you can see what building requires. If the icon is highlited, that means that you have some problem with that parameter.", false, null, 11, 35, 38, 41, false, "Textures/2.png");
         frame.addElement("next", "Next", true, null, 11, 24, 38, 10, false, "Textures/btnLong1.png");
         return frame;
     }

@@ -38,7 +38,6 @@ public class ThermalPowerPlant extends PowerPlant {
     }
 
     private void beginAnimation(String animationName, final String nextAnimation){
-        //// FIXME: 04-Nov-17
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName, new GeometryManager.OnAnimationEndListener() {
             @Override
             public void animationEnd() {
@@ -51,10 +50,6 @@ public class ThermalPowerPlant extends PowerPlant {
     public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
         ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy"+level, onAnimationEndListener);
     }
-
-    /*
-    logic block
-     */
 
     @Override
     public void recalculateParams() {
@@ -70,7 +65,6 @@ public class ThermalPowerPlant extends PowerPlant {
     public void setLevelNumber(int level) {
         if (level<0 || level>=getLevelsCount()) throw new IllegalArgumentException("Wrong level number: "+level);
         beginAnimation("destroy"+(level-1), "build"+(level));
-        //beginAnimation("destroy"+Integer.toString(getLevelNumber()), "build"+Integer.toString(level));
         this.level = level;
         setLevelParams();
     }

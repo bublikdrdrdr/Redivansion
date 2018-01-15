@@ -10,7 +10,6 @@ import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.WorldLight;
 import tk.ubublik.redivansion.gamelogic.gui.AllFrames;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
-import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.SavedLevel;
 import tk.ubublik.redivansion.gamelogic.units.Settings;
@@ -32,11 +31,8 @@ import tk.ubublik.redivansion.gamelogic.utils.GameParams;
 import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
-import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
 import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
-
-import static tk.ubublik.redivansion.gamelogic.gui.TouchEvents.guiListener;
 
 /**
  * Created by Bublik on 02-Sep-17.
@@ -53,7 +49,6 @@ public class FreeplayLifecycle extends Lifecycle {
     private SelectToolManager selectToolManager;
     private Settings settings;
     private volatile boolean done = false;
-    private WorldObject selectedObject = null;
 
     public FreeplayLifecycle(SimpleApplication simpleApplication){
         super(simpleApplication);
@@ -72,7 +67,7 @@ public class FreeplayLifecycle extends Lifecycle {
         gui.setTime(-666);
         gui.setStatusChanged(0, GameParams.LEVELS_MONEY[0], true);
         Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
-        worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
+        worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f));
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
         cameraControl.setTouchInputHook(gui);
         worldMap.addObserver(mapRenderer);
@@ -124,11 +119,6 @@ public class FreeplayLifecycle extends Lifecycle {
         cameraControl.onUpdate();
         selectToolManager.onUpdate();
         NodesCache.getInstance().updateModels();
-    }
-
-    private void testSetIcon() {
-        WorldObject worldObject = worldMap.get(getCenterPoint(1));
-        if (worldObject!=null) worldObject.setIconState(WorldObject.IconState.WARNING);
     }
 
     private Point getCenterPoint(int size){

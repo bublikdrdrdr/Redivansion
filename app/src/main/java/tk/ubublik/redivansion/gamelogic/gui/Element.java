@@ -3,7 +3,6 @@ package tk.ubublik.redivansion.gamelogic.gui;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.font.Rectangle;
-import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
 
 import tk.ubublik.redivansion.MainActivity;

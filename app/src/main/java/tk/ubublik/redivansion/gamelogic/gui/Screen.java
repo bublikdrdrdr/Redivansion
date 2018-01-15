@@ -14,13 +14,11 @@ import tk.ubublik.redivansion.gamelogic.utils.MenuListener;
 
 public class Screen {
 
-    private String screenName;
     private Node guiNode;
     private ArrayList<Frame> activeFrame = new ArrayList<>();
     public GUI gui;
 
-    public Screen(String name, Node guiNode, Frame frame, GUI gui){
-        this.screenName = name;
+    public Screen(Node guiNode, Frame frame, GUI gui){
         this.guiNode = guiNode;
         this.gui = gui;
         guiNode.detachAllChildren();

@@ -2,19 +2,12 @@ package tk.ubublik.redivansion.gamelogic.lifecycle;
 
 import com.jme3.app.SimpleApplication;
 
-import java.util.HashMap;
-
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
-import tk.ubublik.redivansion.gamelogic.utils.LevelFactory;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
  * Created by Bublik on 02-Sep-17.
- *
- * Difference between LevelLoadingLifecycle - additional tutorial nodes
  */
 public class TutorialLoadingLifecycle extends LoadingLifecycle {
 
@@ -49,8 +42,6 @@ public class TutorialLoadingLifecycle extends LoadingLifecycle {
                     NodesCache.getInstance().put("shopModel", shopModel);
                     Model waterplantModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/waterplantModel.crm");
                     NodesCache.getInstance().put("waterplantModel", waterplantModel);
-
-                    // TODO: 27-Dec-17 load other models
                 } catch (Exception e){
                     e.printStackTrace();
                     System.exit(1);

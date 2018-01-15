@@ -2,9 +2,6 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 
 import android.graphics.Point;
 
-import com.jme3.scene.Geometry;
-
-import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryLoopAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
@@ -39,7 +36,7 @@ public class Tree extends WorldObject {
     boolean loopStage = false;
     @Override
     public void onUpdate() {
-        if (!loopStage) getGeometryManager().onUpdate(); //else this.getGeometryManager().updateGeometricState();
+        if (!loopStage) getGeometryManager().onUpdate();
     }
 
     @Override
@@ -55,41 +52,6 @@ public class Tree extends WorldObject {
             onAnimationEndListener.animationEnd();
         }
     }
-
-    /*
-         ;,
-       :@@@
-     ;@@# `@;
-   @@@'     `@'
-    . ++       #+
-        +#       +#
-          ;#`      ;#`
-            ;@`      ;@`
-              ,@.      ,@.
-                ,@,      ,@,
-                  .@:      .@:
-                    `@;      `@:
-                      `#+      `#'
-                         ++       #`
-                           '#     `:
-                             '@@#',#,
-                                   +@@:
-                                     +@@+:
-                                       #@@@;
-                                         #@@@'
-                                           +@@@'
-                                             '+`
-
-             ':           '++;           ;##+  +########: `+`     `+.       ':       ,+
-              +;    @:  `;@';;;'@;    `;@';.        `@     .@`     `@.      #'++      ,#
-              +;  .#`   .@       +@,  .@            .@`    .@`     `@.      #.:+`     ,#
-              '@@@@`    .@`        +; .@`           .@`    .@`     `@.      #, ,#     ,#
-              +';@;     .@`        +; .@`           .@`    .@      `@.    `@:` ,#     ,#
-              +; `'@:`  .@`       .#; .@`           .@`    .@++@'. `@.    ,@.  .+@`   ,@+@:`
-              +;    #,  .@`     `#@,  .#@.          .@`    .@`  ;+ `@.   .@`    .@`   ,#  #,
-              ``    `.`  .@#####@.      .#@###+`    .@`    .@##@'` `@.  .#@`     .@.  ,@#@,
-                                                                        .:
-     */
 
     private GeometryLoopAnimationManager.OnAnimationEndListener getLoopAnimation(){
         return new GeometryLoopAnimationManager.OnAnimationEndListener() {
@@ -107,10 +69,6 @@ public class Tree extends WorldObject {
             }
         };
     }
-
-    /*
-    logic block
-     */
 
     @Override
     public void recalculateParams() {

@@ -2,8 +2,6 @@ package tk.ubublik.redivansion.gamelogic.utils.logic;
 
 import android.graphics.Point;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,7 +39,7 @@ public class RoadConnectionChecker extends Checker implements Runnable {
         }
     }
 
-    private void checkNeighbors(WorldObjectRoadConnectionStatus status) throws InterruptedException{ //list mode
+    private void checkNeighbors(WorldObjectRoadConnectionStatus status) throws InterruptedException{
         checkInterrupted();
         if (status==null || status.connected) return;
         status.connected = true;
@@ -62,8 +60,6 @@ public class RoadConnectionChecker extends Checker implements Runnable {
         return null;
     }
 
-    //TODO: check difference between 2D array check speed
-
     @Override
     public void refresh() {
         if (thread!=null && thread.isAlive()){
@@ -81,10 +77,9 @@ public class RoadConnectionChecker extends Checker implements Runnable {
     }
 
     private List<WorldObjectRoadConnectionStatus> cloneMap(WorldMap worldMap){
-        List<WorldObjectRoadConnectionStatus> list = new LinkedList<>();//worldMap.getWorldObjects().size()
+        List<WorldObjectRoadConnectionStatus> list = new LinkedList<>();
         for (WorldObject worldObject: worldMap.getWorldObjects()){
             list.add(new WorldObjectRoadConnectionStatus(worldObject, false));
-            //todo: find main road here and put it first
         }
         return list;
     }
@@ -104,6 +99,4 @@ public class RoadConnectionChecker extends Checker implements Runnable {
             this.connected = connected;
         }
     }
-
-
 }

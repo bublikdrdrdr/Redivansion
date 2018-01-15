@@ -53,7 +53,6 @@ public class WaterPlant extends WorldObject {
     }
 
     private void beginAnimation(String animationName, final String nextAnimation){
-        //// FIXME: 04-Nov-17
         ((GeometryAnimationManager)getGeometryManager()).beginAnimation(animationName, new GeometryManager.OnAnimationEndListener() {
             @Override
             public void animationEnd() {

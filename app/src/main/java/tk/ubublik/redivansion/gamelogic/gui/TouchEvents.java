@@ -22,7 +22,6 @@ public class TouchEvents {
     public static boolean tutorial = false;
 
     public static void backKeyPressed(Screen screen){
-        System.out.println("AZAZAZAZA: "+screen.getCurrentFrameName());
         closeFrame(screen);
     }
 
@@ -65,6 +64,8 @@ public class TouchEvents {
                 return;
             }
             else if(screen.getActiveFrame().frameName.equals("main")) {
+                if(guiListener != null)
+                    guiListener.pauseTime(true);
                 screen.showFrame(AllFrames.gameMenu());
                 return;
             }

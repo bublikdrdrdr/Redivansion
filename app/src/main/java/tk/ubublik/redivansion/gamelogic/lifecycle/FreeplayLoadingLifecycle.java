@@ -1,7 +1,6 @@
 package tk.ubublik.redivansion.gamelogic.lifecycle;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.ui.Picture;
 
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
@@ -45,8 +44,6 @@ public class FreeplayLoadingLifecycle extends LoadingLifecycle {
                     NodesCache.getInstance().put("shopModel", shopModel);
                     Model waterplantModel = (Model) StaticAssetManager.getAssetManager().loadAsset("Models/waterplantModel.crm");
                     NodesCache.getInstance().put("waterplantModel", waterplantModel);
-
-                    // TODO: 27-Dec-17 load other models
                 } catch (Exception e){
                     e.printStackTrace();
                     System.exit(1);

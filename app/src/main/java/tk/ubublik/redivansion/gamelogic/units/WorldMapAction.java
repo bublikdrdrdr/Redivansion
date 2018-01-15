@@ -13,9 +13,6 @@ public class WorldMapAction {
     private Action action;
     private WorldObject worldObject;
 
-    public WorldMapAction() {
-    }
-
     public WorldMapAction(Action action, WorldObject worldObject) {
         this.action = action;
         this.worldObject = worldObject;

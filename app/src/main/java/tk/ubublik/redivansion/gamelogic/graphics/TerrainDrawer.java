@@ -2,19 +2,11 @@ package tk.ubublik.redivansion.gamelogic.graphics;
 
 import android.graphics.Point;
 
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
-import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 /**
  * Created by Bublik on 03-Nov-17.
@@ -65,12 +57,6 @@ public class TerrainDrawer {
         return new Point((int)(center.x/MODEL_SIZE.x), (int)(center.z/MODEL_SIZE.z));
     }
 
-    public void setRadius(int radius){
-        scaleArray(radius);
-        this.radius = radius;
-        fillArray();
-    }
-
     public void remove(){
         mainNode.detachChild(terrainNode);
     }
@@ -81,13 +67,6 @@ public class TerrainDrawer {
         for (int i = 0; i < radius; i++){
             terrainParts[i] = new Geometry[radius];
         }
-        fillArray();
-    }
-
-    private void scaleArray(int radius){
-        Geometry[][] clone = terrainParts;
-        createArray(radius);
-        //todo
         fillArray();
     }
 
@@ -116,11 +95,6 @@ public class TerrainDrawer {
     }
 
     private Geometry getClone(){
-        /*Geometry geometry = new Geometry("TerrainPart");
-        geometry.setMesh(geometryManager.getMesh());
-        geometry.setMaterial(geometryManager.getMaterial());
-        geometry.updateModelBound();
-        return geometry;*/
         return geometryManager.clone(false);
     }
 

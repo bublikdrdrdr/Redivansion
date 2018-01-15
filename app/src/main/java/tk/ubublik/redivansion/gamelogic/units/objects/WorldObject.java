@@ -3,17 +3,7 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 
 import android.graphics.Point;
 
-import com.jme3.font.BitmapFont;
-import com.jme3.font.BitmapText;
-import com.jme3.font.Rectangle;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -21,7 +11,6 @@ import java.lang.reflect.InvocationTargetException;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.utils.ByteSettings.*;
-import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 
 import static tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter.*;
 
@@ -31,15 +20,10 @@ import static tk.ubublik.redivansion.gamelogic.utils.ByteSettings.ByteConverter.
 
 public abstract class WorldObject extends Node{
 
-    public enum IconState {NONE, WARNING, ERROR}
     public enum ResourceType{POWER, FIRE, WATER, POLLUTION, CRIMINAL, HEALTH, WORK, HAPPINESS, EDUCATION}
 
     //only 3D model
     private GeometryManager geometryManager;
-
-    //notification icon (if something wrong with the object)
-    private Node icon = new Node("icon");
-    private IconState iconState = IconState.NONE;
 
     //game logic properties
     private Point position;
@@ -90,18 +74,6 @@ public abstract class WorldObject extends Node{
     public WorldObject(Point position, int size){
         this.position = position;
         this.size = size;
-        icon.setLocalTranslation(0,1,0);
-        attachChild(icon);
-        /*/test
-        BitmapFont fnt = StaticAssetManager.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
-        BitmapText txt = new BitmapText(fnt, false);
-        txt.setBox(new Rectangle(0, 0, 6, 3));
-        txt.setQueueBucket(RenderQueue.Bucket.Transparent);
-        txt.setSize( 0.3f );
-        txt.setText(this.getClass().getSimpleName());
-        txt.setLocalTranslation(-0.5f,1,0);
-        txt.rotate(-0.1f* FastMath.PI,0.25f* FastMath.PI, 0);
-        this.attachChild(txt);*/
     }
 
     public GeometryManager getGeometryManager() {
@@ -165,7 +137,6 @@ public abstract class WorldObject extends Node{
         insertArray(bytes, getArray(education), index);
         index += INT_SIZE;
         insertArray(bytes, getArray(radiusSqr), index);
-        //index += FLOAT_SIZE;
         return bytes;
     }
 
@@ -174,7 +145,6 @@ public abstract class WorldObject extends Node{
             Hospital.class,
             House.class,
             Office.class,
-            Park.class,
             PoliceStation.class,
             Road.class,
             School.class,
@@ -238,38 +208,8 @@ public abstract class WorldObject extends Node{
         return index-originIndex;
     }
 
-    public static int getDefaultSize(){return 1;}
-
-    public IconState getIconState() {
-        return iconState;
-    }
-
-    public void setIconState(IconState iconState) {
-        if (iconState != this.iconState){
-            this.iconState = iconState;
-            icon.detachAllChildren();
-            switch (iconState){
-                //case WARNING: addIconBox(ColorRGBA.Yellow); break;
-                //case ERROR: addIconBox(ColorRGBA.Red); break;
-            }
-        }
-    }
-
-    /*private void addIconBox(ColorRGBA color) {
-        float boxSize = 0.2f;
-        Box box = new Box(boxSize, boxSize, boxSize);
-        Material material = new Material(StaticAssetManager.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        material.setColor("Color", color);
-        Geometry iconBox = new Geometry("icon box", box);
-        iconBox.setMaterial(material);
-        icon.attachChild(iconBox);
-    }*/
-
     //////////////////////
 
-    public Node getIcon() {
-        return icon;
-    }
 
     public Point getPosition() {
         return position;

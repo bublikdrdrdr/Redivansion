@@ -26,14 +26,9 @@ public class Level {
         setWorldObjects(worldObjects);
     }
 
-    public Level(byte[] bytes){
-
-    }
-
     public byte[] getBytes(){
         return null;
     }
-
 
     public int getId() {
         return id;

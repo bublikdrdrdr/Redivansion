@@ -17,7 +17,7 @@ public class ShoppingMall extends WorldObject {
     public ShoppingMall(Point position) {
         setGeometryManager(new GeometryAnimationManager("SHOPPING_MALL", (Model) NodesCache.getInstance().get("shopModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(1.8f, 3f, 1.8f);
+        getGeometryManager().setLocalScale(0.5f, 1.2f, 0.5f);
         getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
         //params
         setSize(2);

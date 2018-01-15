@@ -5,15 +5,12 @@ import android.graphics.Point;
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.Vector3f;
 
-import java.util.Iterator;
-
 import tk.ubublik.redivansion.gamelogic.Main;
 import tk.ubublik.redivansion.gamelogic.camera.CameraControl;
 import tk.ubublik.redivansion.gamelogic.graphics.WorldLight;
 import tk.ubublik.redivansion.gamelogic.gui.AllFrames;
 import tk.ubublik.redivansion.gamelogic.gui.Element;
 import tk.ubublik.redivansion.gamelogic.gui.GUI;
-import tk.ubublik.redivansion.gamelogic.test.FpsMeter;
 import tk.ubublik.redivansion.gamelogic.units.Level;
 import tk.ubublik.redivansion.gamelogic.units.SavedLevel;
 import tk.ubublik.redivansion.gamelogic.units.Settings;
@@ -39,8 +36,6 @@ import tk.ubublik.redivansion.gamelogic.utils.StaticAssetManager;
 import tk.ubublik.redivansion.gamelogic.utils.game_tools.SelectToolManager;
 import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
 
-import static tk.ubublik.redivansion.gamelogic.gui.TouchEvents.guiListener;
-
 /**
  * Created by Bublik on 02-Sep-17.
  */
@@ -62,7 +57,7 @@ public class LevelLifecycle extends Lifecycle {
         super(simpleApplication);
         this.levelNumber = levelNumber;
         done = false;
-        Level level = LevelFactory.getLevel(levelNumber);// TODO: getLevel(levelNumber);
+        Level level = LevelFactory.getLevel(levelNumber);
         settings = Settings.getInstance();
         settings.open(true);
         loadLevel(level);
@@ -77,7 +72,7 @@ public class LevelLifecycle extends Lifecycle {
         gui.setStatusChanged(0, GameParams.LEVELS_MONEY[levelNumber], true);
         Main.registerBackPressListener(gui.touchListener, simpleApplication.getInputManager());
         AllFrames.levelEndShowed = false;
-        worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f)/*simpleApplication.getCamera().getDirection()*/);
+        worldLight = new WorldLight(simpleApplication.getRootNode(), new Vector3f(-1f, -2f, 0.1f));
         selectToolManager = new SelectToolManager(worldMap, mapRenderer, simpleApplication.getRootNode(), cameraControl);
         cameraControl.setTouchInputHook(gui);
         worldMap.addObserver(mapRenderer);
@@ -108,7 +103,7 @@ public class LevelLifecycle extends Lifecycle {
 
     @Override
     public LifecycleType getType() {
-        return LifecycleType.TEST_LIFECYCLE;
+        return LifecycleType.LEVEL;
     }
 
     public void setDone(boolean value){
@@ -130,11 +125,6 @@ public class LevelLifecycle extends Lifecycle {
         cameraControl.onUpdate();
         selectToolManager.onUpdate();
         NodesCache.getInstance().updateModels();
-    }
-
-    private void testSetIcon() {
-        WorldObject worldObject = worldMap.get(getCenterPoint(1));
-        if (worldObject!=null) worldObject.setIconState(WorldObject.IconState.WARNING);
     }
 
     private Point getCenterPoint(int size){
@@ -164,7 +154,7 @@ public class LevelLifecycle extends Lifecycle {
             gameLogicProcessor.setGameSpeed(1);
             boolean additionalGoalCompleted = checkAdditionalGoals();
             if(!additionalGoalCompleted) win = false;
-            if(!AllFrames.levelEndShowed) //without this statement creates and shows multiply frames at once and it looks ugly
+            if(!AllFrames.levelEndShowed)
                 gui.guiScreen.showFrame(AllFrames.initLevelComplete(win));
             if(win && (levelNumber == settings.getProgress())) {
                     settings.setProgress(settings.getProgress() + 1);

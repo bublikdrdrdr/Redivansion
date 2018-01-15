@@ -19,7 +19,6 @@ import tk.ubublik.redivansion.gamelogic.utils.NodesCache;
 public class House extends Building {
 
     private int population = GameParams.HOUSE_LEVELS_MAX_POPULATION[0]/3;
-    private int lastPopulationDelta = 0;
 
     public House(int x, int y){
         this(new Point(x,y));
@@ -71,14 +70,6 @@ public class House extends Building {
         });
     }
 
-    public int getLastPopulationDelta() {
-        return lastPopulationDelta;
-    }
-
-    /*
-    logic block
-     */
-
     @Override
     public int getLevelsCount() {
         return GameParams.HOUSE_LEVELS_BUILD_COST.length;
@@ -103,9 +94,8 @@ public class House extends Building {
     public void setLevelNumber(int level) {
         if (level<0 || level>=getLevelsCount()) throw new IllegalArgumentException("Wrong level number: "+level);
         beginAnimation("destroy"+(level-1), "build"+(level));
-        //beginAnimation("destroy"+Integer.toString(getLevelNumber()), "build"+Integer.toString(level));
         this.level = level;
-        setPopulation(getPopulation());//if population is more than max it will cut it
+        setPopulation(getPopulation());
     }
 
     @Override
@@ -143,41 +133,6 @@ public class House extends Building {
         else result = checkMainParams() + checkMinorParams();
         int lastPopulation = getPopulation();
         setPopulation(lastPopulation + (int)result);
-        lastPopulationDelta = getPopulation()-lastPopulation;
-
-        System.out.println("Azaza power and need: " + power + " " + getPowerNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
-        System.out.println("Azaza water and need: " + water + " " + getWaterNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
-        System.out.println("Azaza fire and need: " + fire + " " + getFireNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
-        System.out.println("Azaza health and need: " + health + " " + getHealthNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
-        System.out.println("Azaza work and need: " + work + " " + getWorkNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
-        System.out.println("Azaza criminal and need: " + criminal + " " + getCriminalNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT);
-        System.out.println("Azaza pollution and need: " + pollution + " " + getPollutionNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT);
-        System.out.println("Azaza happiness and need: " + happiness + " " + getHappinessNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT);
-        System.out.println("Azaza education and need: " + education + " " + getEducationNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT);
-
-        System.out.println("Azaza main: " + checkMainParams());
-        System.out.println("Azaza minor: " + checkMinorParams());
-        System.out.println("Azaza result: " + result);
-        /*float main = ((float)power/getPowerNeed() + water/(float)getWaterNeed() + fire/(float)getFireNeed() +
-                        health/(float)getHealthNeed() + work/(float)getWorkNeed() + criminal/(float)getCriminalNeed())/6;
-        float minor = (pollution/(float)getPollutionNeed() + happiness/(float)getHappinessNeed()
-                        + education/(float)getEducationNeed())/3;
-
-        float result = ((main-GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT +
-                minor-GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)*GameParams.POPULATION_GROW_DELTA)/2;
-        System.out.println("Azaza result: " + result);
-        int lastPopulation = getPopulation();
-        setPopulation(lastPopulation + (int)result);
-        lastPopulationDelta = getPopulation()-lastPopulation;
-
-        /*float mainMin = getMinMainParamPercent();
-        float minorMin = getMinMinorParamPercent();
-        int mainMinPopulationDelta = (int)((mainMin-GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)*GameParams.POPULATION_GROW_DELTA);
-        int minorMinPopulationDelta = (int)((minorMin-GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)*GameParams.POPULATION_GROW_DELTA);
-
-        int lastPopulation = getPopulation();
-        setPopulation(lastPopulation + Math.min(mainMinPopulationDelta, minorMinPopulationDelta));
-        lastPopulationDelta = getPopulation()-lastPopulation;*/
     }
 
     private float checkMainParams(){
@@ -196,12 +151,12 @@ public class House extends Building {
         if(criminal > getCriminalNeed()*GameParams.POPULATION_GROW_MAIN_RESOURCES_PERCENT)
             positive++;
         if(pow && positive >= 5)
-            return 2;//*(int)GameParams.POPULATION_GROW_DELTA;
+            return 2;
         else if(pow && positive >= 3)
-            return 1;//*(int)GameParams.POPULATION_GROW_DELTA;
+            return 1;
         else if(!pow && positive >= 3)
             return 0;
-        else return -1;//*(int)GameParams.POPULATION_GROW_DELTA;
+        else return -1;
     }
 
     private float checkMinorParams(){
@@ -213,27 +168,10 @@ public class House extends Building {
         if(education > getEducationNeed()*GameParams.POPULATION_GROW_MINOR_RESOURCES_PERCENT)
             positive++;
         if(positive >= 2)
-            return 1;//*(int)GameParams.POPULATION_GROW_DELTA;
+            return 1;
         else if(positive >= 0)
             return 0;
-        else return -1;//*(int)GameParams.POPULATION_GROW_DELTA;
-    }
-
-    private float getMinMainParamPercent(){
-        float min = (float)power/getPowerNeed();
-        min = Math.min(min, water/(float)getWaterNeed());
-        min = Math.min(min, fire/(float)getFireNeed());
-        min = Math.min(min, health/(float)getHealthNeed());
-        min = Math.min(min, work/(float)getWorkNeed());
-        min = Math.min(min, criminal/(float)getCriminalNeed());
-        return min;
-    }
-
-    private float getMinMinorParamPercent(){
-        float min = pollution/(float)getPollutionNeed(); //is it main or not?
-        min = Math.min(min, happiness/(float)getHappinessNeed());
-        min = Math.min(min, education/(float)getEducationNeed());
-        return min;
+        else return -1;
     }
 
     private int getPowerNeed(){

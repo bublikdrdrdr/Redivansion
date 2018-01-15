@@ -3,12 +3,10 @@ package tk.ubublik.redivansion.gamelogic.units.objects;
 import android.graphics.Point;
 
 import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 
 import java.util.Arrays;
 import java.util.List;
 
-import tk.ubublik.redivansion.R;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryAnimationManager;
 import tk.ubublik.redivansion.gamelogic.graphics.GeometryManager;
 import tk.ubublik.redivansion.gamelogic.graphics.Model;
@@ -77,7 +75,6 @@ public class Road extends WorldObject {
         ByteSettings.ByteConverter.insertArray(bytes, superBytes, 0);
         byte[] state = roadState.toBytes();
         ByteSettings.ByteConverter.insertArray(bytes, state, superBytes.length);
-        System.out.println("AAA"+state[0]);
         return bytes;
     }
 
@@ -88,7 +85,6 @@ public class Road extends WorldObject {
         byte[] state = Arrays.copyOfRange(bytes, index, index+ROAD_STATE_SIZE);
         roadState = new RoadState(state);
         setRoadState(roadState);
-        System.out.println("AAA"+state[0]);
         return size+ROAD_STATE_SIZE;
     }
 
@@ -112,7 +108,6 @@ public class Road extends WorldObject {
     }
 
     public void setRoadState(RoadState roadState) {
-        // TODO: 21-Oct-17 fix it with animation cache
         this.roadState = roadState;
         String animationName = roadState.getModelName();
         float rotation = roadState.getRotation();

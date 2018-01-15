@@ -8,8 +8,6 @@ import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
  * Created by Bublik on 25-Oct-17.
  */
 
-
-//blaha muha, ne mozu nazwy prydumaty, roma help
 public class FinalChecker extends Checker implements Runnable{
 
     private WorldMap temporaryClone;

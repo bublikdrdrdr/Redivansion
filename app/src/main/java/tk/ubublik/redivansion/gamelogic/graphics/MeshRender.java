@@ -23,9 +23,6 @@ public class MeshRender {
     private GeometryLoopAnimationManager.OnAnimationEndListener listener = null;
 
     private boolean[] polygonStateBuffer;
-    private static final byte POLYGON_NOT_RENDERED =0;
-    private static final byte POLYGON_IN_PROCESS = 1;
-    private static final byte POLYGON_IS_DONE = 2;
 
     public MeshRender(PolyAnimation polyAnimation) {
         this.polyAnimation = polyAnimation;
@@ -79,7 +76,6 @@ public class MeshRender {
         mesh.setBuffer(VertexBuffer.Type.Normal, 3, BufferUtils.createFloatBuffer(polyCount * 3 * 3));
     }
 
-
     private VertexBuffer positionVertexBuffer;
     private FloatBuffer positionDataBuffer;
 
@@ -120,12 +116,6 @@ public class MeshRender {
                     }
                     index += 1;
                 }
-                /*if (!polygon.isDone(time)) {
-                    allDone = false;
-                    if (polygon.isUpdating(time)) {
-                        renderPolygon(polygon, index, time);
-                    }
-                }*/
             }
             positionVertexBuffer.setUpdateNeeded();
             normalVertexBuffer.setUpdateNeeded();
@@ -133,7 +123,6 @@ public class MeshRender {
             if (allDone) {
                 done = true;
                 animationStart = ANIMATION_DISABLED;
-                //polyAnimation.reset();
             }
         }
     }
@@ -165,7 +154,6 @@ public class MeshRender {
     }
 
     private Vector3f getPolygonNormalVector(Vector3f[] triangle) {
-        // FIXME: 27-Aug-17 works, but not for spot lights
         return FastMath.computeNormal(triangle[0], triangle[1], triangle[2]);
     }
 

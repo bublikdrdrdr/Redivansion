@@ -26,14 +26,6 @@ public class WorldLight {
         rootNode.addLight(directionalLight);
     }
 
-    public AmbientLight getAmbientLight() {
-        return ambientLight;
-    }
-
-    public DirectionalLight getDirectionalLight() {
-        return directionalLight;
-    }
-
     public void onUpdate(){
 
     }

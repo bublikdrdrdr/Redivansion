@@ -17,8 +17,8 @@ public class Hospital extends WorldObject {
     public Hospital(Point position) {
         setGeometryManager(new GeometryAnimationManager("hospital", (Model) NodesCache.getInstance().get("hospitalModel")));
         //local model scale and move
-        getGeometryManager().setLocalScale(1.8f, 2f, 1.8f);//fix model size to 3
-        getGeometryManager().setLocalTranslation(-0.9f,0, -0.9f);
+        getGeometryManager().setLocalScale(0.9f, 1f, 0.9f);
+        getGeometryManager().setLocalTranslation(-1.3f,0,-1.3f);
         //params
         setSize(3);
         setPosition(position);

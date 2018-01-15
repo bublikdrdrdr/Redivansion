@@ -13,7 +13,6 @@ import java.util.Observable;
 
 import tk.ubublik.redivansion.gamelogic.units.objects.Road;
 import tk.ubublik.redivansion.gamelogic.units.objects.WorldObject;
-import tk.ubublik.redivansion.gamelogic.utils.logic.GameLogicProcessor;
 
 /**
  * Created by Bublik on 21-Sep-17.
@@ -124,7 +123,6 @@ public class WorldMap extends Observable implements Cloneable{
     }
 
     public WorldObject fastRemove(Point position){
-        // TODO: 04-Oct-17 check speed difference, in "remove" function we search for object in position and then search it again in list
         Iterator<WorldObject> iterator = worldObjects.iterator();
         while (iterator.hasNext()){
             WorldObject worldObject = iterator.next();
@@ -145,10 +143,6 @@ public class WorldMap extends Observable implements Cloneable{
                 position.y < worldObject.getPosition().y + worldObject.getSize());
     }
 
-    public boolean objectsIntersect(WorldObject o1, WorldObject o2) {
-        return objectsIntersect(o1, o2.getPosition(), o2.getSize());
-    }
-
     public boolean objectsIntersect(WorldObject o1, Point o2Position, int o2Size){
         return objectsIntersect(o1.getPosition(), o1.getSize(), o2Position, o2Size);
     }
@@ -158,14 +152,6 @@ public class WorldMap extends Observable implements Cloneable{
                 (o1Position.x < o2Position.x + o2Size) &&
                 (o1Position.y + o1Size > o2Position.y) &&
                 (o1Position.y < o2Position.y + o2Size);
-    }
-
-    public WorldObject getFromSpatial(Spatial spatial){
-        for (WorldObject worldObject: worldObjects){
-            if (worldObject.getGeometryManager().equals(spatial))
-                return worldObject;
-        }
-        return null;
     }
 
     public void onUpdate() {
@@ -213,28 +199,8 @@ public class WorldMap extends Observable implements Cloneable{
         point.y+=shift;
     }
 
-    public List<WorldObject> getNearbyObjects(Point p1, Point p2){
-        p1 = new Point(p1);
-        p2 = new Point(p2);
-        if (p1.x>p2.x) swapX(p1, p2);
-        if (p1.y>p2.y) swapY(p1, p2);
-        pointShift(p1, false);
-        pointShift(p2, true);
-        List<WorldObject> list = new LinkedList<>();
-        for (WorldObject worldObject: worldObjects)
-            if (objectInRectangle(worldObject, p1, p2))
-                list.add(worldObject);
-        return list;
-    }
-
-    // TODO: 26-Oct-17 check which works correct
-    public float getDistanceSqr(WorldObject w1, WorldObject w2){ //means without sqrt
+    public float getDistanceSqr(WorldObject w1, WorldObject w2){
         return FastMath.sqr(w1.getPosition().x-w2.getPosition().x)+FastMath.sqr(w1.getPosition().y-w2.getPosition().y);
-    }
-
-    public float getDistanceSqr2(WorldObject w1, WorldObject w2){
-        float dS = w1.getSize()/2.f-w2.getSize()/2.f;//check with int
-        return FastMath.sqr(dS+w1.getPosition().x-w2.getPosition().x)+FastMath.sqr(dS+w1.getPosition().y-w2.getPosition().y);
     }
 
     @Override

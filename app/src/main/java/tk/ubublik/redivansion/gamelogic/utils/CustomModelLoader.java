@@ -14,7 +14,6 @@ import tk.ubublik.redivansion.gamelogic.graphics.Model;
  * Created by Bublik on 29-Aug-17.
  */
 
-//for *.crm (Compressed Redivansion Model files)
 public class CustomModelLoader implements AssetLoader {
     @Override
     public Object load(AssetInfo assetInfo) throws IOException {

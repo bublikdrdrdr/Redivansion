@@ -19,12 +19,9 @@ import tk.ubublik.redivansion.gamelogic.utils.MapRenderer;
 
 public class SelectToolManager implements Observer{
 
-    enum SelectMode {NONE, SINGLE, OBJECT, ROAD};
-
     private static final float SELECT_OPACITY = 0.5f;
     public static final ColorRGBA OK_SELECT_COLOR = new ColorRGBA(0,240/256.f, 60/256.f, SELECT_OPACITY);
     public static final ColorRGBA DEFAULT_SELECT_COLOR = new ColorRGBA(1,1,1,SELECT_OPACITY);
-    public static final ColorRGBA WARNING_SELECT_COLOR = new ColorRGBA(1,1,25/256.f, SELECT_OPACITY);
     public static final ColorRGBA ERROR_SELECT_COLOR = new ColorRGBA(1,0,0,SELECT_OPACITY);
 
     private WorldMap worldMap;
@@ -40,35 +37,9 @@ public class SelectToolManager implements Observer{
         this.cameraControl = cameraControl;
     }
 
-    public void setMode(SelectMode selectMode){
-        //need it?
-    }
-
     public void setSelectSinglePoint(Class<? extends WorldObject> clazz){
         destroyTool();
         selectTool = new SingleBuilder(clazz, mapRenderer, node, cameraControl, worldMap);
-    }
-
-    @Deprecated
-    public void setRoadStart(Point point){
-        checkRoadBuilder();
-        ((RoadBuilderOld)selectTool).setStartPoint(point);
-    }
-
-    @Deprecated
-    public void setRoadEnd(Point point){
-        checkRoadBuilder();
-        ((RoadBuilderOld)selectTool).setEndPoint(point);
-    }
-
-    public void setRoadSelectStart(){
-        checkRoadBuilder();
-        ((RoadBuilder)selectTool).setSelectStage(RoadBuilder.SelectStage.START);
-    }
-
-    public void setRoadSelectEnd(){
-        checkRoadBuilder();
-        ((RoadBuilder)selectTool).setSelectStage(RoadBuilder.SelectStage.END);
     }
 
     public void setRoadSelect(){
@@ -85,11 +56,6 @@ public class SelectToolManager implements Observer{
         selectTool = null;
     }
 
-    public void setObjectSelect(WorldObject worldObject){
-        destroyTool();
-        selectTool = new SingleSelectTool(worldObject, mapRenderer, node);
-    }
-
     private void destroyTool(){
         if (selectTool!=null) selectTool.destroy();
     }
@@ -99,20 +65,6 @@ public class SelectToolManager implements Observer{
             destroyTool();
             selectTool = new RoadBuilder(mapRenderer, node, cameraControl, worldMap);
         }
-    }
-
-    public boolean canPut() {
-        return selectTool != null && selectTool.canPut();
-    }
-
-    public WorldObject buildObjectInPoint(){
-        if (!(selectTool instanceof SingleBuilder)) return null;
-        SingleBuilder singleBuilder = (SingleBuilder) selectTool;
-        WorldObject worldObject = singleBuilder.build();
-        if (worldObject!=null){
-            worldMap.put(worldObject);
-        }
-        return worldObject;
     }
 
     public boolean buildRoad() {

@@ -37,10 +37,6 @@ public class ResourcesChecker extends Checker implements Runnable{
         thread.start();
     }
 
-    public WorldMap getResult(){
-        return temporaryClone;
-    }
-
     @Override
     public void run() {
         try {
@@ -49,47 +45,6 @@ public class ResourcesChecker extends Checker implements Runnable{
         } catch (InterruptedException ie){
             done = false;
             temporaryClone = null;
-        }
-    }
-
-    private void v1() throws InterruptedException {
-        //power
-        //find power plants
-        List<Producer> powerPlants = new LinkedList<>();
-        for (WorldObject worldObject: temporaryClone.getWorldObjects()){
-            if (worldObject instanceof PowerPlant){
-                checkInterrupted();
-                powerPlants.add(new Producer(worldObject));
-            }
-        }
-        //find consumers
-        for (WorldObject worldObject: temporaryClone.getWorldObjects()){
-            if (!(worldObject instanceof PowerPlant)) {
-                // TODO: 26-Oct-17 calculate how much energy object needs
-                //right here
-                for (Producer producer : powerPlants) {
-                    float distance = temporaryClone.getDistanceSqr(producer.producer, worldObject);
-                    if (distance <= ((PowerPlant) producer.producer).radiusSqr) {
-                        producer.add(worldObject, distance);
-                    }
-                }
-            }
-        }
-        //sort by count
-        Collections.sort(powerPlants, new Comparator<Producer>() {
-            @Override
-            public int compare(Producer o1, Producer o2) {
-                return Integer.compare(o1.consumers.size(), o2.consumers.size());
-            }
-        });
-        //sort by distance
-        for (Producer producer: powerPlants){
-            Collections.sort(producer.consumers, new Comparator<Consumer>() {
-                @Override
-                public int compare(Consumer o1, Consumer o2) {
-                    return Float.compare(o1.distance, o2.distance);
-                }
-            });
         }
     }
 
@@ -114,7 +69,7 @@ public class ResourcesChecker extends Checker implements Runnable{
         for (WorldObject worldObject: list) {
             checkInterrupted();
             worldObject.recalculateParams();
-            if (!worldObject.roadConnected && !(worldObject instanceof Tree)) continue;// TODO: or remove from list (check speed difference)
+            if (!worldObject.roadConnected && !(worldObject instanceof Tree)) continue;
             if (worldObject.power > 0)
                 hashMap.get(new WorldObjectTypeKey(ResourceType.POWER, true)).add(worldObject);
             else if (worldObject.power < 0)
@@ -166,7 +121,6 @@ public class ResourcesChecker extends Checker implements Runnable{
     private void processResourceType(ResourceType resourceType, List<WorldObject> producers, List<WorldObject> consumers) throws InterruptedException {
         List<Producer> list = getSortedProducerList(producers, consumers);
         for (Producer producer : list) {
-            //logic based on resourceType
             int producerResourceValue = producer.producer.getResourceValue(resourceType);
             while (producerResourceValue > 0) {
                 boolean stillNeeded = false;
@@ -177,7 +131,7 @@ public class ResourcesChecker extends Checker implements Runnable{
                     Consumer consumer = consumerIterator.next();
                     int consumerValue = consumer.consumer.getResourceValue(resourceType);
                     if (consumerValue + part >= 0) {
-                        producerResourceValue+=consumerValue; //because consumer value is negative
+                        producerResourceValue+=consumerValue;
                         consumer.consumer.setResourceValue(resourceType, 0);
                         consumerIterator.remove();
                     } else {

@@ -38,7 +38,6 @@ public class Office extends Building {
 
     @Override
     public void destroy(GeometryManager.OnAnimationEndListener onAnimationEndListener) {
-        // TODO: 11-Nov-17 i don't remember destroy animation name
         try {
             ((GeometryAnimationManager) getGeometryManager()).beginAnimation("destroy"+level, onAnimationEndListener);
         } catch (Exception e){
@@ -55,11 +54,6 @@ public class Office extends Building {
         });
     }
 
-    /*
-
-    Level logic block
-
-     */
     @Override
     public void recalculateParams() {
         int oldPower = power;
@@ -81,7 +75,7 @@ public class Office extends Building {
         beginAnimation("destroy"+(level-1), "build"+(level));
         this.level = level;
         setParamsByLevel(level);
-        power = 0;//will set in next recalculateParams()
+        power = 0;
     }
 
     private void setParamsByLevel(int level){

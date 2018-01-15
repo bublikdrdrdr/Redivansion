@@ -29,19 +29,6 @@ public class Frame {
         elements.add(elem);
     }
 
-    public void removeAllElements(){
-        elements.removeAll(elements);
-    }
-
-    public void removeElement(String name){
-        for(Element element:elements){
-            if(element.p.getName().equals(name)) {
-                elements.remove(elements.indexOf(element));
-                break;
-            }
-        }
-    }
-
     public void scrollElements(float deltaY){
         for(Element element:elements){
             if(!element.p.getName().equals("bg")){
